@@ -321,6 +321,10 @@ The firm-FE difference $(\alpha_i - \alpha_j)$ captures the 31$\times$ size gap 
 \]
 using $\mathrm{shock}_{s,t} = 100 \cdot \mathrm{intensity\_base}_s \cdot \mathrm{EUA}_t$. Each sector therefore has its own slope of the ETS$-$nonETS log-revenue gap on $\mathrm{EUA}_t$, equal to $\gamma + 100 \beta \cdot \mathrm{intensity\_base}_s$.
 
+$$
+\mathrm{phys_intensity}s ;=; \mathrm{mean}{t \in 2005..07}!\left(\frac{\mathrm{emissions}{s,t}}{\mathrm{total_cost}{s,t}}\right)
+$$
+
 \paragraph{Separating $\beta$ from $\gamma$.} Two sources of identifying variation:
 \begin{itemize}
   \item \textbf{$\gamma$} is the common, sector-independent slope of the ETS$-$nonETS gap on $\mathrm{EUA}_t$. It is identified from sectors with $\mathrm{intensity\_base}_s \approx 0$, where the gap's sensitivity to EUA reduces to $\gamma \cdot \mathrm{EUA}_t$.
