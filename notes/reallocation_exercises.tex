@@ -22,10 +22,6 @@ These notes document each empirical exercise we have run to test whether
 Belgian carbon pricing induced \emph{output reallocation} from dirty to clean
 firms. For every exercise I define the variables, write the specification,
 state the identification assumption, and report headline results.
-Section~\ref{sec:sct} covers the Grossman--Krueger
-Scale--Composition--Technique (SCT) decomposition and spends extra space on
-the contrast between the fixed-base and year-on-year variants, which are
-computed differently and answer subtly different questions.
 \end{abstract}
 
 \tableofcontents
@@ -52,187 +48,39 @@ The clean sample covers 88.4\% of Belgian ETS emissions in 2005 and ranges from 
 
 \bigskip
 
-\section{SCT decomposition of aggregate emissions}
-\label{sec:sct}
-
-\textbf{Script:} \texttt{analysis/phase0\_decomposition.R}.
-
-The identity~\eqref{eq:identity} expresses total emissions as the product of three moving parts: the \emph{scale} of the economy ($Y_t$), the \emph{composition} of output across firms ($\theta_{i,t}$), and the \emph{technique} (emission intensity $z_{i,t}$). The SCT decomposition attributes changes in $E_t$ to each channel by building counterfactuals in which only some of these parts move.
-
-We compute the decomposition two ways: a \emph{fixed-base} version that compares year $t$ directly to 2005, and a \emph{year-on-year chained} version that strings together one-year changes. The two versions produce different numbers and are not interchangeable: each has a distinct sample, a distinct counterfactual, and a distinct interpretation. The rest of this section is devoted to explaining both and the difference between them.
-
-\subsection{Variables}
-
-The only variables that appear are the ones in the notation section: $e_{i,t}$, $q_{i,t}$, $Y_t$, $\theta_{i,t}$, $z_{i,t}$, $E_t$.
-
-\subsection{Specification A --- Fixed base year 2005}
-
-For each year $t \in \{2005,\ldots,2022\}$, take the set of firms present in both 2005 and $t$; call this set $\mathcal{F}_t$. Compute:
-\begin{align}
-    E_t^{\text{scale}}     &= Y_t \sum_{i \in \mathcal{F}_t} \theta_{i,2005}\, z_{i,2005}, \label{eq:Escale}\\
-    E_t^{\text{scale+reall}} &= Y_t \sum_{i \in \mathcal{F}_t} \theta_{i,t}\, z_{i,2005}, \label{eq:Ereall}\\
-    E_t^{\text{actual}}    &= Y_t \sum_{i \in \mathcal{F}_t} \theta_{i,t}\, z_{i,t}. \label{eq:Eactual}
-\end{align}
-Channel magnitudes:
-\begin{itemize}
-  \item \textbf{Scale:} $E_t^{\text{scale}} / E_{2005}$.
-  \item \textbf{Reallocation (composition):} $E_t^{\text{scale+reall}} - E_t^{\text{scale}}$. Shares move; intensities frozen.
-  \item \textbf{Technique (within-firm abatement):} $E_t^{\text{actual}} - E_t^{\text{scale+reall}}$. Intensities move; shares as in the data.
-\end{itemize}
-To split reallocation into between-sector and within-sector, we run the same decomposition at the NACE 2-digit level (replacing $\theta_{i,t}$ with sector share $\theta_{s,t}$ and $z_{i,t}$ with sector intensity $z_{s,t}$). The \emph{between-sector} reallocation is the sector-level composition effect; the \emph{within-sector} reallocation is the firm-level composition effect minus the sector-level one.
-
-\subsection{Specification B --- Year-on-year chained}
-
-For each pair $(t-1, t)$ with $t \in \{2006,\ldots,2022\}$, take the set of firms present in both years; call this set $\mathcal{F}_{t-1,t}$. Compute:
-\begin{align}
-    r_t^{\text{scale}}     &= \frac{Y_t \sum_{i \in \mathcal{F}_{t-1,t}} \theta_{i,t-1}\, z_{i,t-1}}{Y_{t-1} \sum_{i \in \mathcal{F}_{t-1,t}} \theta_{i,t-1}\, z_{i,t-1}}, \\
-    r_t^{\text{scale+reall}} &= \frac{Y_t \sum_{i \in \mathcal{F}_{t-1,t}} \theta_{i,t}\, z_{i,t-1}}{Y_{t-1} \sum_{i \in \mathcal{F}_{t-1,t}} \theta_{i,t-1}\, z_{i,t-1}}, \\
-    r_t^{\text{actual}}    &= \frac{Y_t \sum_{i \in \mathcal{F}_{t-1,t}} \theta_{i,t}\, z_{i,t}}{Y_{t-1} \sum_{i \in \mathcal{F}_{t-1,t}} \theta_{i,t-1}\, z_{i,t-1}}.
-\end{align}
-Chain the log-changes:
-\begin{align}
-    \text{idx}_T^{\text{scale+reall}} &= 100 \cdot \exp\!\Bigg(\sum_{t=2006}^{T} \log r_t^{\text{scale+reall}}\Bigg), \\
-    \text{idx}_T^{\text{actual}} &= 100 \cdot \exp\!\Bigg(\sum_{t=2006}^{T} \log r_t^{\text{actual}}\Bigg).
-\end{align}
-Between-sector reallocation is built analogously from sector-level quantities; the \emph{within-sector residual} is $\log(r_t^{\text{actual}}) - \log(r_t^{\text{between}})$ and bundles within-sector reallocation with within-firm abatement.
-
-\subsection{The difference between A and B --- worked example}
-\label{sec:sct_example}
-
-Consider a tiny economy with one sector and two firms. Set prices so that real revenue equals output.
-
-\paragraph{Year 2005.}
-\begin{center}
-\begin{tabular}{lccc}
-\toprule
-Firm & Output $q_{i,2005}$ & Intensity $z_{i,2005}$ & Emissions $e_{i,2005}$ \\
-\midrule
-A (dirty) & 60 & 1.00 & 60 \\
-B (clean) & 40 & 0.25 & 10 \\
-\midrule
-Total     & $Y_{2005}=100$ & & $E_{2005}=70$ \\
-\bottomrule
-\end{tabular}
-\end{center}
-
-\paragraph{Year 2015.} Firm A has shrunk and abated; firm B has grown.
-\begin{center}
-\begin{tabular}{lccc}
-\toprule
-Firm & Output $q_{i,2015}$ & Intensity $z_{i,2015}$ & Emissions $e_{i,2015}$ \\
-\midrule
-A (dirty) & 50 & 0.80 & 40 \\
-B (clean) & 50 & 0.25 & 12.5 \\
-\midrule
-Total     & $Y_{2015}=100$ & & $E_{2015}=52.5$ \\
-\bottomrule
-\end{tabular}
-\end{center}
-
-\paragraph{Fixed-base (A) attribution of the 2005$\to$2015 change.}
-\begin{align*}
-    E_{2015}^{\text{scale}}         &= 100 \cdot (0.60 \cdot 1.00 + 0.40 \cdot 0.25) = 70, \\
-    E_{2015}^{\text{scale+reall}} &= 100 \cdot (0.50 \cdot 1.00 + 0.50 \cdot 0.25) = 62.5, \\
-    E_{2015}^{\text{actual}}        &= 52.5.
-\end{align*}
-So: scale $= 0$, reallocation $= -7.5$, technique $= -10$. Total change $= -17.5$, which matches $E_{2015} - E_{2005} = 52.5 - 70$. Reallocation is cleanly separated from technique because A's \emph{own} 2005 intensity is known.
-
-\paragraph{Year-on-year (B) attribution across the same horizon.} Suppose the 10-year path happens to go through an intermediate year 2010 with A at output 55, intensity 0.90, and B at output 45, intensity 0.25. The algorithm strings together the 2005$\to$2010 change (using firms in both) and the 2010$\to$2015 change (using firms in both).
-
-Now imagine that during 2005--2010 a \emph{third} firm C (with intensity 0.10) enters the data in 2008 and leaves again in 2009. The fixed-base version ignores C entirely (C is absent from 2005, so $\theta_{C,2005}$ is undefined). The year-on-year version uses C for the 2008$\to$2009 link (C is in both years). Each one-year step uses the maximum sample available.
-
-\paragraph{Why year-on-year cannot separate within-sector reallocation from within-firm abatement.} At a one-year horizon, $\theta_{i,t}$ fluctuates wildly for real firms: a firm has a good sales year, then a bad one. The reallocation term $Y_t \sum_i (\theta_{i,t} - \theta_{i,t-1}) z_{i,t-1}$ and the technique term $Y_t \sum_i \theta_{i,t} (z_{i,t} - z_{i,t-1})$ can both be large and offsetting even if nothing happened structurally. Over a 10-year fixed-base comparison, these transient fluctuations wash out; over a one-year comparison they are the signal. The year-on-year version is therefore \emph{only} usable for:
-\begin{enumerate}
-  \item the \emph{total} emission index (all the noise stays inside the residual),
-  \item the \emph{between-sector} reallocation (sector-level shares $\theta_{s,t}$ are stable year-to-year),
-  \item the residual sector-level technique (= within-sector reallocation $+$ within-firm abatement, bundled).
-\end{enumerate}
-
-\subsection{Identification assumption}
-
-The SCT decomposition is a purely mechanical accounting identity. It makes no causal claim: reallocation or technique changes could be caused by carbon policy, demand shocks, or autonomous technical change. It tells us \emph{through which channel} emissions fell, not \emph{why}.
-
-The only data assumption worth noting is that the real-revenue deflation correctly strips price effects from output. Because we use a NACE 4-digit domestic PPI, pass-through of carbon costs into prices is already absorbed: $q_{i,t}$ is real volume, not nominal.
-
-\subsection{Results}
-
-\begin{center}
-\captionof{table}{Fixed-base decomposition (pp relative to 2005 = 100).}
-\begin{tabular}{lrrrrr}
-\toprule
-Year & Firms & Total & Between-sector & Within-sector realloc. & Within-firm abatement \\
-\midrule
-2008 & 141 & $-1.2$  & $+16.3$ & $+1.9$ & $-31.5$ \\
-2012 & 127 & $-27.2$ & $+17.1$ & $+2.0$ & $-49.6$ \\
-2016 & 114 & $-26.1$ & $+1.7$  & $+7.2$ & $-31.3$ \\
-2019 & 104 & $-25.9$ & $-7.4$  & $+3.2$ & $-16.9$ \\
-2022 & 100 & $-45.8$ & $-19.2$ & $+1.7$ & $-25.6$ \\
-\bottomrule
-\end{tabular}
-\end{center}
-
-\begin{center}
-\captionof{table}{Year-on-year chained decomposition (pp, 2005 = 100).}
-\begin{tabular}{lrrrr}
-\toprule
-Year & Firms (pair) & Total & Between-sector & Within-sector residual \\
-\midrule
-2008 & 145 & $-12.4$ & $+13.3$ & $-25.6$ \\
-2012 & 161 & $-32.3$ & $+10.1$ & $-42.3$ \\
-2016 & 162 & $-23.9$ & $+1.0$  & $-25.0$ \\
-2019 & 156 & $-21.3$ & $-7.0$  & $-14.3$ \\
-2022 & 149 & $-46.4$ & $-22.9$ & $-23.5$ \\
-\bottomrule
-\end{tabular}
-\end{center}
-
-\textbf{Headline.} Total emissions fell $\sim 46$\% between 2005 and 2022. Decomposing the decline: between-sector reallocation $\approx 20$--$23$ pp ($\sim 45$--$50\%$ of total), within-firm abatement $\approx 23$--$26$ pp ($\sim 50$--$55\%$ of total), within-sector reallocation $\approx 0$. The samples are too small to assign meaningful statistical uncertainty; the two specifications agree to within $\sim 3$ pp on every channel, so the qualitative story does not depend on which is used.
-
-\section{Six-channel pairwise decomposition}
+\section{Six-channel pairwise emission decomposition}
 \label{sec:pairwise}
 
 \textbf{Script:} \texttt{analysis/phase0\_pairwise\_decomposition.R}.
 
-Runs the same Grossman--Krueger accounting as \S\ref{sec:sct} but for arbitrary $(t_{\text{base}}, t_{\text{end}})$ pairs rather than fixed-base 2005. Adds explicit entry and exit channels.
+For each pair of years $(t_0, t_1)$ we decompose the total change in aggregate EUTL emissions into six exhaustive channels.
 
 \subsection{Variables}
-Same primitives as \S\ref{sec:sct}: $e_{i,t}$, $q_{i,t}$, $Y_t$. For a given pair $(t_0, t_1)$:
+
+Primitive variables as defined in \S1 ($e_{i,t}$, $q_{i,t}$, $Y_t$, $\theta_{i,t}$, $z_{i,t}$, $E_t$). For a given pair:
 \begin{itemize}
-  \item Survivors $S$: firms with $e_{i,t} > 0$ for both $t = t_0$ and $t = t_1$. Joined on firm ID (\texttt{vat}); a firm that switches NACE 2d between years is still a survivor, and its $t_0$ sector is used for the between/within split.
-  \item Entrants $N$: firms with $e_{i,t_1} > 0$ and $e_{i,t_0} = 0$ (or no row in $t_0$).
-  \item Exiters $X$: firms with $e_{i,t_0} > 0$ and $e_{i,t_1} = 0$ (or no row in $t_1$).
+  \item \textbf{Survivors} $S$: firms with $e_{i,t} > 0$ in both $t_0$ and $t_1$, joined on firm ID (\texttt{vat}). A firm that switches NACE 2d between years is still a survivor; its $t_0$ sector is used for the between/within split.
+  \item \textbf{Entrants} $N$: firms with $e_{i,t_1} > 0$ but no positive emissions in $t_0$.
+  \item \textbf{Exiters} $X$: firms with $e_{i,t_0} > 0$ but no positive emissions in $t_1$.
+  \item Within-survivor aggregates: $Y_{t,S} = \sum_{i \in S} q_{i,t}$, $\theta_{i,t}^S = q_{i,t}/Y_{t,S}$.
+  \item Group-average intensities, reported alongside the table in tCO\textsubscript{2} per million \euro{} of real revenue: $\bar z^E = \sum_{i \in N} e_{i,t_1} / \sum_{i \in N} q_{i,t_1}$ and $\bar z^X = \sum_{i \in X} e_{i,t_0} / \sum_{i \in X} q_{i,t_0}$.
+  \item \textbf{Triple-balanced panel}: the 101 firms with positive emissions in all of 2005, 2012, and 2020; reported as a separate block in the table to allow a strict same-firm comparison of the pre- and post-2012 windows. Entry and exit are zero by construction on these rows.
+  \item \textbf{Three firms excluded} from rows ending in 2022 (marked $^{\ddagger}$ in the table): one NACE 24 installation (likely ArcelorMittal Gent: 4.6 Mt $\to$ 0.09 Mt over 2020--2022 while revenue grew from 3{,}399 to 6{,}476 M\euro{}) and two NACE 20 installations. All three show EUTL verified emissions and free allocation collapsing to near-zero in 2021 while Annual Accounts revenue continues or grows --- diagnosed as installation-level reclassifications under Phase IV, not real abatement. NACE 21 shows no analogous pattern.
 \end{itemize}
-Within-survivor aggregates: $Y_{t,S} = \sum_{i \in S} q_{i,t}$, $\theta_{i,t}^S = q_{i,t} / Y_{t,S}$, $z_{i,t} = e_{i,t}/q_{i,t}$.
 
 \subsection{Specification}
 Decompose total emissions change as
 \begin{equation}
   E_{t_1} - E_{t_0} \;=\; \underbrace{\text{Scale}_S + \text{Between}_S + \text{Within}_S + \text{Technique}_S}_{\text{survivor portion}} \;+\; \underbrace{E_{t_1, N}}_{\text{Entry}} \;-\; \underbrace{E_{t_0, X}}_{\text{Exit}},
 \end{equation}
-with the survivor portion computed by the standard counterfactual construction:
+with the survivor portion computed by the standard Grossman--Krueger counterfactuals:
 \begin{align*}
   \text{Scale}_S     &= Y_{t_1,S} \textstyle\sum_{i \in S} \theta_{i,t_0}^S z_{i,t_0} - E_{t_0,S}, \\
   \text{Between}_S   &= Y_{t_1,S} \textstyle\sum_{s} (\theta_{s,t_1}^S - \theta_{s,t_0}^S) z_{s,t_0}, \\
   \text{Within}_S    &= Y_{t_1,S} \textstyle\sum_{i \in S} \theta_{i,t_1}^S z_{i,t_0} - Y_{t_1,S} \sum_s \theta_{s,t_1}^S z_{s,t_0}, \\
   \text{Technique}_S &= Y_{t_1,S} \textstyle\sum_{i \in S} \theta_{i,t_1}^S (z_{i,t_1} - z_{i,t_0}).
 \end{align*}
-The six channels sum to $E_{t_1} - E_{t_0}$ exactly. All channels reported in pp of $E_{t_0}$.
-
-\subsection{Identification assumption}
-Mechanical accounting. Same caveat as \S\ref{sec:sct}: no causal claim.
-
-\subsection{Entrant and exiter intensities}
-
-Beyond the six-channel accounting, the emissions-weighted mean intensity of entrants at $t_{\text{end}}$ and of exiters at $t_{\text{base}}$ is informative:
-\begin{align*}
-  \bar z^E &= \frac{\sum_{i \in N} e_{i,t_1}}{\sum_{i \in N} q_{i,t_1}}, &
-  \bar z^X &= \frac{\sum_{i \in X} e_{i,t_0}}{\sum_{i \in X} q_{i,t_0}}.
-\end{align*}
-These are reported in tCO\textsubscript{2} per million EUR of real revenue in the table below.
-
-\subsection{Triple-balanced panel}
-
-For a strict ``same firms'' comparison across $2005/2012/2020$, restrict to the 101 firms with positive emissions and revenue in all three years. On this panel entry and exit are zero by construction, and technique can be compared directly across the $2005 \to 2012$ and $2012 \to 2020$ windows on the same firm set.
+The six channels sum to $E_{t_1} - E_{t_0}$ exactly. Each is reported in pp of $E_{t_0}$.
 
 \subsection{Results}
 
@@ -266,57 +114,23 @@ Pair & n\_s & n\_e & n\_x & Total & Scale & Btw & Within & Tech & Entry & Exit &
 
 \paragraph{Takeaway --- the two phases.} The fall is not uniform across time. Between 2005 and 2012 emissions fell $16\%$, and the within-firm abatement channel alone would have delivered a $50\%$ fall: technique $= -49.6$, while scale ($+10.8$), between-sector ($+7.4$), and within-sector ($+10.5$) were all pushing emissions up. Between 2012 and 2022 the picture inverts. Emissions fell only $13\%$, the technique channel essentially disappears (technique $= -0.9$), and between-sector reallocation carries almost the entire decline ($-29.5$). The conclusion is that the abatement story is almost entirely a Phase I/II phenomenon; from 2012 onward the emissions decline comes from the Belgian manufacturing mix shifting away from high-emission sectors, not from surviving ETS firms getting cleaner. The triple-balanced rows tell the same story on an even tighter sample: technique $-54$ over 2005--2012 and $+10$ over 2012--2020 among the same 101 firms.
 
-\subsection{What this pins down that Table 1 could not}
-
-\textbf{(1) Did Phase I/II abatement persist?} No. On the triple-balanced 101-firm panel --- firms present in all three of 2005, 2012, and 2020 --- technique is $-53.7$ pp over $2005 \to 2012$ but $+9.5$ pp over $2012 \to 2020$. Among literally the same firms, a meaningful fraction of the earlier intensity reduction reversed from 2012 onward. The 2005 $\to$ 2020 full-window technique is $-23.1$ on this panel: essentially the net of $-53.7$ and $+9.5$, with Laspeyres/Paasche weighting differences explaining the slight gap. The reversal was already visible in the unrestricted $2012 \to 2020$ pair ($+4.2$, 126 firms) and $2007 \to 2020$ pair ($+2.6$, 109 firms); the triple-balanced panel makes it sharper because the sample is held fixed.
-
-\textbf{(2) What is actually driving the post-2012 decline?} Between-sector reallocation. On the triple-balanced panel, between is $-16.2$ over $2012 \to 2020$ while technique is $+9.5$. The two components net to a total of only $-3.3$. The full 2005 $\to$ 2022 headline of $\sim -46\%$ is therefore a combination of two distinct phases: within-firm abatement concentrated in 2005--2012, and between-sector reallocation accelerating after 2012.
-
-\textbf{(3) Are exiters dirtier than entrants? No --- the opposite.} $\bar z^E > \bar z^X$ in every unrestricted pair, with ratios $1.4$ to $2.4$. ``Exit = dirty firms dying under ETS pressure, entry = cleaner new firms'' is the wrong mental model for this data. Three plausible reasons: (i) ``exit'' is mostly Annual Accounts missingness rather than literal closure (EUTL installation roster is near-stable at 281 firms); (ii) entrants include installations in their capacity ramp-up phase, with elevated intensity; (iii) firms whose emissions crossed the zero threshold between the two years. Despite the entry-is-dirtier pattern, net emissions from entry minus exit is small ($|\text{Entry} - \text{Exit}| \leq 4.4$ pp) because exiters tend to be larger in revenue terms.
-
-\subsection{EUTL reclassifications and the 2022 rows}
-
-Diagnosed 2026-04-23. Inspection of per-firm emissions and free-allocation trajectories in the sectors whose post-2020 aggregate EUTL emissions diverge from Statbel aggregates (NACE 20, 24) reveals the following pattern. In each of NACE 20 and NACE 24, one large firm (plus a second smaller firm in NACE 20) shows:
-\begin{itemize}
-  \item EUTL verified emissions drop to $\sim 0$ in 2021, sustained in 2022;
-  \item EUTL free allocation drops to $\sim 0$ or near-zero in 2021;
-  \item Annual Accounts revenue continues or grows (in the NACE 24 case, revenue roughly doubles from 2020 to 2022).
-\end{itemize}
-This pattern is inconsistent with real abatement or firm closure and consistent with installation-level reassignment under Phase IV of the EU ETS (operator code change, EUTL registry event). NACE 21 does not show this pattern: its 2021 free-allocation cut is the intended Phase IV benchmark reset, and its emissions continue near trend.
-
-The \emph{Excluded} rows in the table drop these three firms from every year of the sample (not just 2021+, which would merely relabel their 2005 emissions as ``Exit''). Effect on the 2005 $\to$ 2022 accounting:
-\begin{itemize}
-  \item Total $-37.3 \to -24.9$: about $-12$ pp of the unrestricted total was artefact.
-  \item Technique $-25.6 \to -11.6$: the bulk of the cleanup --- these firms' reclassification-driven emissions drop was being counted as within-firm abatement.
-  \item Between-sector $-31.7 \to -35.1$: slightly \emph{more} negative on the clean panel, i.e.\ between-sector reallocation is the genuine driver of the 2005 $\to$ 2022 decline, not the contaminated technique term.
-\end{itemize}
-The cleaned 2012 $\to$ 2022 row (Total $-12.6$, Technique $-0.9$, Between $-29.5$) is the sharpest statement of the paper's main story: post-2012, real within-firm abatement is essentially zero; the emissions decline is entirely between-sector reallocation. Pairs ending in 2020 or earlier are not affected by this correction and do not need to be re-run.
-
-\subsection{Residual caveats}
-
-\begin{itemize}
-  \item Technique in the triple-balanced rows does not decompose exactly additively ($-53.7 + 9.5 \neq -23.1$). That is expected: the counterfactual weights $\theta_{i,t_1}$ differ across pairs (Paasche-style). The discrepancy ($-2.1$ pp out of $-23.1$) is small.
-  \item ``Between'' uses only survivor aggregates, unlike the fixed-base Table 1 (which uses all firms at the sector level); numbers are not directly comparable across tables for overlapping years.
-  \item The triple-balanced panel is a selected sample --- firms with continuous emissions and Annual Accounts coverage across 15 years are larger and more established than the broader population. The sign of the $2012 \to 2020$ reversal matches the 126-firm pair-wise estimate, so selection is not explaining the direction.
-\end{itemize}
-
 \section{Melitz--Polanec decomposition}
 
 \textbf{Script:} \texttt{analysis/phase0\_melitz\_polanec.R}.
 
 \subsection{Variables}
-Same as \S\ref{sec:sct}. In addition, for each rolling 5-year window $(t_0, t_1)$, partition firms into three disjoint sets: \emph{survivors} (present in both $t_0$ and $t_1$), \emph{entrants} (present in $t_1$ only), \emph{exiters} (present in $t_0$ only).
+Primitives as in \S1; see also \S\ref{sec:pairwise}. For each rolling 5-year window $(t_0, t_1)$, partition firms into three disjoint sets: \emph{survivors} (present in both $t_0$ and $t_1$), \emph{entrants} (present in $t_1$ only), \emph{exiters} (present in $t_0$ only).
 
 \subsection{Specification}
 Following \cite{melitz2015}, decompose $\bar{z}_{t_1} - \bar{z}_{t_0}$ (aggregate emission intensity) into: within-firm change (unweighted survivor mean $\bar{z}^S_{t_1} - \bar{z}^S_{t_0}$); Olley--Pakes reallocation covariance $\sum_i (\theta_{i,t} - \bar\theta_t)(z_{i,t} - \bar z_t)$; entrant and exiter contributions.
 
 \subsection{Identification assumption}
-Mechanical decomposition; same caveat as SCT.
+Mechanical decomposition; no causal claim.
 
 \subsection{Results}
-Entry and exit contributions are consistently in the single digits as a percentage of base-year intensity across all 5-year windows. Sample composition is not driving the SCT results.
+Entry and exit contributions are consistently in the single digits as a percentage of base-year intensity across all 5-year windows, confirming that sample composition is not driving the pairwise-decomposition results.
 
-\textbf{Limitation.} The unweighted survivor mean is dominated by a handful of high-intensity firms, so the within-firm and reallocation terms swing wildly in opposite directions for horizons beyond $\sim 5$ years. We therefore use Melitz--Polanec only to confirm entry/exit are small, and rely on the share-weighted SCT as the primary decomposition.
+\textbf{Limitation.} The unweighted survivor mean is dominated by a handful of high-intensity firms, so the within-firm and reallocation terms swing wildly in opposite directions for horizons beyond $\sim 5$ years. We therefore use Melitz--Polanec only to confirm entry/exit are small, and rely on the share-weighted pairwise decomposition (\S\ref{sec:pairwise}) as the primary tool.
 
 \section{Olley--Pakes covariance vs.\ carbon cost exposure}
 \label{sec:opcov}
