@@ -117,61 +117,61 @@ Pair & n\_s & n\_e & n\_x & Total & Scale & Btw & Within & Tech & Entry & Exit &
 
 \paragraph{Takeaway --- the triple-balanced panel.} Restricting to the 101 firms present in 2005, 2012, and 2020 --- a strict same-firm comparison that rules out sample composition changes --- sharpens the phase contrast. On these 101 firms, technique is $\mathbf{-53.7}$ pp over 2005$\to$2012 (rapid Phase I/II abatement) but $\mathbf{+9.5}$ pp over 2012$\to$2020 (the earlier intensity reductions partially reversed). Extending to 2020$\to$2022 on the same panel, further excluding the three post-2020 reclassifications to leave 99 firms, technique is $\mathbf{+6.4}$ pp. So across 2012$\to$2022 on essentially the same firms, technique has been strictly positive: within-firm emission intensity among the long-survivors has been drifting \emph{up}, not down, for a decade.
 
-\section{Melitz--Polanec decomposition}
+\section{Sector-level heterogeneity}
+\label{sec:sector}
 
-\textbf{Script:} \texttt{analysis/phase0\_melitz\_polanec.R}.
+\textbf{Script:} \texttt{analysis/phase0\_pairwise\_decomposition\_by\_sector.R}.
 
-\subsection{Variables}
-Primitives as in \S1; see also \S\ref{sec:pairwise}. For each rolling 5-year window $(t_0, t_1)$, partition firms into three disjoint sets: \emph{survivors} (present in both $t_0$ and $t_1$), \emph{entrants} (present in $t_1$ only), \emph{exiters} (present in $t_0$ only).
-
-\subsection{Specification}
-Following \cite{melitz2015}, decompose $\bar{z}_{t_1} - \bar{z}_{t_0}$ (aggregate emission intensity) into: within-firm change (unweighted survivor mean $\bar{z}^S_{t_1} - \bar{z}^S_{t_0}$); Olley--Pakes reallocation covariance $\sum_i (\theta_{i,t} - \bar\theta_t)(z_{i,t} - \bar z_t)$; entrant and exiter contributions.
-
-\subsection{Identification assumption}
-Mechanical decomposition; no causal claim.
-
-\subsection{Results}
-Entry and exit contributions are consistently in the single digits as a percentage of base-year intensity across all 5-year windows, confirming that sample composition is not driving the pairwise-decomposition results.
-
-\textbf{Limitation.} The unweighted survivor mean is dominated by a handful of high-intensity firms, so the within-firm and reallocation terms swing wildly in opposite directions for horizons beyond $\sim 5$ years. We therefore use Melitz--Polanec only to confirm entry/exit are small, and rely on the share-weighted pairwise decomposition (\S\ref{sec:pairwise}) as the primary tool.
-
-\section{Olley--Pakes covariance vs.\ carbon cost exposure}
-\label{sec:opcov}
-
-\textbf{Script:} standalone in \texttt{phase0\_melitz\_polanec.R} (to be refactored).
-
-\subsection{Variables}
-\begin{itemize}
-  \item $\mathrm{OP}_{s,t}$: Olley--Pakes covariance for sector $s$ in year $t$, $\sum_{i \in s} (\theta_{i,s,t} - \bar\theta_{s,t})(z_{i,t} - \bar z_{s,t})$.
-  \item $\Delta \mathrm{OP}_{s,t} = \mathrm{OP}_{s,t} - \mathrm{OP}_{s,t-1}$: year-on-year change in within-sector reallocation.
-  \item $\mathrm{cost\_share}_{s,t} = \mathrm{shortage}_{s,t} \cdot \mathrm{EUA}_t / \mathrm{revenue}_{s,t}$.
-  \item $\mathrm{priced}_{s,t} = \mathrm{shortage}_{s,t} / e_{s,t}$.
-\end{itemize}
-
-\subsection{Specification}
-\begin{equation*}
-  \Delta \mathrm{OP}_{s,t} = \alpha + \beta \cdot \mathrm{exposure}_{s,t} + \alpha_s + \delta_t + \varepsilon_{s,t},
-\end{equation*}
-where exposure is either $\mathrm{cost\_share}_{s,t}$ or $\mathrm{priced}_{s,t}$. 195 sector-year observations across 16 sectors with $\geq 3$ firms.
-
-\subsection{Identification assumption}
-Sector and year FE absorb time-invariant sector heterogeneity and common macro shocks. The residual coefficient reflects whether sector-years with higher realized carbon costs see more reallocation, conditional on sector and year. This is not causal: high carbon costs are a function of realized emissions, which depend on the outcome.
+The aggregate pairwise decomposition in \S\ref{sec:pairwise} masks large differences across sectors. This section runs the same decomposition inside each NACE 2-digit sector separately, for the 2005$\to$2022 horizon. At single-sector level the \emph{Between-sector} channel collapses (only one sector), so the decomposition has five channels --- Scale, Within (firm-share shifts inside the sector), Technique, Entry, Exit --- that sum to the sector's own Total in pp of its own 2005 emissions. The three contaminated VATs (\S\ref{sec:pairwise}) are excluded from every year.
 
 \subsection{Results}
 
 \begin{center}
-\begin{tabular}{llrrr}
+\captionof{table}{Per-sector decomposition, 2005 $\to$ 2022. All pp of the sector's own 2005 emissions; five channels sum to \textbf{Total}. ``\% of agg.'' is the sector's share of aggregate 2005 ETS emissions.}
+\small
+\begin{tabular}{llrrrrrrrrrr}
 \toprule
-Spec & Measure & Coefficient & $t$ & $p$ \\
+NACE & Sector & \% of agg. & n\_s & n\_e & n\_x & Total & Scale & Within & Tech & Entry & Exit \\
 \midrule
-OLS              & cost share        & $4.53$     & $0.54$  & $0.59$ \\
-Sector + Year FE & cost share        & $7.58$     & $0.60$  & $0.55$ \\
-OLS              & \% priced         & $-0.0001$  & $-0.06$ & $0.95$ \\
-Sector + Year FE & \% priced         & $-0.0016$  & $-0.32$ & $0.75$ \\
+35 & Electricity               & 43.3 &  3 &  4 &  1 & $\mathbf{-39.8}$ & $-46.4$ & $+12.8$           & $-15.7$          & $+9.7$  & $-0.1$  \\
+23 & Cement, glass, ceramics   & 21.3 & 21 & 11 &  7 & $\mathbf{-29.0}$ & $+11.3$ & $\mathbf{-15.1}$  & $\mathbf{-25.8}$ & $+4.9$  & $-4.2$  \\
+19 & Petroleum refining        & 13.2 &  3 &  1 &  2 & $+1.6$           & $-32.1$ & $+16.0$           & $+28.8$          & $+0.2$  & $-11.3$ \\
+20 & Chemicals                 &  9.3 & 26 & 21 &  5 & $\mathbf{+43.7}$ & $-29.7$ & $+24.4$           & $+14.2$          & $+42.2$ & $-7.5$  \\
+24 & Basic metals              &  7.5 &  6 &  3 &  5 & $\mathbf{-70.6}$ & $-0.9$  & $-7.1$            & $-0.2$           & $+2.9$  & $-65.3$ \\
+17 & Paper                     &  1.7 &  5 &  1 &  4 & $-3.4$           & $+35.4$ & $+15.1$           & $-38.2$          & $+3.5$  & $-19.2$ \\
+13 & Textiles                  &  0.2 &  3 &  3 &  7 & $-43.8$          & $-9.2$  & $+0.5$            & $+11.8$          & $+27.1$ & $-73.9$ \\
 \bottomrule
 \end{tabular}
 \end{center}
-No correlation. Raw correlations $0.039$ (cost share) and $-0.005$ (\% priced).
+
+\subsection{Technique by phase}
+
+Splitting by phase makes the heterogeneity in within-firm abatement stark:
+
+\begin{center}
+\captionof{table}{Within-firm technique channel, by sector and phase. pp of each sector's own $t_0$ emissions.}
+\begin{tabular}{llrr}
+\toprule
+NACE & Sector & Tech 2005 $\to$ 2012 & Tech 2012 $\to$ 2022 \\
+\midrule
+35 & Electricity               & $\mathbf{-99.9}$ & $\mathbf{+39.1}$ \\
+23 & Cement, glass, ceramics   & $-29.7$          & $-9.0$           \\
+19 & Petroleum refining        & $+32.3$          & $-55.1$          \\
+20 & Chemicals                 & $+42.0$          & $-20.5$          \\
+24 & Basic metals              & $-5.4$           & $+13.9$          \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Takeaways}
+
+\textbf{Which sectors account for the aggregate decline?} Electricity (NACE 35) and basic metals (NACE 24) drive most of it. Cement/glass (NACE 23) contributes a moderate decline. Petroleum (19) is essentially flat. \textbf{Chemicals (NACE 20) went the other way: emissions grew by 44\%} of the sector's 2005 baseline over 2005$\to$2022, driven by $+42$ pp of Entry (21 new ETS-reporting chemical firms joining the panel) plus a +14 pp rise in within-firm intensity among survivors.
+
+\textbf{Within-firm abatement is far from consistent across sectors.} The electricity sector had spectacular Phase I/II abatement ($-100$\% of its 2005 emissions from Technique alone), but the 2012$\to$2022 technique is $+39$ pp: surviving thermal plants appear to be running at lower capacity factor as non-ETS renewables take over the grid, which mechanically raises their emissions per unit of their own real revenue. Cement/glass (23) is the only big sector with sustained within-firm abatement across both phases. Petroleum (19) and chemicals (20) both have a Phase I/II intensity \emph{rise} reversed post-2012, a pattern that cancels on net. Basic metals (24) on the non-reclassified survivors shows essentially no Technique in either phase; the 71-pp sector decline is overwhelmingly Exit.
+
+\textbf{Within-sector reallocation exists and goes in both directions.} Cement/glass is the textbook H1 story: $-15.1$ pp of within-sector reallocation over 2005$\to$2022 ($-16.3$ in 2012$\to$2022 alone). Dirtier firms lost share to cleaner ones inside that sector. The opposite happens in electricity ($+12.8$), petroleum ($+16.0$), and especially chemicals ($+24.4$): dirtier firms \emph{gained} share within the sector. The aggregate within-sector reallocation of $+4.9$ pp in \S\ref{sec:pairwise} is the weighted average: the dirty-gaining effect in the large chemicals, petroleum, and electricity sectors outweighs the clean-gaining effect in cement/glass.
+
+\textbf{What this implies for the broader story.} The paper's main within-sector-reallocation null is not uniform. There is a clean reallocation story in NACE 23 --- exactly the sector where \cite{phase3}'s pass-through evidence is strongest --- and opposite-signed within-sector reallocation elsewhere. Any H1 vs H2 test that pools across sectors will wash out the cement signal. A sector-by-sector treatment (or at least a split that isolates NACE 23) is a natural follow-up.
 
 \section{ETS vs.\ non-ETS output share}
 
@@ -180,7 +180,7 @@ No correlation. Raw correlations $0.039$ (cost share) and $-0.005$ (\% priced).
 \subsection{Variables}
 \begin{itemize}
   \item $\mathrm{ETS\_share}_{s,t}$: share of total revenue in NACE 4-digit sector $s$ accounted for by ETS-regulated firms. Sample restricted to \emph{mixed} sectors (those containing both ETS and non-ETS firms in year $t$); 80 such sectors.
-  \item $\mathrm{cost\_share}_{s,t}$ as in \S\ref{sec:opcov}.
+  \item $\mathrm{cost\_share}_{s,t} = \mathrm{shortage}_{s,t} \cdot \mathrm{EUA}_t / \mathrm{revenue}_{s,t}$: sector-year carbon cost share.
 \end{itemize}
 
 \subsection{Specification}
@@ -340,13 +340,13 @@ Similar patterns under top-tercile and 10\%-significance cutoffs: the H1-directi
 \toprule
 Test & Level & Finding \\
 \midrule
-SCT decomposition                         & Within NACE 2d, ETS firms                 & Within-sector realloc.\ $\approx 0$ \\
-OP covariance vs.\ carbon cost           & Sector-year panel                          & No correlation \\
+Pairwise decomposition                    & Aggregate, ETS firms                      & Post-2012 decline is all Between-sector; aggregate Within-sector $\approx +5$ pp \\
+Sector-level heterogeneity                & NACE 2d, ETS firms                        & Cement (23) shows clean reallocation ($-15$); electricity/petroleum/chemicals show dirty gaining; aggregate null masks the split \\
 ETS vs.\ non-ETS share                    & NACE 4d, full panel                       & No correlation with carbon cost; wrong-signed lag-1 \\
-Binary split by exposure, NACE 4d        & Within NACE 4d, ETS firms                 & Flat post-2017 \\
+Binary split by exposure, NACE 4d         & Within NACE 4d, ETS firms                 & Flat post-2017 \\
 Terciles within sector                    & Within NACE 4d, ETS firms                 & Long-run trend, no post-2017 break \\
 Phase 4 Spec 1.A (pooled)                 & Firm-year panel LP under ID-A             & Sign flip across shock/surprise; uninterpretable \\
-Phase 4 Spec 1.C (sample split)          & Firm-year panel LP, high-pass-through sectors & Negative under surprise $h\geq 2$, positive under shock; same flip \\
+Phase 4 Spec 1.C (sample split)           & Firm-year panel LP, high-pass-through sectors & Negative under surprise $h\geq 2$, positive under shock; same flip \\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -355,7 +355,6 @@ Phase 4 Spec 1.C (sample split)          & Firm-year panel LP, high-pass-through
 
 \begin{thebibliography}{99}
 \bibitem[K\"anzig(2025)]{kanzig2025} K\"anzig, D.~R. (2025). ``The Unequal Economic Consequences of Carbon Pricing.''
-\bibitem[Melitz and Polanec(2015)]{melitz2015} Melitz, M.~J. and S.~Polanec (2015). ``Dynamic Olley--Pakes Productivity Decomposition with Entry and Exit.'' \emph{RAND Journal of Economics} 46(2).
 \bibitem[Phase 3 notes]{phase3} Internal: \texttt{phase3\_build\_exposure\_panel.R}.
 \bibitem[Pass-through notes]{passthrough} Internal: \texttt{PASSTHROUGH\_CPSHOCK.md}, S7--S12.
 \end{thebibliography}
