@@ -229,104 +229,6 @@ Sector & P1 & P2 & P3 & P4 & P1 & P2 & P3 & P4 \\
 
 \paragraph{Takeaway 2 --- substantial heterogeneity across sectors and across time.} The Phase 3 technique channel ranges from $-42$ (petroleum) to $+19$ (electricity), a 60-pp spread. Cement alone moves from $-6 \to -14 \to -27 \to +11$ across phases. Within-sector reallocation has even wider variation ($-15$ to $+83$ across sector-phase cells). There is no single ``ETS response'' pattern that applies economy-wide; each large sector has its own phase-specific story.
 
-\section{Within-ETS cross-sector output response}
-\label{sec:withinets}
-
-\textbf{Script:} \texttt{analysis/phase0\_within\_ets\_cross\_sector.R}.
-
-This section asks whether ETS firms in sectors with higher pre-MSR carbon-cost exposure see larger real revenue declines as the EUA price rises, compared to ETS firms in less exposed sectors. It is a cross-sector test inside the ETS panel only --- there is no non-ETS comparison group.
-
-\subsection{Variables}
-
-Firm-level variables:
-\begin{itemize}
-  \item $\mathrm{real\_rev}_{i,t}$: nominal turnover deflated by NACE 4d PPI (2d fallback).
-  \item $\mathrm{intensity\_base}_s$: pre-MSR (2013--16 mean) carbon cost share of the ETS firms in NACE 4d sector $s$. Source: \texttt{data/processed/phase3\_sector\_exposure.RData}.
-  \item $\mathrm{EUA}_t$: annual mean EUA secondary-market price, 2005--2022.
-  \item $\mathrm{shock}_{s,t} = 100 \cdot \mathrm{intensity\_base}_s \cdot \mathrm{EUA}_t$: Bartik-style shock.
-\end{itemize}
-Sample: ETS firms only; three contaminated VATs excluded.
-
-\subsection{Specification}
-
-\begin{equation}
-  \log(\mathrm{real\_rev})_{i,s,t} = \beta \cdot \mathrm{shock}_{s,t} + \alpha_i + \delta_t + \varepsilon_{i,s,t}.
-\end{equation}
-\begin{itemize}
-  \item $\alpha_i$ (firm FE) absorbs firm size, firm-invariant sector (since a firm's sector is fixed), and time-invariant scale.
-  \item $\delta_t$ (year FE) absorbs all macro shocks common across ETS firms in year $t$, including the main effect of $\mathrm{EUA}_t$.
-  \item $\beta$ identified from the interaction: for a given ETS firm, log revenue deviations from its own mean and from the year's ETS-wide average co-vary with $(\mathrm{intensity\_base}_s - \overline{\mathrm{intensity\_base}}) \cdot (\mathrm{EUA}_t - \overline{\mathrm{EUA}})$. A firm in a dirtier-than-average sector in a higher-than-average EUA year gets higher $\mathrm{shock}$; $\beta < 0$ means its log revenue is lower than what firm and year FE would predict.
-  \item SEs clustered on NACE 4d.
-\end{itemize}
-
-\textbf{Cannot use sector-year FE.} $\mathrm{shock}_{s,t}$ is a 4d-year variable, so 4d $\times$ year FE would absorb it. The design uses firm + year FE only.
-
-\subsection{Identification assumption and key caveat}
-
-The assumption is that, conditional on firm and year FE, $\mathrm{shock}_{s,t}$ is uncorrelated with other determinants of ETS firms' revenue. \textbf{This assumption is strong and arguably fails.} Sectors with high $\mathrm{intensity\_base}$ are precisely the energy-intensive sectors (cement, metals, petroleum, bulk chemicals). Three confounders co-move with EUA and hit energy-intensive sectors differentially:
-\begin{itemize}
-  \item \textbf{Energy prices.} Natural gas and wholesale electricity prices co-move with EUA (EUA is passed through to electricity; gas and coal substitute as thermal fuels). Energy-intensive ETS firms' revenue responds to their own energy costs; this response is larger in high-$\mathrm{intensity\_base}$ sectors regardless of carbon regulation.
-  \item \textbf{Business cycle.} Bulk industrial sectors are more cyclical than specialty manufacturing. EUA rises in booms; dirty-sector revenue rises more in booms.
-  \item \textbf{Commodity and exchange-rate cycles.} Steel prices, petroleum prices, and cement prices all have their own cycles that correlate with EUA to varying degrees.
-\end{itemize}
-Without a non-ETS control group in the same sector-year, we cannot partial out these confounders. $\beta$ conflates the carbon-cost response with these macro-energy-cycle responses.
-
-\subsection{Results}
-
-\begin{center}
-\captionof{table}{Coefficient $\hat\beta$ on $\mathrm{shock}_{s,t} = 100 \cdot \mathrm{intensity\_base}_s \cdot \mathrm{EUA}_t$. Firm + year FE, cluster-robust SEs on NACE 4d. Sample: ETS firms only, 244 distinct firms across 91 4d sectors.}
-\begin{tabular}{lrrrr}
-\toprule
-Window & $\hat\beta$ & SE & $t$ & $p$ \\
-\midrule
-A: 2005--2022 (full panel)                                 & $-0.036$ & $0.009$ & $-3.98$ & $<0.001$ \\
-B: 2013--2022 (Phase 3 onward)                              & $-0.031$ & $0.010$ & $-3.05$ & $0.003$  \\
-C: 2017--2022 (post-base, cleanest Bartik)                  & $-0.021$ & $0.010$ & $-2.00$ & $0.05$   \\
-Robustness: 2d $\times$ year FE (full panel)                & $-0.040$ & $0.012$ & $-3.38$ & $0.001$  \\
-\bottomrule
-\end{tabular}
-\end{center}
-
-\textbf{All four specs give negative, statistically significant estimates.} Across windows, $\hat\beta$ ranges from $-0.021$ to $-0.040$. Economic magnitude: at peak EUA (80 EUR) and the dirtiest sector ($\mathrm{intensity\_base} \approx 0.005$), $\mathrm{shock} = 40$, so $\hat\beta \cdot \mathrm{shock} = -1.4$ log points ($\sim -75\%$ in levels) for window A, or $-0.82$ log points ($\sim -56\%$) for the Bartik-clean window C. The 2d $\times$ year FE robustness (absorbing NACE 2d-year macro and identifying off within-2d 4d variation across ETS firms) gives a magnitude very close to the main spec, suggesting the cross-sector signal is not a pure NACE-2d composition artefact.
-
-\subsection{Swapping EUA for K\"anzig's CPShock as the time-varying shifter}
-
-The identification caveat above warns that $\mathrm{EUA}_t$ co-moves with sector-level energy prices, business cycle, and commodity cycles, so $\beta$ conflates carbon-cost response with those channels. \citet{kanzig2025}'s monthly carbon policy surprise series is constructed precisely to be orthogonal to contemporaneous macro, financial, and oil-market news --- it is identified off EUA changes in narrow event windows around EU ETS regulatory announcements. Aggregating to annual (sum of the monthly surprises in each calendar year) and substituting it for $\mathrm{EUA}_t$ in the shifter gives a cleaner identification:
-\[
-  \mathrm{shock}^{\mathrm{cps}}_{s,t} \;=\; 100 \cdot \mathrm{intensity\_base}_s \cdot \mathrm{CPShock}^{\mathrm{ann}}_t.
-\]
-Two K\"anzig series: $\mathrm{cpshock\_surprise}$ (raw event-day surprise) and $\mathrm{cpshock\_shock}$ (VAR-identified structural response). Sample ends 2019 because that's the last year of K\"anzig's published series.
-
-\begin{center}
-\captionof{table}{Within-ETS cross-sector regression with CPShock-based shifter. Firm + year FE, cluster-robust SEs on NACE 4d.}
-\begin{tabular}{lrrrr}
-\toprule
-Shifter / Window & $\hat\beta$ & SE & $t$ & $p$ \\
-\midrule
-$\mathrm{cpshock\_surprise}$, 2005--2019 & $-0.050$ & $0.134$ & $-0.37$ & $0.71$ \\
-$\mathrm{cpshock\_surprise}$, 2013--2019 & $+0.462$ & $0.387$ & $+1.19$ & $0.24$ \\
-$\mathrm{cpshock\_shock}$, 2005--2019    & $+0.065$ & $0.079$ & $+0.82$ & $0.41$ \\
-$\mathrm{cpshock\_shock}$, 2013--2019    & $-0.011$ & $0.053$ & $-0.20$ & $0.84$ \\
-\bottomrule
-\end{tabular}
-\end{center}
-
-\textbf{The significant negative coefficients from the EUA-based spec completely evaporate.} All four CPShock-based estimates are null, with signs that flip across surprise vs shock and across windows. Point estimates become imprecise (SEs an order of magnitude larger in absolute terms) because annual CPShock has low variance (SD $\approx 0.53$ EUR at annual frequency; see \cite{passthrough}) and the identifying variation is now confined to regulatory-announcement-driven EUA moves, which are a fraction of the total EUA variance the EUA-based spec exploited.
-
-The correct reading is that \textbf{the $\hat\beta \in [-0.040, -0.021]$ from the EUA-based within-ETS cross-sector spec was picking up the sector-level energy-price / business-cycle confounders}, not a clean carbon-cost response. Under K\"anzig's exogenous identification, the within-ETS cross-sector channel is null.
-
-The familiar K\"anzig pathology is visible here too: $\mathrm{cpshock\_surprise}$ and $\mathrm{cpshock\_shock}$ deliver opposite-sign point estimates in the 2013--2019 window ($+0.46$ vs $-0.01$) and in the 2005--2019 window ($-0.05$ vs $+0.07$). Same shock-vs-surprise sign flip as the Phase 4 Spec 1.A exercise in \S\ref{sec:phase4}, and for the same unresolved reason. None of the flips are statistically significant here, so no interpretive weight either way.
-
-\subsection{Takeaway}
-
-The EUA-based spec's significant negative coefficient was driven by sector-level energy-price and business-cycle channels that co-move with EUA. Under K\"anzig's clean identification, the within-ETS cross-sector channel is null. Consistent with the broader literature \citep{colmer2024, dechezleprêtre2023}: cleanly identified output effects of EU ETS regulation on ETS firms are small or null.
-
-Two caveats:
-\begin{itemize}
-  \item \textbf{Power.} CPShock at annual frequency is weak; the panel has 244 ETS firms. The null is an under-powered null, not a power-robust zero.
-  \item \textbf{Sample horizon ends 2022.} Post-2022 EUA trajectory (high 60--80 EUR sustained through Phase 4) could produce a detectable response that we cannot see.
-\end{itemize}
-
 \section{Within-sector output shares by exposure tercile}
 
 \textbf{Script:} \texttt{analysis/phase1a\_output\_share\_by\_exposure.R}. Eyeball/descriptive test.
@@ -463,7 +365,6 @@ Test & Level & Finding \\
 Pairwise decomposition                    & Aggregate, ETS firms                      & Post-2012 decline is all Between-sector; aggregate Within-sector $\approx +5$ pp \\
 Sector-level heterogeneity                & NACE 2d, ETS firms                        & Cement (23) shows clean reallocation ($-15$); electricity/petroleum/chemicals show dirty gaining; aggregate null masks the split \\
 Sector-phase decomposition                & NACE 2d $\times$ phase, ETS firms         & Large heterogeneity across sectors and across phases; electricity hard to interpret (capacity-factor channel) \\
-Within-ETS cross-sector response          & ETS-only, firm + year FE                  & EUA-based: $\hat\beta \in [-0.040, -0.021]$ significant but confounded; CPShock-based: null once confounders removed \\
 Binary split by exposure, NACE 4d         & Within NACE 4d, ETS firms                 & Flat post-2017 \\
 Terciles within sector                    & Within NACE 4d, ETS firms                 & Long-run trend, no post-2017 break \\
 Phase 4 Spec 1.A (pooled)                 & Firm-year panel LP under ID-A             & Sign flip across shock/surprise; uninterpretable \\
