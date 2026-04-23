@@ -360,68 +360,85 @@ Similar patterns under top-tercile and 10\%-significance cutoffs: the H1-directi
 
 \textbf{Script:} \texttt{analysis/phase4\_b2b\_supplier\_switching.R}. Reportable results require the full B2B sample on RMD; local-1 estimates are for code validation.
 
-This is the network-level reallocation test. Angles 1--3 ask whether ETS firms' output responds to carbon cost exposure. Angle 4 asks whether \emph{buyers} reallocate their purchases away from ETS suppliers with high carbon cost exposure as EUA rises --- a reallocation via the supplier-customer network rather than via firm output.
+Angles 1--3 ask whether ETS firms' output responds to carbon cost exposure. Angle 4 asks the \emph{network-level} question: do buyers reallocate their purchases away from high-carbon-exposure ETS suppliers? The natural parallel is the Peter-Ruane (2025) and Boehm-Levchenko-Pandalai-Nayar (2022) horizon-differentiated elasticity literature: both papers extract long-run substitution elasticities from \emph{permanent} shocks observed over a long enough window, and both are sharp about what permanence and horizon require for identification.
+
+Transplanting that template here gives us two changes relative to the original Bartik design. First, the permanent shock in our setting is the post-2015 ETS regime change (MSR decided Oct 2015, implemented Jan 2019, EUA price $\sim\!\!\mbox{\euro}5\to\mbox{\euro}80$ by 2022, Fit-for-55 + CBAM cementing the scarcity regime). Pre-MSR exposure should therefore be computed on 2013--2015, \emph{not} 2013--2016: the 2016 emissions risk being contaminated by MSR anticipation. Second, the identification cannot rely on $\mathrm{EUA}_t$ as a continuous shifter. $\mathrm{EUA}_t$ co-moves with oil, gas, electricity, and the Belgian cycle, and firms with high $\mathrm{firm\_cost\_share}$ are also typically more gas- or coal-intensive. A Bartik interaction $\mathrm{EUA}_t\times\mathrm{firm\_cost\_share}_j$ therefore conflates carbon-cost substitution with commodity-cycle substitution. Peter-Ruane and BLPN dodge this through \emph{heterogeneous} product-level shifts; we have only one aggregate EUA series, so we lose that protection. The fix is to push identification into the cross-section with event-study long differences, and to use within-seller-sector fixed effects to absorb sector-level commodity and cyclical shocks.
 
 \subsection{Variables}
 
 \begin{itemize}
-  \item $\mathrm{flow}_{j,b,t}$: real (deflated by seller's NACE 4d PPI) euros of sales from ETS seller $j$ to buyer $b$ in year $t$. Raw input: \texttt{b2b\_selected\_sample} \texttt{corr\_sales} field. Units: deflated euros.
-  \item $\mathrm{share}_{j,b,t} = \mathrm{flow}_{j,b,t} / \sum_{j' \in s(j)} \mathrm{flow}_{j',b,t}$: share of buyer $b$'s year-$t$ purchases from the seller's NACE 4d sector $s(j)$ accounted for by seller $j$. Denominator sums over all sellers (ETS and non-ETS) in the same 4d sector selling to the same buyer.
-  \item $\mathrm{firm\_cost\_share}_j$: ETS seller's pre-MSR carbon cost share, defined in \S\ref{sec:phase4} (the same firm-level Bartik-compatible exposure used in Spec 1.A).
-  \item $\mathrm{firm\_dev}_{j,s(j)} = \mathrm{firm\_cost\_share}_j - \overline{\mathrm{firm\_cost\_share}}_{s(j)}$: within-4d-sector demeaning of the seller's exposure.
-  \item $\mathrm{Signal}_t$: EUA annual mean (for Bartik interpretation) as the primary shifter; K\"anzig's \texttt{cpshock\_surprise} and \texttt{cpshock\_shock} as robustness only --- both are unreliable at annual frequency, see \S\ref{sec:phase4} caveat.
-  \item Sample: seller side restricted to ETS firms with known $\mathrm{firm\_cost\_share}_j$ (three contaminated VATs excluded); buyer side is any firm in the Belgian B2B network.
+  \item $\mathrm{flow}_{j,b,t}$: real (deflated by seller's NACE 4d PPI) euros of sales from ETS seller $j$ to buyer $b$ in year $t$. Raw input: \texttt{b2b\_selected\_sample} \texttt{corr\_sales}.
+  \item $\mathrm{share}_{j,b,t} = \mathrm{flow}_{j,b,t} / \sum_{j' \in s(j)} \mathrm{flow}_{j',b,t}$: share of buyer $b$'s year-$t$ purchases from seller-NACE 4d sector $s(j)$ accounted for by seller $j$. Denominator sums over all sellers (ETS \emph{and} non-ETS) in the same 4d sector selling to the same buyer. Requires vat-to-NACE mapping for non-ETS sellers from annual accounts.
+  \item $\mathrm{firm\_cost\_share}_j = \mathrm{mean}_{2013\text{--}15}(\mathrm{shortage}_j\cdot\mathrm{EUA}_t)/\mathrm{mean}_{2010\text{--}12}(\mathrm{total\_cost}_j)$: ETS seller's pre-MSR carbon cost share. Numerator window 2013--2015 (rather than the Spec 1.A 2013--2016) to keep the pre-period strictly pre-MSR-decision. Denominator window 2010--2012 unchanged, with earliest-3-year fallback.
+  \item $\mathrm{firm\_dev}_{j,s(j)} = \mathrm{firm\_cost\_share}_j - \overline{\mathrm{firm\_cost\_share}}_{s(j)}$: within-NACE 4d demeaning. Identifies whether seller $j$ is dirtier or cleaner than its sector mean.
+  \item Baseline year $t_0 = 2015$. Horizons $h\in\{1,\ldots,7\}$ correspond to 2016--2022.
+  \item Sample: seller side restricted to ETS firms with known $\mathrm{firm\_cost\_share}_j$ (three contaminated NACE 20/24 VATs excluded); buyer side is any firm in the Belgian B2B network.
 \end{itemize}
 
-\subsection{Specifications}
+\textbf{K\"anzig annual CPShock series dropped.} The shock and surprise variants are essentially uncorrelated at annual frequency ($r = 0.03$) and the SR sign flip is driven by 6 disagreement-sign years (see \texttt{memory/project\_spec1a\_shock\_vs\_surprise\_flip.md} and \S\ref{sec:phase4}). Neither is a usable annual identifier for this exercise.
 
-\paragraph{Spec 4.A --- Flow-level pair panel.}
+\subsection{Primary specifications: event-study long differences}
+
+Both specs follow the Peter-Ruane template: anchor at a pre-shock baseline $t_0=2015$ and run one cross-sectional regression per horizon $h$. Because each $(j,b)$ pair contributes a single observation at a given $h$, pair fixed effects cannot be used; identification instead comes from within-buyer (Spec 4.A-event) or within-buyer-sector (Spec 4.B-event) cross-sectional variation in seller exposure.
+
+\paragraph{Spec 4.B-event --- Primary. Within-seller-sector share long difference.}
+For each $h\in\{1,\ldots,7\}$:
 \begin{equation}
-  \Delta \log(\mathrm{flow})_{j,b,t} = \beta \cdot \big(\mathrm{Signal}_t \times \mathrm{firm\_cost\_share}_j\big) + \alpha_{b,t} + \alpha_{j,b} + \varepsilon_{j,b,t}.
-  \label{eq:4A}
+  \mathrm{share}_{j,b,2015+h} - \mathrm{share}_{j,b,2015}
+  = \beta^{h}\cdot \mathrm{firm\_dev}_{j,s(j)}
+  + \alpha_{b, s(j)} + \varepsilon_{j,b}^{h}.
+  \label{eq:4B-event}
 \end{equation}
+Analog of Peter-Ruane's 1989$\to$1989+$h$ long difference with within-ASICC-1d FE.
 \begin{itemize}
-  \item $\alpha_{b,t}$ (buyer $\times$ year FE) absorbs everything about buyer $b$'s year-$t$ total spending trajectory, including aggregate demand conditions and the main effect of $\mathrm{Signal}_t$ itself.
-  \item $\alpha_{j,b}$ (pair FE) absorbs each (seller, buyer) relationship's time-invariant intensity.
-  \item $\beta$ is identified within a buyer-year cell: across seller $j$s in that cell, does the flow from the more-exposed ETS seller fall by more than the flow from a less-exposed ETS seller?
-  \item Under H1 (reallocation), $\beta < 0$. Under H2 (inelastic demand, no reallocation), $\beta = 0$.
+  \item $\alpha_{b, s(j)}$ (buyer $\times$ seller-NACE 4d FE) absorbs the buyer's sector-level spending shift between 2015 and 2015+$h$. Any oil price, gas price, electricity price, or Belgian business-cycle shock that hits the whole seller-4d sector uniformly is \emph{absorbed}. The identifying variation is exclusively cross-firm heterogeneity in $\mathrm{firm\_dev}$ within the same (buyer, seller-sector) cell.
+  \item $\beta^h$ is the horizon-$h$ cross-firm elasticity of supplier share within a buyer's basket for a given 4d input: how much does a one-unit-dirtier-than-sector-mean seller lose in share over $h$ years?
+  \item Under H1 (reallocation), $\beta^h<0$ and $|\beta^h|$ rising in $h$ until adjustment completes.
   \item SEs clustered two-way on seller and buyer.
+  \item \textbf{Identification requirement:} a buyer must purchase from $\geq 2$ ETS sellers in the same 4d sector in year 2015 \emph{and} in year 2015+$h$. Sample shrinks at larger $h$.
 \end{itemize}
 
-\paragraph{Spec 4.B --- Within-seller-sector supplier share.} Sharpest test.
+\paragraph{Spec 4.A-event --- Flow long difference with buyer-sector FE.}
 \begin{equation}
-  \Delta \mathrm{share}_{j,b,t} = \beta \cdot \big(\mathrm{Signal}_t \times \mathrm{firm\_dev}_{j,s(j)}\big) + \alpha_{b,s(j),t} + \alpha_{j,b} + \varepsilon_{j,b,t}.
-  \label{eq:4B}
+  \log(\mathrm{flow})_{j,b,2015+h} - \log(\mathrm{flow})_{j,b,2015}
+  = \beta^{h} \cdot \mathrm{firm\_cost\_share}_j
+  + \alpha_{b, s(j)} + \varepsilon_{j,b}^{h}.
+  \label{eq:4A-event}
 \end{equation}
-\begin{itemize}
-  \item $\alpha_{b,s(j),t}$ (buyer $\times$ seller-4d-sector $\times$ year FE) absorbs \emph{the buyer's total spending in seller-sector $s$ in year $t$}. So $\beta$ isolates within-seller-sector substitution across individual suppliers, within the buyer's own basket for that sector.
-  \item $\alpha_{j,b}$ (pair FE) absorbs time-invariant relationship intensity.
-  \item $\beta$ is identified from: at fixed buyer, fixed seller-sector, fixed year, across ETS sellers in that cell, does the share of the buyer's purchases shift from high-$\mathrm{firm\_dev}$ sellers (dirtier than their sector mean) to low-$\mathrm{firm\_dev}$ sellers (cleaner than their sector mean)?
-  \item This is the textbook H1 test at the buyer-side: within a 4d product market, dirty suppliers should lose share to clean suppliers as carbon costs bite.
-  \item SEs clustered two-way on seller and buyer.
-  \item \textbf{Identification requirement:} a buyer must purchase from $\geq 2$ ETS sellers in the same 4d sector in the same year. On the local-1 downsampled B2B this gives $\sim 5{,}000$ buyer-sector-year cells; on RMD with full B2B the number will be larger.
-\end{itemize}
+Uses $\mathrm{firm\_cost\_share}$ rather than the within-sector deviation, so identifies off absolute exposure; the buyer $\times$ seller-4d FE provides partial protection against commodity-cycle confounders but is not as tight as the within-sector-deviation identification in Spec 4.B-event.
 
-\paragraph{Extensive margin.}
+\paragraph{Extensive margin long difference.}
 \begin{equation}
-  \Pr(\mathrm{flow}_{j,b,t+h} > 0 \mid \mathrm{flow}_{j,b,t} > 0) = \beta \cdot \big(\mathrm{Signal}_t \times \mathrm{firm\_cost\_share}_j\big) + \alpha_{b,t} + \alpha_{j,b} + \varepsilon.
+  \mathbf{1}\{\mathrm{flow}_{j,b,2015+h} > 0 \mid \mathrm{flow}_{j,b,2015} > 0\}
+  = \beta^{h}\cdot \mathrm{firm\_cost\_share}_j
+  + \alpha_{b,s(j)} + \varepsilon.
 \end{equation}
-Linear probability model for relationship continuation. Tests whether buyers \emph{drop} high-cost-share suppliers rather than merely shrink them. Under H1, $\beta < 0$.
+Tests whether buyers \emph{drop} high-cost-share suppliers rather than merely shrink them. Under H1, $\beta^h < 0$.
 
-\subsection{Identification assumption}
+\subsection{Benchmark specifications (Bartik annual-change)}
+\label{sec:b2b-bartik-caveat}
 
-The Bartik structure (pre-determined $\mathrm{firm\_cost\_share}_j$ $\times$ aggregate $\mathrm{EUA}_t$) rests on the same two assumptions as Spec 1.A in \S\ref{sec:phase4}:
+The original Bartik annual-change specs are retained as a benchmark:
+\begin{align*}
+  \text{Spec 4.A-annual:}\quad & \Delta \log(\mathrm{flow})_{j,b,t} = \beta\cdot(\mathrm{EUA}_t\times\mathrm{firm\_cost\_share}_j) + \alpha_{b,t} + \alpha_{j,b} + \varepsilon,\\
+  \text{Spec 4.B-annual:}\quad & \Delta \mathrm{share}_{j,b,t} = \beta\cdot(\mathrm{EUA}_t\times\mathrm{firm\_dev}_{j,s(j)}) + \alpha_{b,s(j),t} + \alpha_{j,b} + \varepsilon.
+\end{align*}
+These are \emph{not} the primary tests. Because $\mathrm{EUA}_t$ co-moves with oil, gas, electricity, and cyclical factors, and $\mathrm{firm\_cost\_share}$ correlates positively with gas/coal intensity within a sector, Spec 4.A-annual cannot separate carbon-cost-induced substitution from commodity-cycle substitution. Spec 4.B-annual partially mitigates the problem via the buyer $\times$ seller-4d $\times$ year FE, but still identifies off the time-series variation in $\mathrm{EUA}_t$, so any residual within-sector commodity heterogeneity still contaminates $\beta$. Report these for transparency only; read the event-study $\beta^h$ as the primary estimate.
+
+\subsection{Identification assumptions (event-study primary specs)}
+
 \begin{itemize}
-  \item $\mathrm{firm\_cost\_share}_j$ is pre-MSR (2013--16 average) and therefore pre-determined with respect to the 2017+ EUA surge. For earlier years the assumption is strained in the same way as the main reallocation note discusses.
-  \item $\mathrm{EUA}_t$ is exogenous to any individual Belgian ETS seller's supplier relationships, conditional on FEs. This is a standard shift-share exogeneity assumption.
+  \item $\mathrm{firm\_cost\_share}_j$ on the 2013--2015 window is pre-determined w.r.t. the MSR regime change. MSR was decided Oct 2015 and implemented Jan 2019, so 2015 is the last plausibly pre-shock year.
+  \item The MSR shock is effectively permanent: the Market Stability Reserve is legally binding, Fit-for-55 tightens the cap through 2030, and CBAM 2026 further locks in carbon pricing. This matches the permanence condition in Boehm-Levchenko-Pandalai-Nayar and Peter-Ruane --- indeed, EU institutional commitment is arguably stronger than WTO tariff bindings.
+  \item Spec 4.B-event's within-sector FE absorbs any sector-level shock (commodities, cycle, demand) between 2015 and 2015+$h$. Residual threat: within a 4d sector, firms with higher $\mathrm{firm\_cost\_share}$ may also have systematically higher gas/oil exposure, so $\beta^h$ could pick up cross-firm-within-sector commodity substitution. This residual concern cannot be fully dispatched without firm-level gas/oil cost shares.
+  \item \textbf{Horizon truncation.} Data ends 2022, giving $h\leq 7$. BLPN finds 7--10 years for convergence; P\&R uses a 7-year window. Our longest-horizon $\beta^7$ should be framed as ``medium- to long-run'' rather than fully converged long-run.
 \end{itemize}
-The distinctive feature of Angle 4 is that the buyer-year and pair FEs are stronger controls than anything available in the ETS-only firm-output specs: a buyer's year-$t$ total demand is fully absorbed, so $\beta$ cleanly captures within-buyer cross-supplier heterogeneity. This is the key reason Angle 4 is a sharper test than the Spec 1.A family.
 
 \subsection{Status}
 
-Script is written and runs end-to-end on local 1 downsampled B2B. Local-1 estimates for Spec 4.A under EUA-Bartik are essentially zero at every sample window ($\hat\beta \in [-0.001, +0.001]$, all $p > 0.6$), but the downsampled B2B is not the production data --- pair FE is meaningfully thinner than in the full network, and local-1 estimates are not reportable. Spec 4.B is deferred to RMD because the share denominator requires clean sector attribution for non-ETS sellers, which is cleaner on the production sample.
+Rewritten to run event-study horizons $h=1,\ldots,7$ on RMD directly; local-1 output is diagnostic only.
 
-\textbf{RMD deployment:} the script is designed to be data-driven and runs unchanged on RMD given the same data file paths (see \texttt{paths.R} user-aware branches). Run on full B2B to obtain reportable estimates.
+\textbf{RMD deployment:} the script is fully self-contained (rebuilds \texttt{firm\_cost\_share} on 2013--2015 from \texttt{phase3\_firm\_exposure.RData}; no dependence on \texttt{phase4\_firm\_treatment.rds}). It runs unchanged on RMD given the same data file paths (see \texttt{paths.R}). Run on full B2B + full annual accounts to obtain reportable estimates.
 
 \section{Summary of reallocation tests}
 
@@ -437,12 +454,12 @@ Binary split by exposure, NACE 4d         & Within NACE 4d, ETS firms           
 Terciles within sector                    & Within NACE 4d, ETS firms                 & Long-run trend, no post-2017 break \\
 Phase 4 Spec 1.A (pooled)                 & Firm-year panel LP under ID-A             & Sign flip across shock/surprise; uninterpretable \\
 Phase 4 Spec 1.C (sample split)           & Firm-year panel LP, high-pass-through sectors & Negative under surprise $h\geq 2$, positive under shock; same flip \\
-Angle 4 Spec 4.A (B2B flow)               & Pair panel, buyer$\times$year + pair FE   & Local-1 downsample null under EUA-Bartik; reportable results require RMD \\
+Angle 4 Spec 4.A-event / 4.B-event (B2B) & Event-study long diff around $t_0=2015$, within buyer $\times$ seller-4d cell, horizons $h=1..7$ & RMD only. Primary Peter-Ruane-style horizon-$\beta^h$ estimator for supplier substitution \\
 \bottomrule
 \end{tabular}
 \end{center}
 
-\textbf{Bottom line.} Across every pre-Phase-4 test, within-sector reallocation is approximately zero or uncorrelated with carbon cost exposure. Phase 4 Spec 1.A/1.C under ID-A cannot deliver a directional answer until the shock-vs-surprise sign flip is understood. Identifications ID-B (EUA level) and ID-C (event study), plus Angle 4 (B2B supplier switching), remain to be run.
+\textbf{Bottom line.} Across every pre-Phase-4 test, within-sector reallocation is approximately zero or uncorrelated with carbon cost exposure. Phase 4 Spec 1.A/1.C under ID-A cannot deliver a directional answer because of the annual-CPShock shock-vs-surprise sign flip. Identifications ID-B (EUA level) and ID-C (event study), plus Angle 4 event-study specs (\S\ref{sec:b2b}, $\beta^h$ over $h=1,\ldots,7$ on RMD), remain to be run.
 
 \begin{thebibliography}{99}
 \bibitem[K\"anzig(2025)]{kanzig2025} K\"anzig, D.~R. (2025). ``The Unequal Economic Consequences of Carbon Pricing.''
