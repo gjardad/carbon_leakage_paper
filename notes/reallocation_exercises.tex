@@ -188,6 +188,73 @@ Year & Firms (pair) & Total & Between-sector & Within-sector residual \\
 
 \textbf{Headline.} Total emissions fell $\sim 46$\% between 2005 and 2022. Decomposing the decline: between-sector reallocation $\approx 20$--$23$ pp ($\sim 45$--$50\%$ of total), within-firm abatement $\approx 23$--$26$ pp ($\sim 50$--$55\%$ of total), within-sector reallocation $\approx 0$. The samples are too small to assign meaningful statistical uncertainty; the two specifications agree to within $\sim 3$ pp on every channel, so the qualitative story does not depend on which is used.
 
+\section{Six-channel pairwise decomposition}
+\label{sec:pairwise}
+
+\textbf{Script:} \texttt{analysis/phase0\_pairwise\_decomposition.R}.
+
+Runs the same Grossman--Krueger accounting as \S\ref{sec:sct} but for arbitrary $(t_{\text{base}}, t_{\text{end}})$ pairs rather than fixed-base 2005. Adds explicit entry and exit channels.
+
+\subsection{Variables}
+Same primitives as \S\ref{sec:sct}: $e_{i,t}$, $q_{i,t}$, $Y_t$. For a given pair $(t_0, t_1)$:
+\begin{itemize}
+  \item Survivors $S$: firms with $e_{i,t} > 0$ for both $t = t_0$ and $t = t_1$. Joined on firm ID (\texttt{vat}); a firm that switches NACE 2d between years is still a survivor, and its $t_0$ sector is used for the between/within split.
+  \item Entrants $N$: firms with $e_{i,t_1} > 0$ and $e_{i,t_0} = 0$ (or no row in $t_0$).
+  \item Exiters $X$: firms with $e_{i,t_0} > 0$ and $e_{i,t_1} = 0$ (or no row in $t_1$).
+\end{itemize}
+Within-survivor aggregates: $Y_{t,S} = \sum_{i \in S} q_{i,t}$, $\theta_{i,t}^S = q_{i,t} / Y_{t,S}$, $z_{i,t} = e_{i,t}/q_{i,t}$.
+
+\subsection{Specification}
+Decompose total emissions change as
+\begin{equation}
+  E_{t_1} - E_{t_0} \;=\; \underbrace{\text{Scale}_S + \text{Between}_S + \text{Within}_S + \text{Technique}_S}_{\text{survivor portion}} \;+\; \underbrace{E_{t_1, N}}_{\text{Entry}} \;-\; \underbrace{E_{t_0, X}}_{\text{Exit}},
+\end{equation}
+with the survivor portion computed by the standard counterfactual construction:
+\begin{align*}
+  \text{Scale}_S     &= Y_{t_1,S} \textstyle\sum_{i \in S} \theta_{i,t_0}^S z_{i,t_0} - E_{t_0,S}, \\
+  \text{Between}_S   &= Y_{t_1,S} \textstyle\sum_{s} (\theta_{s,t_1}^S - \theta_{s,t_0}^S) z_{s,t_0}, \\
+  \text{Within}_S    &= Y_{t_1,S} \textstyle\sum_{i \in S} \theta_{i,t_1}^S z_{i,t_0} - Y_{t_1,S} \sum_s \theta_{s,t_1}^S z_{s,t_0}, \\
+  \text{Technique}_S &= Y_{t_1,S} \textstyle\sum_{i \in S} \theta_{i,t_1}^S (z_{i,t_1} - z_{i,t_0}).
+\end{align*}
+The six channels sum to $E_{t_1} - E_{t_0}$ exactly. All channels reported in pp of $E_{t_0}$.
+
+\subsection{Identification assumption}
+Mechanical accounting. Same caveat as \S\ref{sec:sct}: no causal claim.
+
+\subsection{Results}
+
+\begin{center}
+\captionof{table}{Six-channel pairwise decomposition. All channels in pp of $E_{t_{\text{base}}}$; channels sum to \textbf{Total}.}
+\small
+\begin{tabular}{lrrrrrrrrrr}
+\toprule
+Pair & n\_surv & n\_ent & n\_exit & Total & Scale & Between & Within & Tech & Entry & Exit \\
+\midrule
+2005 $\to$ 2007 & 154 & 8  & 8  & $-4.1$  & $+18.2$ & $+11.5$ & $+3.3$  & $-38.1$ & $+1.0$  & $-0.1$ \\
+2005 $\to$ 2012 & 127 & 37 & 35 & $-16.4$ & $+10.8$ & $+7.4$  & $+10.5$ & $\mathbf{-49.6}$ & $+10.8$ & $-6.4$ \\
+2005 $\to$ 2020 & 105 & 55 & 57 & $-20.3$ & $+1.6$  & $-14.3$ & $+11.1$ & $-21.5$          & $+10.3$ & $-7.4$ \\
+2005 $\to$ 2022 & 100 & 49 & 62 & $-37.3$ & $+15.6$ & $-31.7$ & $+4.5$  & $-25.6$          & $+8.5$  & $-8.5$ \\
+2007 $\to$ 2012 & 129 & 35 & 33 & $-12.8$ & $-6.6$  & $-3.9$  & $+4.0$  & $-10.4$          & $+10.8$ & $-6.7$ \\
+2007 $\to$ 2020 & 109 & 51 & 53 & $-16.8$ & $-12.6$ & $-18.5$ & $+9.3$  & $\mathbf{+2.6}$  & $+9.5$  & $-7.1$ \\
+2012 $\to$ 2020 & 126 & 34 & 38 & $-4.7$  & $-7.0$  & $-17.1$ & $+14.5$ & $\mathbf{+4.2}$  & $+3.1$  & $-2.3$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{What this pins down that Table 1 could not}
+
+The question ``did firms that abated by 2012 subsequently un-abate?'' cannot be answered from Table 1 alone, because its 2012 row (127 firms) and 2022 row (100 firms) use different samples. The pairwise table can. \textbf{Technique is $+4.2$ pp over $2012 \to 2020$ (126 survivors) and $+2.6$ over $2007 \to 2020$ (109 survivors).} Among firms present at both endpoints, the within-firm intensity reductions accumulated in Phase I/II (2005--2012, $-49.6$ pp) did not continue through Phase III --- on net, those same firms slightly \emph{raised} intensity from 2012 onward.
+
+The post-2012 decline in total ETS emissions is therefore being driven almost entirely by \textbf{between-sector} reallocation ($-17.1$ pp over 2012--2020), not by continued within-firm abatement. Entry and exit roughly cancel ($|\text{Entry} - \text{Exit}| \leq 4.4$ pp in every pair), confirming that sample dynamics are not driving the headline.
+
+\subsection{Residual caveats}
+
+\begin{itemize}
+  \item Samples still differ across pairs. ``$-49.6$ in 2005--2012'' and ``$+4.2$ in 2012--2020'' are computed on overlapping but not identical firm sets (127 vs 126 survivors); a triple-balanced panel would tighten the comparison.
+  \item ``Exit'' is not literal firm death: it captures any firm with zero emissions or missing Annual Accounts in $t_{\text{end}}$. The EUTL installation roster is nearly stable at 281 firms per year.
+  \item The ``Between'' column here uses only survivor aggregates, unlike the fixed-base Table 1 (which uses all firms at the sector level); numbers are not directly comparable across tables for overlapping years.
+\end{itemize}
+
 \section{Melitz--Polanec decomposition}
 
 \textbf{Script:} \texttt{analysis/phase0\_melitz\_polanec.R}.
