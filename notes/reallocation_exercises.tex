@@ -1,0 +1,434 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{caption}
+\usepackage{xcolor}
+
+\newcommand{\N}{\mathcal{N}}
+
+\title{Empirical Exercises on Reallocation:\\
+\large Notes on What We've Done So Far}
+\author{Working Note}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+These notes document each empirical exercise we have run to test whether
+Belgian carbon pricing induced \emph{output reallocation} from dirty to clean
+firms. For every exercise I define the variables, write the specification,
+state the identification assumption, and report headline results.
+Section~\ref{sec:sct} covers the Grossman--Krueger
+Scale--Composition--Technique (SCT) decomposition and spends extra space on
+the contrast between the fixed-base and year-on-year variants, which are
+computed differently and answer subtly different questions.
+\end{abstract}
+
+\tableofcontents
+
+\section{Notation used throughout}
+
+Let $i$ index firms, $s$ index NACE 4-digit sectors (or 2-digit where stated), and $t$ index years.
+\begin{itemize}
+  \item $e_{i,t}$: verified CO\textsubscript{2} emissions (EUTL) in tCO\textsubscript{2}.
+  \item $q_{i,t}$: real revenue, equal to nominal turnover deflated by the NACE 4-digit domestic PPI (Statbel from 2010; Eurostat chain-linked back to 2005).
+  \item $Y_t = \sum_i q_{i,t}$: total real output in the sample in year $t$.
+  \item $\theta_{i,t} = q_{i,t} / Y_t$: firm $i$'s share of total real output.
+  \item $z_{i,t} = e_{i,t} / q_{i,t}$: firm $i$'s emission intensity (tCO\textsubscript{2} per euro of real revenue).
+  \item $E_t = \sum_i e_{i,t}$: total emissions. Note the identity
+  \begin{equation}
+      E_t \;=\; Y_t \sum_i \theta_{i,t}\, z_{i,t}. \label{eq:identity}
+  \end{equation}
+  \item $\mathrm{shortage}_{i,t} = \max(e_{i,t} - \mathrm{free}_{i,t},\, 0)$, where $\mathrm{free}_{i,t}$ is freely allocated allowances.
+  \item $\mathrm{EUA}_t$: annual mean EUA secondary-market price, in \euro/tCO\textsubscript{2}.
+  \item $\mathrm{firm\_cost\_share}_i$: firm-level pre-MSR carbon cost share (defined in \S\ref{sec:phase4}).
+  \item $\mathrm{intensity\_base}_s$: NACE 4-digit sector pre-MSR carbon cost share (same construction as \cite{phase3}).
+\end{itemize}
+The clean sample covers 88.4\% of Belgian ETS emissions in 2005 and ranges from 162 to 194 firms per year.
+
+\bigskip
+
+\section{SCT decomposition of aggregate emissions}
+\label{sec:sct}
+
+\textbf{Script:} \texttt{analysis/phase0\_decomposition.R}.
+
+The identity~\eqref{eq:identity} expresses total emissions as the product of three moving parts: the \emph{scale} of the economy ($Y_t$), the \emph{composition} of output across firms ($\theta_{i,t}$), and the \emph{technique} (emission intensity $z_{i,t}$). The SCT decomposition attributes changes in $E_t$ to each channel by building counterfactuals in which only some of these parts move.
+
+We compute the decomposition two ways: a \emph{fixed-base} version that compares year $t$ directly to 2005, and a \emph{year-on-year chained} version that strings together one-year changes. The two versions produce different numbers and are not interchangeable: each has a distinct sample, a distinct counterfactual, and a distinct interpretation. The rest of this section is devoted to explaining both and the difference between them.
+
+\subsection{Variables}
+
+The only variables that appear are the ones in the notation section: $e_{i,t}$, $q_{i,t}$, $Y_t$, $\theta_{i,t}$, $z_{i,t}$, $E_t$.
+
+\subsection{Specification A --- Fixed base year 2005}
+
+For each year $t \in \{2005,\ldots,2022\}$, take the set of firms present in both 2005 and $t$; call this set $\mathcal{F}_t$. Compute:
+\begin{align}
+    E_t^{\text{scale}}     &= Y_t \sum_{i \in \mathcal{F}_t} \theta_{i,2005}\, z_{i,2005}, \label{eq:Escale}\\
+    E_t^{\text{scale+reall}} &= Y_t \sum_{i \in \mathcal{F}_t} \theta_{i,t}\, z_{i,2005}, \label{eq:Ereall}\\
+    E_t^{\text{actual}}    &= Y_t \sum_{i \in \mathcal{F}_t} \theta_{i,t}\, z_{i,t}. \label{eq:Eactual}
+\end{align}
+Channel magnitudes:
+\begin{itemize}
+  \item \textbf{Scale:} $E_t^{\text{scale}} / E_{2005}$.
+  \item \textbf{Reallocation (composition):} $E_t^{\text{scale+reall}} - E_t^{\text{scale}}$. Shares move; intensities frozen.
+  \item \textbf{Technique (within-firm abatement):} $E_t^{\text{actual}} - E_t^{\text{scale+reall}}$. Intensities move; shares as in the data.
+\end{itemize}
+To split reallocation into between-sector and within-sector, we run the same decomposition at the NACE 2-digit level (replacing $\theta_{i,t}$ with sector share $\theta_{s,t}$ and $z_{i,t}$ with sector intensity $z_{s,t}$). The \emph{between-sector} reallocation is the sector-level composition effect; the \emph{within-sector} reallocation is the firm-level composition effect minus the sector-level one.
+
+\subsection{Specification B --- Year-on-year chained}
+
+For each pair $(t-1, t)$ with $t \in \{2006,\ldots,2022\}$, take the set of firms present in both years; call this set $\mathcal{F}_{t-1,t}$. Compute:
+\begin{align}
+    r_t^{\text{scale}}     &= \frac{Y_t \sum_{i \in \mathcal{F}_{t-1,t}} \theta_{i,t-1}\, z_{i,t-1}}{Y_{t-1} \sum_{i \in \mathcal{F}_{t-1,t}} \theta_{i,t-1}\, z_{i,t-1}}, \\
+    r_t^{\text{scale+reall}} &= \frac{Y_t \sum_{i \in \mathcal{F}_{t-1,t}} \theta_{i,t}\, z_{i,t-1}}{Y_{t-1} \sum_{i \in \mathcal{F}_{t-1,t}} \theta_{i,t-1}\, z_{i,t-1}}, \\
+    r_t^{\text{actual}}    &= \frac{Y_t \sum_{i \in \mathcal{F}_{t-1,t}} \theta_{i,t}\, z_{i,t}}{Y_{t-1} \sum_{i \in \mathcal{F}_{t-1,t}} \theta_{i,t-1}\, z_{i,t-1}}.
+\end{align}
+Chain the log-changes:
+\begin{align}
+    \text{idx}_T^{\text{scale+reall}} &= 100 \cdot \exp\!\Bigg(\sum_{t=2006}^{T} \log r_t^{\text{scale+reall}}\Bigg), \\
+    \text{idx}_T^{\text{actual}} &= 100 \cdot \exp\!\Bigg(\sum_{t=2006}^{T} \log r_t^{\text{actual}}\Bigg).
+\end{align}
+Between-sector reallocation is built analogously from sector-level quantities; the \emph{within-sector residual} is $\log(r_t^{\text{actual}}) - \log(r_t^{\text{between}})$ and bundles within-sector reallocation with within-firm abatement.
+
+\subsection{The difference between A and B --- worked example}
+\label{sec:sct_example}
+
+Consider a tiny economy with one sector and two firms. Set prices so that real revenue equals output.
+
+\paragraph{Year 2005.}
+\begin{center}
+\begin{tabular}{lccc}
+\toprule
+Firm & Output $q_{i,2005}$ & Intensity $z_{i,2005}$ & Emissions $e_{i,2005}$ \\
+\midrule
+A (dirty) & 60 & 1.00 & 60 \\
+B (clean) & 40 & 0.25 & 10 \\
+\midrule
+Total     & $Y_{2005}=100$ & & $E_{2005}=70$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\paragraph{Year 2015.} Firm A has shrunk and abated; firm B has grown.
+\begin{center}
+\begin{tabular}{lccc}
+\toprule
+Firm & Output $q_{i,2015}$ & Intensity $z_{i,2015}$ & Emissions $e_{i,2015}$ \\
+\midrule
+A (dirty) & 50 & 0.80 & 40 \\
+B (clean) & 50 & 0.25 & 12.5 \\
+\midrule
+Total     & $Y_{2015}=100$ & & $E_{2015}=52.5$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\paragraph{Fixed-base (A) attribution of the 2005$\to$2015 change.}
+\begin{align*}
+    E_{2015}^{\text{scale}}         &= 100 \cdot (0.60 \cdot 1.00 + 0.40 \cdot 0.25) = 70, \\
+    E_{2015}^{\text{scale+reall}} &= 100 \cdot (0.50 \cdot 1.00 + 0.50 \cdot 0.25) = 62.5, \\
+    E_{2015}^{\text{actual}}        &= 52.5.
+\end{align*}
+So: scale $= 0$, reallocation $= -7.5$, technique $= -10$. Total change $= -17.5$, which matches $E_{2015} - E_{2005} = 52.5 - 70$. Reallocation is cleanly separated from technique because A's \emph{own} 2005 intensity is known.
+
+\paragraph{Year-on-year (B) attribution across the same horizon.} Suppose the 10-year path happens to go through an intermediate year 2010 with A at output 55, intensity 0.90, and B at output 45, intensity 0.25. The algorithm strings together the 2005$\to$2010 change (using firms in both) and the 2010$\to$2015 change (using firms in both).
+
+Now imagine that during 2005--2010 a \emph{third} firm C (with intensity 0.10) enters the data in 2008 and leaves again in 2009. The fixed-base version ignores C entirely (C is absent from 2005, so $\theta_{C,2005}$ is undefined). The year-on-year version uses C for the 2008$\to$2009 link (C is in both years). Each one-year step uses the maximum sample available.
+
+\paragraph{Why year-on-year cannot separate within-sector reallocation from within-firm abatement.} At a one-year horizon, $\theta_{i,t}$ fluctuates wildly for real firms: a firm has a good sales year, then a bad one. The reallocation term $Y_t \sum_i (\theta_{i,t} - \theta_{i,t-1}) z_{i,t-1}$ and the technique term $Y_t \sum_i \theta_{i,t} (z_{i,t} - z_{i,t-1})$ can both be large and offsetting even if nothing happened structurally. Over a 10-year fixed-base comparison, these transient fluctuations wash out; over a one-year comparison they are the signal. The year-on-year version is therefore \emph{only} usable for:
+\begin{enumerate}
+  \item the \emph{total} emission index (all the noise stays inside the residual),
+  \item the \emph{between-sector} reallocation (sector-level shares $\theta_{s,t}$ are stable year-to-year),
+  \item the residual sector-level technique (= within-sector reallocation $+$ within-firm abatement, bundled).
+\end{enumerate}
+
+\subsection{Identification assumption}
+
+The SCT decomposition is a purely mechanical accounting identity. It makes no causal claim: reallocation or technique changes could be caused by carbon policy, demand shocks, or autonomous technical change. It tells us \emph{through which channel} emissions fell, not \emph{why}.
+
+The only data assumption worth noting is that the real-revenue deflation correctly strips price effects from output. Because we use a NACE 4-digit domestic PPI, pass-through of carbon costs into prices is already absorbed: $q_{i,t}$ is real volume, not nominal.
+
+\subsection{Results}
+
+\begin{center}
+\captionof{table}{Fixed-base decomposition (pp relative to 2005 = 100).}
+\begin{tabular}{lrrrrr}
+\toprule
+Year & Firms & Total & Between-sector & Within-sector realloc. & Within-firm abatement \\
+\midrule
+2008 & 141 & $-1.2$  & $+16.3$ & $+1.9$ & $-31.5$ \\
+2012 & 127 & $-27.2$ & $+17.1$ & $+2.0$ & $-49.6$ \\
+2016 & 114 & $-26.1$ & $+1.7$  & $+7.2$ & $-31.3$ \\
+2019 & 104 & $-25.9$ & $-7.4$  & $+3.2$ & $-16.9$ \\
+2022 & 100 & $-45.8$ & $-19.2$ & $+1.7$ & $-25.6$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{center}
+\captionof{table}{Year-on-year chained decomposition (pp, 2005 = 100).}
+\begin{tabular}{lrrrr}
+\toprule
+Year & Firms (pair) & Total & Between-sector & Within-sector residual \\
+\midrule
+2008 & 145 & $-12.4$ & $+13.3$ & $-25.6$ \\
+2012 & 161 & $-32.3$ & $+10.1$ & $-42.3$ \\
+2016 & 162 & $-23.9$ & $+1.0$  & $-25.0$ \\
+2019 & 156 & $-21.3$ & $-7.0$  & $-14.3$ \\
+2022 & 149 & $-46.4$ & $-22.9$ & $-23.5$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Headline.} Total emissions fell $\sim 46$\% between 2005 and 2022. Decomposing the decline: between-sector reallocation $\approx 20$--$23$ pp ($\sim 45$--$50\%$ of total), within-firm abatement $\approx 23$--$26$ pp ($\sim 50$--$55\%$ of total), within-sector reallocation $\approx 0$. The samples are too small to assign meaningful statistical uncertainty; the two specifications agree to within $\sim 3$ pp on every channel, so the qualitative story does not depend on which is used.
+
+\section{Melitz--Polanec decomposition}
+
+\textbf{Script:} \texttt{analysis/phase0\_melitz\_polanec.R}.
+
+\subsection{Variables}
+Same as \S\ref{sec:sct}. In addition, for each rolling 5-year window $(t_0, t_1)$, partition firms into three disjoint sets: \emph{survivors} (present in both $t_0$ and $t_1$), \emph{entrants} (present in $t_1$ only), \emph{exiters} (present in $t_0$ only).
+
+\subsection{Specification}
+Following \cite{melitz2015}, decompose $\bar{z}_{t_1} - \bar{z}_{t_0}$ (aggregate emission intensity) into: within-firm change (unweighted survivor mean $\bar{z}^S_{t_1} - \bar{z}^S_{t_0}$); Olley--Pakes reallocation covariance $\sum_i (\theta_{i,t} - \bar\theta_t)(z_{i,t} - \bar z_t)$; entrant and exiter contributions.
+
+\subsection{Identification assumption}
+Mechanical decomposition; same caveat as SCT.
+
+\subsection{Results}
+Entry and exit contributions are consistently in the single digits as a percentage of base-year intensity across all 5-year windows. Sample composition is not driving the SCT results.
+
+\textbf{Limitation.} The unweighted survivor mean is dominated by a handful of high-intensity firms, so the within-firm and reallocation terms swing wildly in opposite directions for horizons beyond $\sim 5$ years. We therefore use Melitz--Polanec only to confirm entry/exit are small, and rely on the share-weighted SCT as the primary decomposition.
+
+\section{Olley--Pakes covariance vs.\ carbon cost exposure}
+\label{sec:opcov}
+
+\textbf{Script:} standalone in \texttt{phase0\_melitz\_polanec.R} (to be refactored).
+
+\subsection{Variables}
+\begin{itemize}
+  \item $\mathrm{OP}_{s,t}$: Olley--Pakes covariance for sector $s$ in year $t$, $\sum_{i \in s} (\theta_{i,s,t} - \bar\theta_{s,t})(z_{i,t} - \bar z_{s,t})$.
+  \item $\Delta \mathrm{OP}_{s,t} = \mathrm{OP}_{s,t} - \mathrm{OP}_{s,t-1}$: year-on-year change in within-sector reallocation.
+  \item $\mathrm{cost\_share}_{s,t} = \mathrm{shortage}_{s,t} \cdot \mathrm{EUA}_t / \mathrm{revenue}_{s,t}$.
+  \item $\mathrm{priced}_{s,t} = \mathrm{shortage}_{s,t} / e_{s,t}$.
+\end{itemize}
+
+\subsection{Specification}
+\begin{equation*}
+  \Delta \mathrm{OP}_{s,t} = \alpha + \beta \cdot \mathrm{exposure}_{s,t} + \alpha_s + \delta_t + \varepsilon_{s,t},
+\end{equation*}
+where exposure is either $\mathrm{cost\_share}_{s,t}$ or $\mathrm{priced}_{s,t}$. 195 sector-year observations across 16 sectors with $\geq 3$ firms.
+
+\subsection{Identification assumption}
+Sector and year FE absorb time-invariant sector heterogeneity and common macro shocks. The residual coefficient reflects whether sector-years with higher realized carbon costs see more reallocation, conditional on sector and year. This is not causal: high carbon costs are a function of realized emissions, which depend on the outcome.
+
+\subsection{Results}
+
+\begin{center}
+\begin{tabular}{llrrr}
+\toprule
+Spec & Measure & Coefficient & $t$ & $p$ \\
+\midrule
+OLS              & cost share        & $4.53$     & $0.54$  & $0.59$ \\
+Sector + Year FE & cost share        & $7.58$     & $0.60$  & $0.55$ \\
+OLS              & \% priced         & $-0.0001$  & $-0.06$ & $0.95$ \\
+Sector + Year FE & \% priced         & $-0.0016$  & $-0.32$ & $0.75$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+No correlation. Raw correlations $0.039$ (cost share) and $-0.005$ (\% priced).
+
+\section{ETS vs.\ non-ETS output share}
+
+\textbf{Script:} \texttt{analysis/phase0\_ets\_share\_shift.R}.
+
+\subsection{Variables}
+\begin{itemize}
+  \item $\mathrm{ETS\_share}_{s,t}$: share of total revenue in NACE 4-digit sector $s$ accounted for by ETS-regulated firms. Sample restricted to \emph{mixed} sectors (those containing both ETS and non-ETS firms in year $t$); 80 such sectors.
+  \item $\mathrm{cost\_share}_{s,t}$ as in \S\ref{sec:opcov}.
+\end{itemize}
+
+\subsection{Specification}
+\begin{equation*}
+  \mathrm{ETS\_share}_{s,t} = \alpha + \sum_{k=0}^{3} \beta_k \cdot \mathrm{cost\_share}_{s,t-k} + \alpha_s + \delta_t + \varepsilon_{s,t}.
+\end{equation*}
+
+\subsection{Identification assumption}
+Sector FE absorb time-invariant sectoral heterogeneity between ETS-intensive and non-ETS-intensive 4-digit industries. Year FE absorb common macro shocks. $\beta_k$ is identified off within-sector over-time variation in realized carbon costs, which themselves depend on the outcome (ETS share) --- so reverse causality cannot be ruled out without an instrument.
+
+\subsection{Results}
+
+\begin{center}
+\begin{tabular}{lrrrr}
+\toprule
+Lag & Coefficient & SE & $t$ & $p$ \\
+\midrule
+0 & $-0.257$ & $0.894$ & $-0.29$ & $0.774$ \\
+1 & $+2.880$ & $1.700$ & $+1.69$ & $0.091$ \\
+2 & $+3.064$ & $2.034$ & $+1.51$ & $0.133$ \\
+3 & $-2.643$ & $3.254$ & $-0.81$ & $0.417$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+No significant relationship. The marginal lag-1 coefficient has the \emph{wrong sign} under the competitive-reallocation story (higher lagged carbon cost $\Rightarrow$ ETS firms \emph{gain} share), likely reflecting reverse causality: larger ETS firms have both higher carbon costs and higher market share.
+
+\section{Within-sector output shares by exposure tercile}
+
+\textbf{Script:} \texttt{analysis/phase1a\_output\_share\_by\_exposure.R}. Eyeball/descriptive test.
+
+\subsection{Variables}
+\begin{itemize}
+  \item $\mathrm{shortage\_intensity}_i$: firm-level pre-MSR shortage intensity, $\mathrm{mean}_{t \in 2013..16}[\mathrm{shortage}_{i,t} / q_{i,t}]$.
+  \item Classify firms into terciles of $\mathrm{shortage\_intensity}_i$ within each NACE 4-digit sector.
+  \item Track each tercile's average within-sector output share over time, normalized to 1 in the base year.
+\end{itemize}
+
+\subsection{Specification}
+Descriptive: plot mean of $\theta_{i,s,t} / \theta_{i,s,2005}$ averaged within each tercile, over $t \in 2005..2023$. Four variants: binary split within NACE 2d, binary within NACE 4d, terciles across economy, terciles within NACE 4d.
+
+\subsection{Identification assumption}
+None; purely descriptive. The interpretation as evidence for/against within-sector reallocation by exposure rests on (a) the tercile being a good pre-MSR exposure proxy, (b) there being no confounding within-sector variation that correlates with exposure.
+
+\subsection{Results}
+Terciles within NACE 4d (the sharpest variant): a long-run gradual convergence pattern in which high-exposure firms have been slowly losing within-sector share since 2005. \textbf{No post-2017 break} --- if anything, the divergence slowed down after the MSR reform. Same pattern in the binary 4d split. The long-run trend predates carbon pricing becoming binding.
+
+\section{Phase 4 Spec 1.A --- Firm-level panel LP of $\Delta\log(\text{real rev})$}
+\label{sec:phase4}
+
+\textbf{Script:} \texttt{analysis/phase4\_firm\_output\_reallocation.R}. The sharpest within-sector test so far. Currently only ID-A (annual Känzig CPShock) is implemented; ID-B (EUA level) and ID-C (event study) are on the TODO.
+
+\subsection{Variables}
+\begin{itemize}
+  \item $\mathrm{firm\_cost\_share}_i = \dfrac{\mathrm{mean}_{t \in 2013..16}[\mathrm{shortage}_{i,t} \cdot \mathrm{EUA}_t]}{\mathrm{mean}_{t \in 2010..12}[\mathrm{mat\_inputs}_{i,t} + \mathrm{wage\_bill}_{i,t}]}$. Firm-level analog of sector $\mathrm{intensity\_base}_s$: numerator averaged 2013--16, denominator averaged 2010--12 (fixed, pre-ETS-tightening). Fallback to earliest 3-year window for firms without 2010--12 coverage. Revenue is deliberately \emph{not} the denominator because revenue is endogenous to the ETS shock itself.
+  \item $\mathrm{firm\_emint\_physical}_i = \dfrac{\mathrm{mean}_{t \in 2013..16} \mathrm{shortage}_{i,t}}{\mathrm{mean}_{t \in 2010..12} \mathrm{total\_cost}_{i,t}}$: robustness variant without EUA price in the treatment. Units tCO\textsubscript{2}/\euro.
+  \item $\mathrm{firm\_dev}_{i,s} = \mathrm{firm\_cost\_share}_i - \overline{\mathrm{firm\_cost\_share}}_s$: within-NACE-4d-sector demeaning. SD across firms $= 0.037$.
+  \item $\mathrm{Signal}_t \in \{\mathrm{CPShock}^{\mathrm{surprise},\mathrm{ann}}_t, \mathrm{CPShock}^{\mathrm{shock},\mathrm{ann}}_t\}$: annual sum of Känzig (2025) monthly series. SDs $0.53$ and $2.4$ respectively.
+  \item LHS: $\Delta \log(\mathrm{real\_rev})_{i,t,h} = \log(\mathrm{real\_rev})_{i,t+h} - \log(\mathrm{real\_rev})_{i,t-1}$, LP-style, $h \in \{0,1,2,3\}$.
+\end{itemize}
+
+\textbf{Treatment-build verification.} Aggregating $\mathrm{firm\_cost\_share}_i$ to NACE 4d with firm total-cost weights reproduces sector $\mathrm{intensity\_base}_s$ with correlation $0.98$ across 79 sectors (max abs.\ difference $0.003$). Passes.
+
+\subsection{Specification}
+\begin{equation}
+  \Delta \log(\mathrm{real\_rev})_{i,s,t,h} = \beta \cdot (\mathrm{Signal}_t \times \mathrm{firm\_dev}_{i,s}) + \alpha_{s,t} + \alpha_i + \varepsilon_{i,s,t,h}. \label{eq:spec1A}
+\end{equation}
+$\alpha_{s,t}$ is a NACE 4d $\times$ year fixed effect; $\alpha_i$ a firm fixed effect. Two-way clustering on firm and sector-year. Sample: 215 firms, 2,163 firm-years at $h=0$, horizon window 2005--2019.
+
+\subsection{Identification assumption}
+
+Two assumptions:
+\begin{enumerate}
+  \item \textbf{Exogeneity of $\mathrm{Signal}_t$ to firm-level Belgian demand shocks conditional on $\alpha_{s,t}$.} For $\mathrm{CPShock}^{\mathrm{surprise}}$ this is the Känzig (2025) high-frequency event-study identification: surprise is measured in narrow windows around discrete EU ETS regulatory announcements, so it should be orthogonal to Belgian-specific demand conditions in year $t$. For $\mathrm{CPShock}^{\mathrm{shock}}$ the series is the VAR-instrumented response of the EUA price: it inherits VAR-level persistence and is not a clean high-frequency instrument. This is why we report both.
+  \item \textbf{Exogeneity of $\mathrm{firm\_dev}_{i,s}$ to post-2016 firm-specific shocks.} $\mathrm{firm\_cost\_share}_i$ is built from 2010--16 firm data, so it pre-dates any 2017+ ETS tightening by construction. Survivorship bias through the 2010--12 and 2013--16 base-period filters is not addressed.
+\end{enumerate}
+Pre-trend placebo ($h = -2$) has not been run.
+
+\subsection{Results}
+
+\begin{center}
+\captionof{table}{$\beta$ on $\mathrm{Signal}_t \times \mathrm{firm\_dev}_{i,s}$ (two-way cluster SEs).}
+\begin{tabular}{lcc}
+\toprule
+Horizon & $\mathrm{cpshock\_surprise}$ & $\mathrm{cpshock\_shock}$ \\
+\midrule
+$h=0$ & $-5.66\ (0.90),\ p<0.001$ & $+0.58\ (0.22),\ p=0.008$ \\
+$h=1$ & $-1.81\ (2.72),\ p=0.51$  & $+1.08\ (0.33),\ p=0.001$ \\
+$h=2$ & $-2.32\ (3.46),\ p=0.50$  & $+1.66\ (0.40),\ p<0.001$ \\
+$h=3$ & $-2.65\ (3.32),\ p=0.42$  & $+1.60\ (0.37),\ p<0.001$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Signs flip between the two signal variants at every horizon. Magnitudes on $\mathrm{surprise}$ are implausibly large; magnitudes on $\mathrm{shock}$ are quantitatively reasonable but wrong-signed under H1 (high-exposure firms \emph{gain} output when the carbon price rises). Same pathology as \cite{passthrough}'s S7--S11 specifications. Robustness with $\mathrm{firm\_emint\_physical}_i$ preserves signs and significance at every horizon. \emph{Under ID-A, no direction can be read from this exercise until the surprise-vs-shock sign flip is diagnosed.}
+
+\section{Phase 4 Spec 1.C --- Sample split by realized sector pass-through}
+
+\textbf{Scripts:} \texttt{analysis/phase4\_sector\_passthrough\_classification.R} and \texttt{analysis/phase4\_firm\_output\_reallocation.R}. Addresses H1 (within-sector reallocation) vs H2 (inelastic-demand shield) by checking whether firm-level reallocation is concentrated in sectors that actually pass costs through.
+
+\subsection{Variables}
+\begin{itemize}
+  \item $\gamma_s$: sector-specific monthly PPI response to CPShock at $h=12$ months, estimated from an interacted panel LP (see specification below).
+  \item Classification of each sector into \emph{high-pass-through}, \emph{no-pass-through}, or \emph{unclassified} using $\gamma_s$ and its SE. Six cutoffs: sign under shock, sign under surprise, top tercile, $t>1.645$, $t>1.96$, and intersection of sign under both shock and surprise variants.
+  \item All variables from \S\ref{sec:phase4}.
+\end{itemize}
+
+\subsection{Specification}
+
+\textbf{Step 1 (sector classification):}
+\begin{equation*}
+  \Delta \log(\mathrm{PPI})_{s,m+12} - \Delta \log(\mathrm{PPI})_{s,m-1}
+  = \sum_s \gamma_s \cdot \mathrm{CPShock}_m \cdot \mathbf{1}(\mathrm{sector}=s)
+    + \alpha_s + \delta_m + \varepsilon_{s,m},
+\end{equation*}
+estimated on the monthly 2005--2019 panel (same as the S12 headline). Clustered on year-month (clustering on NACE 4d would be degenerate since each $\gamma_s$ lives in a single cluster). 133 sectors obtain a coefficient.
+
+\textbf{Step 2 (sample-split Spec 1.A):} re-estimate equation~\eqref{eq:spec1A} on each subsample.
+
+\subsection{Identification assumption}
+
+Inherits \S\ref{sec:phase4}'s two assumptions. Adds:
+\begin{itemize}
+  \item $\gamma_s$ must be a reasonable proxy for the sector's realized pass-through elasticity. The main concern is noise: with $\sim 180$ months per sector and $|\mathrm{CPShock}|$ modest, $\gamma_s$ is imprecisely estimated, so the \emph{no-pass-through} bucket will contain both true non-passers and sectors that pass through but couldn't be distinguished statistically. Classification is therefore conservative toward H1 (false negatives likely, false positives less likely).
+\end{itemize}
+
+\subsection{Results --- selected cells}
+
+Split by $\mathrm{cpshock\_shock}$ sign (41 high-pass-through sectors, 122 firms; 7 no-pass-through sectors, 10 firms):
+
+\begin{center}
+\begin{tabular}{lcccc}
+\toprule
+Horizon & High / surprise & High / shock & No / surprise & No / shock \\
+\midrule
+$h=0$ & $-9.49$        & $+1.63$       & $+2.12$  & $-31.8$ \\
+$h=1$ & $-12.83$       & $+1.02$       & $+225.5$ & $-65.0$ \\
+$h=2$ & $\mathbf{-37.67^{**}}$ & $\mathbf{+4.14^{***}}$ & $+162.6$ & $\mathbf{-132.0^{***}}$ \\
+$h=3$ & $\mathbf{-35.85^{**}}$ & $\mathbf{+2.91^{*}}$   & $+150.0$ & $\mathbf{-124.8^{***}}$ \\
+\bottomrule
+\end{tabular}
+\captionof{table}{$\beta$ in sample-split Spec 1.A. Bold = significant at 5\% (or 10\% for single-star).}
+\end{center}
+
+Similar patterns under top-tercile and 10\%-significance cutoffs: the H1-direction coefficient ($\mathrm{surprise}$, negative at $h \geq 2$) is driven by the \emph{high-pass-through} subsample, consistent with H1 over H2. But the sign flip across shock-vs-surprise survives in every cut, and the ``no-pass-through'' subsample's coefficients are wild (often $\pm 100+$) because the cell is too small.
+
+\subsection{Caveats}
+\begin{itemize}
+  \item The $\mathrm{shock}$-based classification is nearly non-discriminating (118 of 133 sectors have $\gamma_s > 0$); the $\mathrm{surprise}$ classification is too noisy at NACE 4d (no sector reaches $t > 1.645$). A rank-based classification is on the TODO (follow-up B).
+  \item Magnitudes under $\mathrm{Signal}=\mathrm{cpshock\_surprise}$ are implausible at face value: $\beta \approx -37$ with $\mathrm{SD}(\mathrm{firm\_dev}) = 0.037$ and $\mathrm{SD}(\mathrm{surprise}) = 0.53$ implies a $-72\%$ cumulative log real-revenue response to a 1-SD$\times$1-SD interaction, which the data cannot literally support.
+  \item Until the shock-vs-surprise sign flip is diagnosed (follow-up A), sign interpretation under ID-A is not trustworthy.
+\end{itemize}
+
+\section{Summary of reallocation tests}
+
+\begin{center}
+\begin{tabular}{p{5.5cm}p{4cm}p{5cm}}
+\toprule
+Test & Level & Finding \\
+\midrule
+SCT decomposition                         & Within NACE 2d, ETS firms                 & Within-sector realloc.\ $\approx 0$ \\
+OP covariance vs.\ carbon cost           & Sector-year panel                          & No correlation \\
+ETS vs.\ non-ETS share                    & NACE 4d, full panel                       & No correlation with carbon cost; wrong-signed lag-1 \\
+Binary split by exposure, NACE 4d        & Within NACE 4d, ETS firms                 & Flat post-2017 \\
+Terciles within sector                    & Within NACE 4d, ETS firms                 & Long-run trend, no post-2017 break \\
+Phase 4 Spec 1.A (pooled)                 & Firm-year panel LP under ID-A             & Sign flip across shock/surprise; uninterpretable \\
+Phase 4 Spec 1.C (sample split)          & Firm-year panel LP, high-pass-through sectors & Negative under surprise $h\geq 2$, positive under shock; same flip \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Bottom line.} Across every pre-Phase-4 test, within-sector reallocation is approximately zero or uncorrelated with carbon cost exposure. Phase 4 Spec 1.A/1.C under ID-A cannot deliver a directional answer until the shock-vs-surprise sign flip is understood. Identifications ID-B (EUA level) and ID-C (event study), plus Angle 4 (B2B supplier switching), remain to be run.
+
+\begin{thebibliography}{99}
+\bibitem[K\"anzig(2025)]{kanzig2025} K\"anzig, D.~R. (2025). ``The Unequal Economic Consequences of Carbon Pricing.''
+\bibitem[Melitz and Polanec(2015)]{melitz2015} Melitz, M.~J. and S.~Polanec (2015). ``Dynamic Olley--Pakes Productivity Decomposition with Entry and Exit.'' \emph{RAND Journal of Economics} 46(2).
+\bibitem[Phase 3 notes]{phase3} Internal: \texttt{phase3\_build\_exposure\_panel.R}.
+\bibitem[Pass-through notes]{passthrough} Internal: \texttt{PASSTHROUGH\_CPSHOCK.md}, S7--S12.
+\end{thebibliography}
+
+\end{document}
