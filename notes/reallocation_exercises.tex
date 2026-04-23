@@ -173,6 +173,77 @@ NACE & Sector & Tech 2005 $\to$ 2012 & Tech 2012 $\to$ 2022 \\
 
 \textbf{What this implies for the broader story.} The paper's main within-sector-reallocation null is not uniform. There is a clean reallocation story in NACE 23 --- exactly the sector where \cite{phase3}'s pass-through evidence is strongest --- and opposite-signed within-sector reallocation elsewhere. Any H1 vs H2 test that pools across sectors will wash out the cement signal. A sector-by-sector treatment (or at least a split that isolates NACE 23) is a natural follow-up.
 
+\section{Sector-phase dataset: allocation rules and channel responses}
+\label{sec:sectorphase}
+
+\textbf{Script:} \texttt{analysis/phase0\_sector\_phase\_dataset.R}.
+
+\subsection{Motivation and construction}
+
+The sector decomposition in \S\ref{sec:sector} is silent on timing: it pools 2005--2022 (or phases it into two halves). This section slices the same five-channel decomposition by the four official EU ETS phases and merges it with the allocation rule in force in each sector-phase, so that we can ask whether the sector heterogeneity above tracks the sector-specific timing of allocation-rule changes.
+
+Phase windows used for the within-phase decomposition:
+\begin{center}
+\begin{tabular}{llllll}
+\toprule
+Phase & Window & ``Paying'' starts & Känzig learning date & Event \\
+\midrule
+Phase 1 & $2005 \to 2007$ & 2005-01-01 & 2003-10-13 & Directive 2003/87/EC (pre-K\"anzig sample) \\
+Phase 2 & $2008 \to 2012$ & 2008-01-01 & 2005-06-20 & First K\"anzig surprise \\
+Phase 3 & $2013 \to 2020$ & 2013-01-01 & \textbf{2009-04-23} & Directive 2009/29/EC adopted (4-year anticipation) \\
+Phase 4 & $2021 \to 2022$ & 2021-01-01 & \textbf{2018-03-14} & Directive 2018/410 adopted (3-year anticipation) \\
+\bottomrule
+\end{tabular}
+\end{center}
+Phase 3 ends 2020 to avoid the EUTL reclassifications that contaminate 2021+; Phase 4 is only 2 years of available data and the three contaminated VATs are excluded.
+
+Allocation-rule coding at NACE 2d, based on Commission Decisions 2010/2/EU, 2014/746/EU, and 2019/708/EU:
+\begin{itemize}
+  \item \texttt{grandfathered\_free} --- Phase 1 and Phase 2 for all sectors (free allocation based on historical activity).
+  \item \texttt{full\_auction} --- Phase 3 onwards for electricity (NACE 35).
+  \item \texttt{CL\_list\_free} --- Phase 3/4 for sectors on the Carbon Leakage list (cement 23, petroleum 19, basic metals 24, chemicals 20, parts of paper 17). Free allocation indexed to a product benchmark $\times$ historical activity level.
+  \item \texttt{partial\_free\_declining} --- Phase 3/4 for non-CL industrials (food 10, beverages 11, textiles 13, pharma 21, rubber/plastics 22). Free share declines from 80\% in 2013 toward 30\% in 2020, lower in Phase 4.
+\end{itemize}
+The NACE-2d granularity is approximate (see caveat below).
+
+\subsection{Results --- Tech and Within by phase, top sectors}
+
+\begin{center}
+\captionof{table}{Within-firm technique and within-sector reallocation, by phase, for the five sectors that together account for $\sim 95\%$ of 2005 ETS emissions. pp of each sector's own phase-start emissions. Three contaminated VATs excluded from every year.}
+\small
+\begin{tabular}{lcrrrrrrrr}
+\toprule
+ & Phase 3/4 rule & \multicolumn{4}{c}{Technique} & \multicolumn{4}{c}{Within-sector reallocation} \\
+\cmidrule(lr){3-6} \cmidrule(lr){7-10}
+Sector & & P1 & P2 & P3 & P4 & P1 & P2 & P3 & P4 \\
+\midrule
+35 Electricity            & \texttt{full\_auction}            & $\mathbf{-74.6}$ & $-18.0$ & $\mathbf{+19.1}$ & $\mathbf{+20.4}$ & $+14.5$ & $+3.3$  & $-6.2$           & $-3.1$ \\
+23 Cement, glass          & \texttt{CL\_list\_free}           & $-5.8$           & $-14.4$ & $\mathbf{-27.3}$ & $+10.8$           & $-4.0$  & $+5.8$  & $+13.4$          & $\mathbf{-15.1}$ \\
+19 Petroleum refining     & \texttt{CL\_list\_free}           & $+5.2$           & $+8.9$  & $\mathbf{-42.4}$ & $-11.3$           & $-23.3$ & $-4.9$  & $\mathbf{+83.1}$ & $+2.2$ \\
+20 Chemicals              & \texttt{CL\_list\_free}           & $-5.1$           & $+25.0$ & $-11.1$          & $\mathbf{-23.6}$  & $+3.3$  & $+7.5$  & $+13.5$          & $+2.9$ \\
+24 Basic metals           & \texttt{CL\_list\_free}           & $+27.7$          & $-9.4$  & $\mathbf{-25.9}$ & $-6.2$            & $-51.6$ & $-1.2$  & $+13.3$          & $+2.0$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Three patterns}
+
+\textbf{(1) For electricity, auctioning did not deliver more within-firm abatement --- the opposite.} The largest technique decline came in Phase 1 under grandfathered free allowances ($-75$ pp). When full auctioning kicked in at the start of Phase 3, technique \emph{reversed} to $+19$, and again $+20$ in Phase 4. Scale over the same Phase 3 window was $-27$: the surviving thermal plants are running at much lower capacity factor as non-ETS renewables take over supply, which mechanically raises their emissions per unit of their own real revenue. Moving from free allowances to auctioning does not appear to have induced additional abatement in this sector; the headline emissions decline in Phase 3/4 is the output-contraction channel, not the intensity channel.
+
+\textbf{(2) Carbon-leakage-list industrials delivered their biggest within-firm abatement in Phase 3.} Cement ($-27$), petroleum ($-42$), basic metals ($-26$), and chemicals ($-11$ then $-24$ in Phase 4) all show a Phase 3 technique that is more negative than anything these sectors produced in the grandfathered phases. These sectors' Phase 3/4 allocation rule pays firms for abating below the product benchmark (allowances indexed to activity at a benchmark intensity); a benchmark-based system creates a direct marginal incentive that pure grandfathering lacks. Chemicals' Phase 4 technique of $-24$ is consistent with the tightening of benchmarks under the Phase 4 linear reduction factor continuing to bite.
+
+\textbf{(3) Within-sector reallocation is almost entirely a Phase 3/4 phenomenon.} Phases 1--2 show small magnitudes (mostly $|$Within$|\leq 5$ pp). In Phases 3--4, petroleum has a striking $+83$ (dirty firms gained share among survivors), chemicals $+14$, and basic metals $+13$. Cement is the clean-reallocation exception: $+13$ in Phase 3 but $\mathbf{-15}$ in Phase 4, dirty firms losing share only after the benchmark tightening arrives. Cement is consistently the sector whose behaviour most resembles what a ``carbon pricing causes reallocation'' model predicts.
+
+\subsection{Anticipation vs.\ paying}
+
+Phase 3 was adopted in April 2009 but firms only started paying for allowances (via auctioning for electricity, tighter benchmarks for industry) in January 2013. The $\sim 4$-year gap between \emph{learning} and \emph{paying} is directly observable in the K\"anzig surprise series: the 2009-04-23 surprise of $-0.12$ euros is Directive 2009/29/EC's adoption. Phase 2 (2008--2012) therefore covers exactly the Phase 3 anticipation window. Electricity's Phase 2 technique of $-18$ is one plausible reading of an anticipation response, but it is one-quarter the size of Phase 1's abatement and sits in the 2008--09 crisis window, so causal attribution is ambiguous. A focused decomposition over $2009 \to 2012$ (post-adoption, pre-payment) is a natural follow-up.
+
+Phase 4 has the same structure with a shorter anticipation window: Directive 2018/410 adopted in March 2018, paying starts January 2021. K\"anzig's event series has large surprises concentrated around the Phase 4 trilogue and Council dates in 2018. Two years of post-2021 data is too little to identify a Phase 4 response cleanly; this is a ``come back in 2027'' question.
+
+\subsection{Caveat on allocation-rule coding}
+
+The Commission's Carbon Leakage list is defined at NACE 4-digit, not at NACE 2d. Coding each NACE 2d sector with a single allocation rule is an approximation that is inaccurate for several sectors --- most visibly chemicals (NACE 20), where plastics precursors and inorganic chemicals are on the CL list while downstream formulation activities are not. Before any load-bearing paper claim built on the allocation-rule column, we should parse the annexes of Decisions 2010/2/EU, 2014/746/EU, and 2019/708/EU at 4d and rebuild the crosswalk at that granularity (TODO item). The patterns above are robust to this concern only when the sector-level headline is dominated by one sub-sector (electricity 35, basic metals 24 are clean; chemicals 20 is the main worry).
+
 \section{ETS vs.\ non-ETS output share}
 
 \textbf{Script:} \texttt{analysis/phase0\_ets\_share\_shift.R}.
