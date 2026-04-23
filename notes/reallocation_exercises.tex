@@ -255,8 +255,14 @@ Pair & n\_s & n\_e & n\_x & Total & Scale & Btw & Within & Tech & Entry & Exit &
 2005 $\to$ 2012 $^{\dagger}$ & 101 & 0 & 0 & $-22.2$ & $+12.5$ & $+9.2$  & $+9.8$  & $\mathbf{-53.7}$ & 0 & 0 & --- & --- \\
 2012 $\to$ 2020 $^{\dagger}$ & 101 & 0 & 0 & $-3.3$  & $-9.1$  & $-16.2$ & $+12.5$ & $\mathbf{+9.5}$  & 0 & 0 & --- & --- \\
 2005 $\to$ 2020 $^{\dagger}$ & 101 & 0 & 0 & $-24.8$ & $+2.2$  & $-15.9$ & $+12.0$ & $-23.1$          & 0 & 0 & --- & --- \\
+\midrule
+\multicolumn{13}{l}{\emph{Three NACE 20/24 firms excluded from every year (post-2020 EUTL reclassifications):}}\\
+2005 $\to$ 2022 $^{\ddagger}$ & 99  & 49 & 61 & $-24.9$ & $+15.9$ & $-35.1$ & $+4.9$  & $\mathbf{-11.6}$ & $+10.2$ & $-9.2$ & 369 & 286 \\
+2007 $\to$ 2022 $^{\ddagger}$ & 103 & 45 & 57 & $-21.1$ & $+0.7$  & $-32.0$ & $+5.0$  & $\mathbf{+4.8}$  & $+9.4$  & $-9.0$ & 442 & 227 \\
+2012 $\to$ 2022 $^{\ddagger}$ & 120 & 28 & 41 & $-12.6$ & $+6.8$  & $-29.5$ & $+11.1$ & $\mathbf{-0.9}$  & $+2.9$  & $-2.9$ & 334 & 170 \\
 \bottomrule
 \end{tabular}
+\captionof{table}{$^{\dagger}$Triple-balanced subset (firms in 2005, 2012, and 2020). $^{\ddagger}$Three firms excluded: one NACE 24 (likely ArcelorMittal Gent, 4.6 Mt $\to$ 0.09 Mt over 2020--2022 while revenue grew from 3{,}399 to 6{,}476 M\euro{}) and two NACE 20 firms whose EUTL verified emissions and free allocation collapse to near-zero in 2021 while revenue continues or grows. Diagnosed as installation-level reclassifications, not real abatement.}
 \end{center}
 
 \subsection{What this pins down that Table 1 could not}
@@ -266,6 +272,24 @@ Pair & n\_s & n\_e & n\_x & Total & Scale & Btw & Within & Tech & Entry & Exit &
 \textbf{(2) What is actually driving the post-2012 decline?} Between-sector reallocation. On the triple-balanced panel, between is $-16.2$ over $2012 \to 2020$ while technique is $+9.5$. The two components net to a total of only $-3.3$. The full 2005 $\to$ 2022 headline of $\sim -46\%$ is therefore a combination of two distinct phases: within-firm abatement concentrated in 2005--2012, and between-sector reallocation accelerating after 2012.
 
 \textbf{(3) Are exiters dirtier than entrants? No --- the opposite.} $\bar z^E > \bar z^X$ in every unrestricted pair, with ratios $1.4$ to $2.4$. ``Exit = dirty firms dying under ETS pressure, entry = cleaner new firms'' is the wrong mental model for this data. Three plausible reasons: (i) ``exit'' is mostly Annual Accounts missingness rather than literal closure (EUTL installation roster is near-stable at 281 firms); (ii) entrants include installations in their capacity ramp-up phase, with elevated intensity; (iii) firms whose emissions crossed the zero threshold between the two years. Despite the entry-is-dirtier pattern, net emissions from entry minus exit is small ($|\text{Entry} - \text{Exit}| \leq 4.4$ pp) because exiters tend to be larger in revenue terms.
+
+\subsection{EUTL reclassifications and the 2022 rows}
+
+Diagnosed 2026-04-23. Inspection of per-firm emissions and free-allocation trajectories in the sectors whose post-2020 aggregate EUTL emissions diverge from Statbel aggregates (NACE 20, 24) reveals the following pattern. In each of NACE 20 and NACE 24, one large firm (plus a second smaller firm in NACE 20) shows:
+\begin{itemize}
+  \item EUTL verified emissions drop to $\sim 0$ in 2021, sustained in 2022;
+  \item EUTL free allocation drops to $\sim 0$ or near-zero in 2021;
+  \item Annual Accounts revenue continues or grows (in the NACE 24 case, revenue roughly doubles from 2020 to 2022).
+\end{itemize}
+This pattern is inconsistent with real abatement or firm closure and consistent with installation-level reassignment under Phase IV of the EU ETS (operator code change, EUTL registry event). NACE 21 does not show this pattern: its 2021 free-allocation cut is the intended Phase IV benchmark reset, and its emissions continue near trend.
+
+The \emph{Excluded} rows in the table drop these three firms from every year of the sample (not just 2021+, which would merely relabel their 2005 emissions as ``Exit''). Effect on the 2005 $\to$ 2022 accounting:
+\begin{itemize}
+  \item Total $-37.3 \to -24.9$: about $-12$ pp of the unrestricted total was artefact.
+  \item Technique $-25.6 \to -11.6$: the bulk of the cleanup --- these firms' reclassification-driven emissions drop was being counted as within-firm abatement.
+  \item Between-sector $-31.7 \to -35.1$: slightly \emph{more} negative on the clean panel, i.e.\ between-sector reallocation is the genuine driver of the 2005 $\to$ 2022 decline, not the contaminated technique term.
+\end{itemize}
+The cleaned 2012 $\to$ 2022 row (Total $-12.6$, Technique $-0.9$, Between $-29.5$) is the sharpest statement of the paper's main story: post-2012, real within-firm abatement is essentially zero; the emissions decline is entirely between-sector reallocation. Pairs ending in 2020 or earlier are not affected by this correction and do not need to be re-run.
 
 \subsection{Residual caveats}
 
