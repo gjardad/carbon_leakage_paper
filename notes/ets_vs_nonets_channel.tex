@@ -1,0 +1,137 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{caption}
+\usepackage{xcolor}
+
+\newcommand{\N}{\mathcal{N}}
+
+\title{ETS vs.\ non-ETS revenue reallocation:\\
+\large A potential channel (moved out of the main reallocation note)}
+\author{Working Note}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+This note is archival. It tests whether Belgian ETS firms' real revenue contracts relative to non-ETS firms within the same NACE 4-digit sector as carbon-cost exposure rises. It was originally §5 of the main reallocation exercises note and was moved here because the evidence is null under clean identification --- we may want to revisit this channel later but it is not part of the main story for now.
+\end{abstract}
+
+\section{Notation used}
+
+Let $i$ index firms, $s$ index NACE 4-digit sectors, and $t$ index years.
+\begin{itemize}
+  \item $\mathrm{ETS}_i \in \{0,1\}$: firm-level ETS-regulated status.
+  \item $\mathrm{real\_rev}_{i,t}$: nominal turnover deflated by NACE 4d PPI (2d fallback).
+  \item $\mathrm{intensity\_base}_s$: pre-MSR (2013--16 mean) carbon cost share of the ETS firms in NACE 4d sector $s$. Source: \texttt{data/processed/phase3\_sector\_exposure.RData}.
+  \item $\mathrm{EUA}_t$: annual mean EUA secondary-market price, 2005--2022.
+  \item $\mathrm{shock}_{s,t} = 100 \cdot \mathrm{intensity\_base}_s \times \mathrm{EUA}_t$: Bartik-style shock.
+\end{itemize}
+
+\section{Setup}
+
+\textbf{Script:} \texttt{analysis/phase0\_ets\_vs\_nonets\_reallocation.R}.
+
+\textbf{Non-ETS firm universe:} union of \texttt{training\_sample} (non-ETS component; firms in NACE 17, 18, 19, and the zero-24 sub-sectors, for which emissions are imputed to zero in the preprocessing pipeline) and \texttt{deployment\_panel} (non-ETS firms in all other sectors), deduplicated. The zero-sector non-ETS firms live only in \texttt{training\_sample} and were previously omitted; recovering them adds 2{,}959 non-ETS firms including the non-ETS competitors in the paper and petroleum sectors.
+
+\textbf{Mixed-sector restriction:} only the 92 NACE 4d sectors with at least one ETS and at least one non-ETS firm present in $\geq 1$ year.
+
+\textbf{Contamination filter:} three ETS VATs that come off EUTL reporting in 2021 excluded from every year.
+
+\section{Specification}
+
+\textbf{Main spec (log levels, firm + sector-year FE):}
+\begin{equation}
+  \log(\mathrm{real\_rev})_{i,s,t} = \beta \cdot (\mathrm{ETS}_i \times \mathrm{shock}_{s,t}) + \gamma \cdot (\mathrm{ETS}_i \times \mathrm{EUA}_t) + \alpha_i + \alpha_{s,t} + \varepsilon_{i,s,t}.
+\end{equation}
+\begin{itemize}
+  \item $\alpha_i$ (firm FE) absorbs ETS status, firm-invariant sector, time-invariant scale.
+  \item $\alpha_{s,t}$ (NACE 4d $\times$ year FE) absorbs all sector-year macro variation, including the main effect of $\mathrm{shock}_{s,t}$ itself.
+  \item $\beta$: within a 4d sector-year, how much more does an ETS firm's log real revenue move with $\mathrm{shock}_{s,t}$ than a non-ETS firm's in the same sector-year. Under reallocation (H1), $\beta < 0$.
+  \item $\gamma$: common ETS-vs-non-ETS time trend with EUA, independent of sector exposure.
+  \item SEs clustered on NACE 4d.
+\end{itemize}
+
+\section{Identification}
+
+Take the population expectation conditional on firm, sector, year, and ETS status. For a \emph{non-ETS firm} $j$ in sector $s$ at year $t$,
+\begin{equation}
+  \mathbb{E}[\log(\mathrm{real\_rev})_{j,s,t} \mid \mathrm{ETS}_j = 0, s, t] = \alpha_j + \alpha_{s,t}. \label{eq:cond_nonets}
+\end{equation}
+For an \emph{ETS firm} $i$ in the same sector-year,
+\begin{equation}
+  \mathbb{E}[\log(\mathrm{real\_rev})_{i,s,t} \mid \mathrm{ETS}_i = 1, s, t] = \alpha_i + \alpha_{s,t} + \beta \cdot \mathrm{shock}_{s,t} + \gamma \cdot \mathrm{EUA}_t. \label{eq:cond_ets}
+\end{equation}
+Subtracting inside a $(s,t)$ cell gives the ETS$-$non-ETS gap,
+\begin{equation}
+  \mathbb{E}[\log(\mathrm{real\_rev})_{i,s,t}] - \mathbb{E}[\log(\mathrm{real\_rev})_{j,s,t}] = (\alpha_i - \alpha_j) + \beta \cdot \mathrm{shock}_{s,t} + \gamma \cdot \mathrm{EUA}_t.
+\end{equation}
+The firm-FE difference captures the 31$\times$ size gap (in levels) between ETS and non-ETS firms. The time-varying part is
+\[
+  \big(100 \cdot \beta \cdot \mathrm{intensity\_base}_s + \gamma\big) \cdot \mathrm{EUA}_t,
+\]
+so each sector has its own slope of the ETS$-$non-ETS log-revenue gap on $\mathrm{EUA}_t$ equal to $\gamma + 100\beta \cdot \mathrm{intensity\_base}_s$. $\gamma$ is identified from the common intercept across sectors; $\beta$ from how that slope varies with sector intensity.
+
+\section{Sample window}
+
+$\mathrm{intensity\_base}_s$ is computed on 2013--16. For the Bartik logic to be clean, the regression window should start after the base period. Three windows are reported:
+\begin{itemize}
+  \item \textbf{A: 2005--2022 (full panel).} Pre-2013 observations use an exposure that did not apply in Phase 1--2 NAP rules --- not strictly defensible.
+  \item \textbf{B: 2013--2022 (Phase 3 onward).} Allocation regime consistent with the base period; mild pre-determination concern (2013--16 is inside the window).
+  \item \textbf{C: 2017--2022 (post-base, cleanest Bartik).} Exposure strictly predates identifying variation.
+\end{itemize}
+
+\section{Results}
+
+\begin{center}
+\captionof{table}{Main-spec coefficient $\hat\beta$ on $\mathrm{ETS}_i \times \mathrm{shock}_{s,t}$, across three sample windows. All use firm + 4d $\times$ year FE, cluster-robust SEs on NACE 4d.}
+\begin{tabular}{lrrrr}
+\toprule
+Window & $\hat\beta$ & SE & $t$ & $p$ \\
+\midrule
+A: 2005--2022 (full panel)            & $-0.026$ & $0.017$ & $-1.50$ & $0.13$ \\
+B: 2013--2022 (Phase 3 onward)        & $-0.025$ & $0.017$ & $-1.47$ & $0.14$ \\
+C: 2017--2022 (post-base)             & $-0.012$ & $0.012$ & $-1.03$ & $0.30$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Sample sizes: A has 80{,}932 firm-years; B has 43{,}448; C has 25{,}906. The point estimate shrinks as we restrict to cleaner identification windows. None significant at 10\%.
+
+\textbf{Main result: direction consistent with reallocation, not significant.} In the Bartik-clean window C, $\hat\beta = -0.012$ ($p = 0.30$). Negative, below conventional significance, and economically small.
+
+\section{Interpreting the identification}
+
+\paragraph{What firm FE plus 4d $\times$ year FE does.} Firm FE removes each firm's own mean log revenue --- ``use firm $i$ as its own control.'' 4d $\times$ year FE removes each sector-year's mean. For a non-ETS firm the interaction is always zero, so non-ETS firms contribute only to estimating $\alpha_{s,t}$. For an ETS firm the interaction equals $\mathrm{intensity\_base}_s \cdot \mathrm{EUA}_t$ --- a firm-fixed sector scale times the aggregate EUA path. $\beta$ captures: among ETS firms, does the firm in a dirtier sector shrink more (relative to its sector's average) when EUA rises?
+
+\paragraph{Why the no-firm-FE robustness ($-0.168$, significant) is contaminated.} For the full panel, dropping firm FE gives $\hat\beta = -0.168$ ($p = 0.006$), about $7\times$ the firm-FE magnitude. Without firm FE, the $\mathrm{ETS}_i$ dummy enters directly with coefficient $\approx 3.45$: ETS firms' mean log real revenue is $3.45$ above non-ETS firms' in the same NACE 4d, i.e.\ $\exp(3.45) \approx 31\times$ larger in levels. That gap is not a bug; ETS firms are integrated steel plants, refineries, cement kilns, petrochemical giants, power stations, while non-ETS firms in the same 4d are small metal finishers, boutique chemical shops, printing firms. Three things correlate with EUA and hit large industrial firms differently from small ones, regardless of carbon regulation:
+\begin{enumerate}
+  \item \textbf{Energy prices.} EUA passes through to wholesale electricity; gas competes with coal. When EUA is high, industrial energy prices are high. Large energy-intensive ETS firms are much more exposed.
+  \item \textbf{Business cycle.} EUA rose in 2018 and 2021--22, both boom periods for bulk industrials.
+  \item \textbf{Commodity and exchange-rate cycles.} Brent, EUR, and EUA co-move.
+\end{enumerate}
+Without firm FE, any systematic difference in how ETS and non-ETS firms respond to macro conditions that correlate with EUA gets loaded onto the $\mathrm{ETS} \times \mathrm{shock}$ coefficient. The $7\times$ magnitude jump suggests most of the apparent ``reallocation'' in the no-firm-FE spec is compositional artefact. Firm FE filters that out; the residual $-0.026$ is the best available estimate of the pure carbon-reallocation channel.
+
+\paragraph{First differences is null.} $\Delta \log(\mathrm{real\_rev})$ on $\Delta \mathrm{shock}$ with firm and sector-year FE yields $\hat\beta = +0.019$ ($p = 0.38$). First differences test year-on-year responses; if reallocation plays out slowly (over 3--5 years), first differences miss it. The pattern (FD null, levels marginally negative) is \emph{consistent with} a slow reallocation effect, not proof of one.
+
+\paragraph{Simpler spec without sector interaction is null.} Dropping $\mathrm{ETS} \times \mathrm{shock}$ and keeping only $\mathrm{ETS}_i \times \mathrm{EUA}_t$ yields $\hat\beta = -0.0009$ ($p = 0.46$). No aggregate ETS-vs-non-ETS differential response to EUA. Whatever reallocation there is must come from cross-sector heterogeneity in $\mathrm{intensity\_base}_s$.
+
+\section{Economic magnitude and power}
+
+At peak EUA (80 EUR in 2022) in the dirtiest sector ($\mathrm{intensity\_base} \approx 0.005$):
+\[
+  \mathrm{shock} = 100 \cdot 0.005 \cdot 80 = 40, \qquad \hat\beta \cdot \mathrm{shock} \approx -1.04 \text{ (at window A)}.
+\]
+An ETS firm in the dirtiest 4d sector at 2022 EUA levels would have log real revenue 1.04 below the non-ETS counterfactual ($\sim -65\%$ in levels). Big, but applies only to the dirtiest sectors; median $\mathrm{intensity\_base}$ across the 92 mixed sectors is $5 \times 10^{-6}$, so the typical implied effect is essentially zero.
+
+\textbf{Underpowered.} Only 15--20 of the 92 mixed sectors have meaningful $\mathrm{intensity\_base}$. Power to detect reallocation is concentrated in those cells. The null is compatible with both ``no reallocation effect'' and ``real effect we cannot detect.''
+
+\section{Why this was moved out of the main note}
+
+After the within-ETS cross-sector regression (§6 of the main note) was shown to be null under clean (CPShock-based) identification, the three reallocation specs we have --- §5 here, §6's EUA-based cross-sector (confounded), §6's CPShock-based cross-sector (null) --- converge on the same answer: no detectable reallocation from ETS to non-ETS firms under clean identification. Consistent with the EU ETS literature (Colmer et al. 2024, Dechezlepr\^etre et al. 2023). Keeping a long §5 in the main note put disproportionate weight on a null channel; the content is preserved here for when we revisit it (e.g., with post-2022 data or with a cleaner identification strategy).
+
+\end{document}

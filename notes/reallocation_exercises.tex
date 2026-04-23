@@ -173,249 +173,79 @@ NACE & Sector & Tech 2005 $\to$ 2012 & Tech 2012 $\to$ 2022 \\
 
 \textbf{What this implies for the broader story.} The paper's main within-sector-reallocation null is not uniform. There is a clean reallocation story in NACE 23 --- exactly the sector where \cite{phase3}'s pass-through evidence is strongest --- and opposite-signed within-sector reallocation elsewhere. Any H1 vs H2 test that pools across sectors will wash out the cement signal. A sector-by-sector treatment (or at least a split that isolates NACE 23) is a natural follow-up.
 
-\section{Sector-phase dataset: allocation rules and channel responses}
+\section{Sector-phase decomposition}
 \label{sec:sectorphase}
 
 \textbf{Script:} \texttt{analysis/phase0\_sector\_phase\_dataset.R}.
 
-\subsection{Motivation and construction}
-
-The sector decomposition in \S\ref{sec:sector} is silent on timing: it pools 2005--2022 (or phases it into two halves). This section slices the same five-channel decomposition by the four official EU ETS phases and merges it with the allocation rule in force in each sector-phase, so that we can ask whether the sector heterogeneity above tracks the sector-specific timing of allocation-rule changes.
+The sector decomposition in \S\ref{sec:sector} pools 2005--2022 (or phases it into two halves). This section slices the same five-channel decomposition by the four official EU ETS phases to show how the sector heterogeneity varies over time.
 
 Phase windows used for the within-phase decomposition:
 \begin{center}
-\begin{tabular}{llllll}
+\begin{tabular}{ll}
 \toprule
-Phase & Window & ``Paying'' starts & Känzig learning date & Event \\
+Phase & Window \\
 \midrule
-Phase 1 & $2005 \to 2007$ & 2005-01-01 & 2003-10-13 & Directive 2003/87/EC (pre-K\"anzig sample) \\
-Phase 2 & $2008 \to 2012$ & 2008-01-01 & 2005-06-20 & First K\"anzig surprise \\
-Phase 3 & $2013 \to 2020$ & 2013-01-01 & \textbf{2009-04-23} & Directive 2009/29/EC adopted (4-year anticipation) \\
-Phase 4 & $2021 \to 2022$ & 2021-01-01 & \textbf{2018-03-14} & Directive 2018/410 adopted (3-year anticipation) \\
+Phase 1 & $2005 \to 2007$ \\
+Phase 2 & $2008 \to 2012$ \\
+Phase 3 & $2013 \to 2020$ \\
+Phase 4 & $2021 \to 2022$ \\
 \bottomrule
 \end{tabular}
 \end{center}
 Phase 3 ends 2020 to avoid the EUTL reclassifications that contaminate 2021+; Phase 4 is only 2 years of available data and the three contaminated VATs are excluded.
-
-Allocation-rule coding at NACE 2d, based on Commission Decisions 2010/2/EU, 2014/746/EU, and 2019/708/EU:
-\begin{itemize}
-  \item \texttt{grandfathered\_free} --- Phase 1 and Phase 2 for all sectors (free allocation based on historical activity).
-  \item \texttt{full\_auction} --- Phase 3 onwards for electricity (NACE 35).
-  \item \texttt{CL\_list\_free} --- Phase 3/4 for sectors on the Carbon Leakage list (cement 23, petroleum 19, basic metals 24, chemicals 20, parts of paper 17). Free allocation indexed to a product benchmark $\times$ historical activity level.
-  \item \texttt{partial\_free\_declining} --- Phase 3/4 for non-CL industrials (food 10, beverages 11, textiles 13, pharma 21, rubber/plastics 22). Free share declines from 80\% in 2013 toward 30\% in 2020, lower in Phase 4.
-\end{itemize}
-The NACE-2d granularity is approximate (see caveat below).
 
 \subsection{Results --- Tech and Within by phase, top sectors}
 
 \begin{center}
 \captionof{table}{Within-firm technique and within-sector reallocation, by phase, for the five sectors that together account for $\sim 95\%$ of 2005 ETS emissions. pp of each sector's own phase-start emissions. Three contaminated VATs excluded from every year.}
 \small
-\begin{tabular}{lcrrrrrrrr}
+\begin{tabular}{lrrrrrrrr}
 \toprule
- & Phase 3/4 rule & \multicolumn{4}{c}{Technique} & \multicolumn{4}{c}{Within-sector reallocation} \\
-\cmidrule(lr){3-6} \cmidrule(lr){7-10}
-Sector & & P1 & P2 & P3 & P4 & P1 & P2 & P3 & P4 \\
+ & \multicolumn{4}{c}{Technique} & \multicolumn{4}{c}{Within-sector reallocation} \\
+\cmidrule(lr){2-5} \cmidrule(lr){6-9}
+Sector & P1 & P2 & P3 & P4 & P1 & P2 & P3 & P4 \\
 \midrule
-35 Electricity            & \texttt{full\_auction}            & $\mathbf{-74.6}$ & $-18.0$ & $\mathbf{+19.1}$ & $\mathbf{+20.4}$ & $+14.5$ & $+3.3$  & $-6.2$           & $-3.1$ \\
-23 Cement, glass          & \texttt{CL\_list\_free}           & $-5.8$           & $-14.4$ & $\mathbf{-27.3}$ & $+10.8$           & $-4.0$  & $+5.8$  & $+13.4$          & $\mathbf{-15.1}$ \\
-19 Petroleum refining     & \texttt{CL\_list\_free}           & $+5.2$           & $+8.9$  & $\mathbf{-42.4}$ & $-11.3$           & $-23.3$ & $-4.9$  & $\mathbf{+83.1}$ & $+2.2$ \\
-20 Chemicals              & \texttt{CL\_list\_free}           & $-5.1$           & $+25.0$ & $-11.1$          & $\mathbf{-23.6}$  & $+3.3$  & $+7.5$  & $+13.5$          & $+2.9$ \\
-24 Basic metals           & \texttt{CL\_list\_free}           & $+27.7$          & $-9.4$  & $\mathbf{-25.9}$ & $-6.2$            & $-51.6$ & $-1.2$  & $+13.3$          & $+2.0$ \\
+35 Electricity            & $\mathbf{-74.6}$ & $-18.0$ & $\mathbf{+19.1}$ & $\mathbf{+20.4}$ & $+14.5$ & $+3.3$  & $-6.2$           & $-3.1$ \\
+23 Cement, glass          & $-5.8$           & $-14.4$ & $\mathbf{-27.3}$ & $+10.8$           & $-4.0$  & $+5.8$  & $+13.4$          & $\mathbf{-15.1}$ \\
+19 Petroleum refining     & $+5.2$           & $+8.9$  & $\mathbf{-42.4}$ & $-11.3$           & $-23.3$ & $-4.9$  & $\mathbf{+83.1}$ & $+2.2$ \\
+20 Chemicals              & $-5.1$           & $+25.0$ & $-11.1$          & $\mathbf{-23.6}$  & $+3.3$  & $+7.5$  & $+13.5$          & $+2.9$ \\
+24 Basic metals           & $+27.7$          & $-9.4$  & $\mathbf{-25.9}$ & $-6.2$            & $-51.6$ & $-1.2$  & $+13.3$          & $+2.0$ \\
 \bottomrule
 \end{tabular}
 \end{center}
 
 \subsection{Three patterns}
 
-\textbf{(1) For electricity, auctioning did not deliver more within-firm abatement --- the opposite.} The largest technique decline came in Phase 1 under grandfathered free allowances ($-75$ pp). When full auctioning kicked in at the start of Phase 3, technique \emph{reversed} to $+19$, and again $+20$ in Phase 4. Scale over the same Phase 3 window was $-27$: the surviving thermal plants are running at much lower capacity factor as non-ETS renewables take over supply, which mechanically raises their emissions per unit of their own real revenue. Moving from free allowances to auctioning does not appear to have induced additional abatement in this sector; the headline emissions decline in Phase 3/4 is the output-contraction channel, not the intensity channel.
+\textbf{(1) For electricity, within-firm technique flips sign after Phase 2.} The largest technique decline came in Phase 1 ($-75$ pp). From Phase 3 onward, technique reverses to $+19$ and $+20$ in Phase 4, while Scale over the same Phase 3 window is $-27$: surviving thermal plants run at much lower capacity factor as non-ETS renewables take over the grid, which mechanically raises their emissions per unit of their own real revenue. The Phase 3/4 emissions decline for electricity is the output-contraction channel, not the intensity channel.
 
-\textbf{(2) Carbon-leakage-list industrials delivered their biggest within-firm abatement in Phase 3.} Cement ($-27$), petroleum ($-42$), basic metals ($-26$), and chemicals ($-11$ then $-24$ in Phase 4) all show a Phase 3 technique that is more negative than anything these sectors produced in the grandfathered phases. These sectors' Phase 3/4 allocation rule pays firms for abating below the product benchmark (allowances indexed to activity at a benchmark intensity); a benchmark-based system creates a direct marginal incentive that pure grandfathering lacks. Chemicals' Phase 4 technique of $-24$ is consistent with the tightening of benchmarks under the Phase 4 linear reduction factor continuing to bite.
+\textbf{(2) The large energy-intensive industrial sectors delivered their biggest within-firm abatement in Phase 3.} Cement ($-27$), petroleum ($-42$), basic metals ($-26$), and chemicals ($-24$ in Phase 4) all show a Phase 3 or Phase 4 technique that is more negative than anything these sectors produced in Phase 1 or Phase 2.
 
-\textbf{(3) Within-sector reallocation is almost entirely a Phase 3/4 phenomenon.} Phases 1--2 show small magnitudes (mostly $|$Within$|\leq 5$ pp). In Phases 3--4, petroleum has a striking $+83$ (dirty firms gained share among survivors), chemicals $+14$, and basic metals $+13$. Cement is the clean-reallocation exception: $+13$ in Phase 3 but $\mathbf{-15}$ in Phase 4, dirty firms losing share only after the benchmark tightening arrives. Cement is consistently the sector whose behaviour most resembles what a ``carbon pricing causes reallocation'' model predicts.
+\textbf{(3) Within-sector reallocation is almost entirely a Phase 3/4 phenomenon.} Phases 1--2 show small magnitudes (mostly $|$Within$|\leq 5$ pp). In Phases 3--4, petroleum has a striking $+83$ (dirty firms gained share among survivors), chemicals $+14$, and basic metals $+13$. Cement is the clean-reallocation exception: $+13$ in Phase 3 but $\mathbf{-15}$ in Phase 4 --- dirty firms losing share within the sector only in Phase 4. Cement is consistently the sector whose behaviour most resembles what a ``carbon pricing causes reallocation'' model predicts.
 
-\subsection{Anticipation vs.\ paying}
-
-Phase 3 was adopted in April 2009 but firms only started paying for allowances (via auctioning for electricity, tighter benchmarks for industry) in January 2013. The $\sim 4$-year gap between \emph{learning} and \emph{paying} is directly observable in the K\"anzig surprise series: the 2009-04-23 surprise of $-0.12$ euros is Directive 2009/29/EC's adoption. Phase 2 (2008--2012) therefore covers exactly the Phase 3 anticipation window. Electricity's Phase 2 technique of $-18$ is one plausible reading of an anticipation response, but it is one-quarter the size of Phase 1's abatement and sits in the 2008--09 crisis window, so causal attribution is ambiguous. A focused decomposition over $2009 \to 2012$ (post-adoption, pre-payment) is a natural follow-up.
-
-Phase 4 has the same structure with a shorter anticipation window: Directive 2018/410 adopted in March 2018, paying starts January 2021. K\"anzig's event series has large surprises concentrated around the Phase 4 trilogue and Council dates in 2018. Two years of post-2021 data is too little to identify a Phase 4 response cleanly; this is a ``come back in 2027'' question.
-
-\subsection{Caveat on allocation-rule coding}
-
-The Commission's Carbon Leakage list is defined at NACE 4-digit, not at NACE 2d. Coding each NACE 2d sector with a single allocation rule is an approximation that is inaccurate for several sectors --- most visibly chemicals (NACE 20), where plastics precursors and inorganic chemicals are on the CL list while downstream formulation activities are not. The patterns above are robust to this concern only when the sector-level headline is dominated by one sub-sector (electricity 35, basic metals 24 are clean; chemicals 20 is the main worry).
-
-Refining this for the \emph{descriptive} decomposition buys little. We already observe $\mathrm{shortage}_{i,t} = \max(\mathrm{emissions} - \mathrm{free\_allocation},\, 0)$ directly at firm-year, so the question ``who pays how much'' is already identified without a 4d crosswalk. The 4d CL list is valuable for \emph{identification}, specifically the anticipation channel: a firm in a 4d sector that stays on the CL list after (e.g.) the 2014-05 revision learns it will keep free allocation, while one removed from the list learns it will face declining free allocation starting in 2015+. That asymmetric announcement is a clean cross-sectional test of whether firms invest in abatement in response to \emph{news} about future carbon costs, not to realized costs --- but that's a separate exercise with a different LHS (capex, energy intensity), and is tracked as the Threat-hypothesis Strategy C in \texttt{TODO.md} and \texttt{TREAT\_HYPOTHESIS\_PLAN.md}. For the descriptive exercise here, the 2d coarseness caveat stands, and the CL-list panel at 4d is deliberately deferred to that workstream.
-
-\subsection{Three takeaways from the sector story}
+\subsection{Two takeaways}
 
 \paragraph{Takeaway 1 --- electricity is hard to interpret using EU ETS firm-year data alone.} The $-75 \to +19 \to +20$ technique path for NACE 35 across phases does not reflect what firms are doing to their installations; it reflects that the same installations run fewer hours as non-ETS renewables crowd them out of the merit order. At firm-year granularity we cannot separate ``firm $X$ installed abatement technology'' from ``firm $X$ ran its plant at 40\% capacity instead of 80\%'', and for electricity the second channel is doing most of the work post-2012. Any emissions-per-real-revenue number for this sector is a capacity-factor measurement as much as a technology measurement.
 
 \paragraph{Takeaway 2 --- substantial heterogeneity across sectors and across time.} The Phase 3 technique channel ranges from $-42$ (petroleum) to $+19$ (electricity), a 60-pp spread. Cement alone moves from $-6 \to -14 \to -27 \to +11$ across phases. Within-sector reallocation has even wider variation ($-15$ to $+83$ across sector-phase cells). There is no single ``ETS response'' pattern that applies economy-wide; each large sector has its own phase-specific story.
-
-\paragraph{Takeaway 3 --- no clean paying-time connection outside electricity.} The framing of ``when does the firm start paying'' applies cleanly only to electricity because that is the only sector whose allocation rule has a discrete Phase 2 $\to$ Phase 3 switch (grandfathered $\to$ full auction). For CL-list industrials the allocation rule moves from grandfathered to benchmark $\times$ activity, but both regimes produce near-100\% free allowances in practice --- the firms never really start paying in the same sense; they just face a different marginal incentive. For non-CL industrials the free share declines gradually (80\% in 2013 to 30\% by 2020), so there is no single moment either. The CL-list industrials do show their largest within-firm technique declines in Phase 3 (cement $-27$, petroleum $-42$, metals $-26$), consistent with the Phase 3 benchmark system rewarding intensity improvements more directly than grandfathering did. But we cannot separate that from general Phase 3 EU ETS cap tightening, EUA price movements, or autonomous technology trends without a cleaner identification strategy.
-
-\section{ETS vs.\ non-ETS revenue reallocation}
-\label{sec:etsvsnonets}
-
-\textbf{Script:} \texttt{analysis/phase0\_ets\_vs\_nonets\_reallocation.R}.
-
-Tests whether ETS firms' real revenue contracts relative to non-ETS firms within the same NACE 4d sector-year as the sector-specific carbon-cost shock rises. Replaces a predecessor exercise (which regressed sector-level ETS revenue shares on contemporaneous carbon-cost shares at NACE 2d) after six fixes documented below.
-
-\subsection{Variables}
-\begin{itemize}
-  \item $\mathrm{ETS}_i \in \{0,1\}$: firm-level ETS-regulated status (from \texttt{firm\_year\_belgian\_euets}).
-  \item $\mathrm{real\_rev}_{i,t}$: nominal turnover deflated by NACE 4d PPI (2d fallback).
-  \item $\mathrm{intensity\_base}_s$: pre-MSR (2013--16 mean) carbon cost share of the ETS firms in NACE 4d sector $s$. Both numerator and denominator are pre-determined (sector total carbon cost / total cost, averaged over 2013--16). Source: \texttt{data/processed/phase3\_sector\_exposure.RData}.
-  \item $\mathrm{EUA}_t$: annual mean EUA secondary-market price, 2005--2022.
-  \item $\mathrm{shock}_{s,t} = 100 \cdot \mathrm{intensity\_base}_s \times \mathrm{EUA}_t$: Bartik-style shock, pre-determined sector exposure interacted with the aggregate EUA path. Only the aggregate EUA scalar moves; the Belgian ETS firms cannot collectively move it.
-  \item \textbf{Non-ETS firm universe:} union of \texttt{training\_sample} (non-ETS component; firms in NACE 17, 18, 19, and the zero-24 sub-sectors, for which emissions are imputed to zero in the preprocessing pipeline) and \texttt{deployment\_panel} (non-ETS firms in all other sectors), deduplicated. The zero-sector non-ETS firms live only in \texttt{training\_sample} and were omitted from the predecessor regression; recovering them adds 2,959 non-ETS firms including all the non-ETS competitors in the paper and petroleum sectors.
-  \item \textbf{Mixed-sector restriction:} only the 92 NACE 4d sectors with at least one ETS and at least one non-ETS firm present in $\geq 1$ year.
-  \item \textbf{Contamination filter:} three ETS VATs that come off EUTL reporting in 2021 (\S\ref{sec:pairwise}) excluded from every year.
-\end{itemize}
-
-\subsection{Specification}
-
-\textbf{Main spec (log levels, firm + sector-year FE):}
-\begin{equation}
-  \log(\mathrm{real\_rev})_{i,s,t} = \beta \cdot (\mathrm{ETS}_i \times \mathrm{shock}_{s,t}) + \gamma \cdot (\mathrm{ETS}_i \times \mathrm{EUA}_t) + \alpha_i + \alpha_{s,t} + \varepsilon_{i,s,t}.
-\end{equation}
-\begin{itemize}
-  \item $\alpha_i$ (firm FE) absorbs ETS status, firm-invariant sector, time-invariant scale.
-  \item $\alpha_{s,t}$ (NACE 4d $\times$ year FE) absorbs \emph{all} sector-year macro variation, including the main effect of $\mathrm{shock}_{s,t}$ itself.
-  \item $\beta$: within a 4d sector-year, how much more does an ETS firm's log real revenue move with $\mathrm{shock}_{s,t}$ than a non-ETS firm's in the same sector-year. Under H1 (reallocation), $\beta < 0$.
-  \item $\gamma$: common ETS-vs-non-ETS time trend with EUA, independent of sector exposure. Not of primary interest but kept in to avoid confounding.
-  \item SEs clustered on NACE 4d.
-\end{itemize}
-
-\subsection{Identification assumption}
-
-Three layers of FE absorption:
-\begin{itemize}
-  \item Firm FE removes ETS status, time-invariant sector, scale. The dominant confounder --- that ETS firms are systematically much larger (mean log-real-revenue gap $\approx 3.45$, i.e.\ $\sim 31 \times$ larger) --- is absorbed here.
-  \item 4d $\times$ year FE removes all sector-year macro, including the main effect of $\mathrm{shock}_{s,t}$ and of $\mathrm{EUA}_t$ itself.
-  \item Identification: residual variation in $\mathrm{ETS}_i \times \mathrm{shock}_{s,t}$ within a 4d sector-year cell (binary across firms, scaled by $\mathrm{shock}_{s,t}$), compared across cells where $\mathrm{shock}_{s,t}$ varies through its $\mathrm{EUA}_t$ component.
-\end{itemize}
-
-Assumption: conditional on firm and 4d $\times$ year FE, $\mathrm{shock}_{s,t}$ is uncorrelated with other determinants of the ETS-vs-non-ETS revenue gap. Fails if macroeconomic shocks that raise EUA differentially affect ETS vs non-ETS firms in ways unrelated to carbon cost (e.g., ETS firms tend to be exporters, and EUA co-moves with the exchange rate). The Bartik structure (sector-fixed intensity $\times$ aggregate EUA) mitigates but does not eliminate this.
-
-\subsection{Conditional expectation and identification of $\beta$ and $\gamma$}
-\label{sec:etsvsnonets_derivation}
-
-Take the population expectation of the main equation conditional on firm identity, sector, year, and ETS status. For a \emph{non-ETS firm} $j$ in sector $s$ at year $t$, the interactions are zero and
-\begin{equation}
-  \mathbb{E}[\log(\mathrm{real\_rev})_{j,s,t} \mid \mathrm{ETS}_j = 0, s, t] = \alpha_j + \alpha_{s,t}. \label{eq:cond_nonets}
-\end{equation}
-For an \emph{ETS firm} $i$ in the same sector-year,
-\begin{equation}
-  \mathbb{E}[\log(\mathrm{real\_rev})_{i,s,t} \mid \mathrm{ETS}_i = 1, s, t] = \alpha_i + \alpha_{s,t} + \beta \cdot \mathrm{shock}_{s,t} + \gamma \cdot \mathrm{EUA}_t. \label{eq:cond_ets}
-\end{equation}
-The firm-FE terms $\alpha_i$ and $\alpha_j$ absorb every time-invariant firm characteristic: ETS status baseline, firm size, scale, export orientation, capital-labour ratio. The sector-year FE $\alpha_{s,t}$ absorbs everything that moves identically for ETS and non-ETS firms inside the same 4d cell in year $t$ --- macro, sectoral business cycle, the main effect of $\mathrm{shock}_{s,t}$ itself, and the main effect of $\mathrm{EUA}_t$.
-
-\paragraph{The ETS$-$nonETS gap is what identifies $\beta$ and $\gamma$.} Subtract \eqref{eq:cond_nonets} from \eqref{eq:cond_ets} within a $(s,t)$ cell:
-\begin{equation}
-  \Delta_{i,j,s,t} \;\equiv\; \mathbb{E}[\log(\mathrm{real\_rev})_{i,s,t}] - \mathbb{E}[\log(\mathrm{real\_rev})_{j,s,t}] = (\alpha_i - \alpha_j) + \beta \cdot \mathrm{shock}_{s,t} + \gamma \cdot \mathrm{EUA}_t. \label{eq:gap}
-\end{equation}
-The firm-FE difference $(\alpha_i - \alpha_j)$ captures the 31$\times$ size gap (in levels) between ETS and non-ETS firms. The time-varying part of the gap is
-\[
-  \beta \cdot \mathrm{shock}_{s,t} + \gamma \cdot \mathrm{EUA}_t \;=\; \big(100 \cdot \beta \cdot \mathrm{intensity\_base}_s + \gamma\big) \cdot \mathrm{EUA}_t,
-\]
-using $\mathrm{shock}_{s,t} = 100 \cdot \mathrm{intensity\_base}_s \cdot \mathrm{EUA}_t$. Each sector therefore has its own slope of the ETS$-$nonETS log-revenue gap on $\mathrm{EUA}_t$, equal to $\gamma + 100 \beta \cdot \mathrm{intensity\_base}_s$.
-
-%% Overleaf-added equation (LaTeX backslashes were lost in transit); fixed
-%% markup but left in place. Thematically this definition belongs in the
-%% Threat-hypothesis workstream (see TODO.md Step 1b), not in section 5 which
-%% is about EUA-based Bartik exposure. Move or delete as desired.
-\[
-  \mathrm{phys\_intensity}_s \;=\; \mathrm{mean}_{t \in 2005..07}\!\left(\frac{\mathrm{emissions}_{s,t}}{\mathrm{total\_cost}_{s,t}}\right)
-\]
-
-\paragraph{Separating $\beta$ from $\gamma$.} Two sources of identifying variation:
-\begin{itemize}
-  \item \textbf{$\gamma$} is the common, sector-independent slope of the ETS$-$nonETS gap on $\mathrm{EUA}_t$. It is identified from sectors with $\mathrm{intensity\_base}_s \approx 0$, where the gap's sensitivity to EUA reduces to $\gamma \cdot \mathrm{EUA}_t$.
-  \item \textbf{$\beta$} is how that slope \emph{varies across sectors} with $\mathrm{intensity\_base}_s$. It is identified from the cross-sector heterogeneity: in a dirty sector ($\mathrm{intensity\_base}_s$ large), the ETS$-$nonETS gap responds more strongly to EUA than in a clean sector.
-\end{itemize}
-Under reallocation (H1), $\beta < 0$: ETS firms' log revenue falls \emph{more} than non-ETS firms' in sectors where the ETS firms were pre-MSR exposed to larger carbon costs. Under a common-trend-only story (no sector heterogeneity), $\beta = 0$ and $\gamma$ picks up any ETS-wide time drift.
-
-\subsection{Sample windows and the Bartik pre-determination issue}
-
-$\mathrm{intensity\_base}_s$ is defined as the 2013--16 sector mean of the carbon cost share (post-Phase-3-start, pre-MSR). Two features shape the window choice:
-\begin{itemize}
-  \item \textbf{Post-Phase-3, pre-MSR.} Phase 1 and 2 allocations were set by country-specific National Allocation Plans with heavy grandfathering; the shortage variable in those years reflects political allocation choices, not sector technology. Phase 3 from 2013 onward has benchmark-based free allocation under a single EU-wide rule --- shortage in those years is a legitimate sector-technology measure. EUA prices were also flat at 5--7 EUR during 2013--16, so this window captures baseline exposure before the MSR-era price surge.
-  \item \textbf{Pre-determination.} For the Bartik logic to be clean, $\mathrm{intensity\_base}_s$ should be computed on data that precede the identifying $\mathrm{EUA}_t$ variation. The main price variation is the 2017--22 MSR-era surge, so 2013--16 is pre-treatment for that variation.
-\end{itemize}
-
-The \emph{regression window} in the main spec is 2005--2022, which overlaps with the base period and extends before it. That creates two concerns:
-\begin{itemize}
-  \item \textbf{Pre-2013 observations (2005--2012)} use an exposure measure that did not apply in those years. Phase 1--2 firms weren't actually paying carbon cost on the portion of emissions not covered by their free NAP allocation; interacting the Phase-1/2 EUA path with a 2013--16-based exposure attributes a carbon cost these firms didn't face.
-  \item \textbf{The 2013--16 observations} are inside the base window, so their own data contribute to $\mathrm{intensity\_base}_s$ (mild pre-determination concern; in practice negligible because $\mathrm{intensity\_base}_s$ is a sector-level average of many firms over four years).
-\end{itemize}
-Both concerns are addressed by running the main spec on tighter windows.
-
-\subsection{Results}
-
-\begin{center}
-\captionof{table}{Main-spec coefficient $\hat\beta$ on $\mathrm{ETS}_i \times \mathrm{shock}_{s,t}$, across three sample windows. All use firm + 4d $\times$ year FE, cluster-robust SEs on NACE 4d.}
-\begin{tabular}{lrrrr}
-\toprule
-Window & $\hat\beta$ & SE & $t$ & $p$ \\
-\midrule
-A: 2005--2022 (full panel)            & $-0.026$ & $0.017$ & $-1.50$ & $0.13$ \\
-B: 2013--2022 (Phase 3 onward, consistent allocation regime) & $-0.025$ & $0.017$ & $-1.47$ & $0.14$ \\
-C: 2017--2022 (post-base, cleanest Bartik)                   & $-0.012$ & $0.012$ & $-1.03$ & $0.30$ \\
-\bottomrule
-\end{tabular}
-\end{center}
-
-Sample sizes: A has 80{,}932 firm-years; B has 43{,}448; C has 25{,}906. The point estimate shrinks as we restrict to cleaner identification windows (from $-0.026$ at the full panel to $-0.012$ at the cleanest Bartik). None are significant at 10\%. Two readings:
-\begin{itemize}
-  \item The Bartik-cleanest window (C) gives the smallest $|\hat\beta|$ because pre-2013 data was contributing identifying variation that the full-panel spec attributed (perhaps dubiously) to the reallocation coefficient. Restricting to the clean window gives us the honest answer: a small negative point estimate that we cannot distinguish from zero.
-  \item An alternative reading: window C's small $\hat\beta$ reflects thin power (6 years, $\sim 26$k firm-years, concentrated in 15--20 dirty-sector cells), not a truly smaller effect. The consistent negative sign across all three windows is the main qualitative finding.
-\end{itemize}
-In either reading, the §5 test does not establish significant evidence of ETS-to-non-ETS reallocation.
-
-\textbf{Main result: direction consistent with reallocation, not significant.} In the preferred Bartik-clean window (C, 2017--2022), $\hat\beta = -0.012$ ($p = 0.30$). Negative, below conventional significance, and economically small.
-
-\subsection{Interpreting the identification}
-\label{sec:etsvsnonets_interp}
-
-\paragraph{Main spec: what the firm FE plus 4d $\times$ year FE actually does.} Firm FE ($\alpha_i$) removes each firm's own mean log revenue --- ``use firm $i$ as its own control.'' 4d $\times$ year FE ($\alpha_{s,t}$) removes each sector-year's mean --- ``also remove what the sector did on average that year.'' What's left to identify $\beta$: for a given firm, across years, does its log revenue deviate from its own mean AND from its sector-year mean in a way that co-moves with $\mathrm{ETS}_i \times \mathrm{shock}_{s,t}$? For a non-ETS firm this interaction is always zero, so the non-ETS firms contribute only to estimating $\alpha_{s,t}$ (the sector-year benchmark). For an ETS firm in sector $s$, $\mathrm{ETS}_i \times \mathrm{shock}_{s,t} = \mathrm{intensity\_base}_s \times \mathrm{EUA}_t$: a firm-fixed sector scale times the aggregate EUA path. $\beta$ captures: among ETS firms, does the firm in the dirtier sector shrink (in its own log revenue, relative to its sector's average) when EUA rises, more than the firm in a cleaner sector? The estimate is $\hat\beta = -0.026$, negative, $p=0.14$.
-
-\paragraph{Contrast with the no-firm-FE spec ($-0.168$, significant).} For the full 2005--2022 panel, dropping firm FE and keeping only 4d + year FE yields $\hat\beta = -0.168$ ($p = 0.006$). This estimate is $\sim 7\times$ larger in magnitude than the firm-FE spec and should be interpreted cautiously for the reasons below. In spec 2 firm FE is dropped. The $\mathrm{ETS}_i$ dummy then returns as a main-effect regressor with coefficient $\approx 3.45$: averaged across the whole sample, an ETS firm has log real revenue $3.45$ higher than a non-ETS firm in the same NACE 4d --- i.e.\ about $\exp(3.45) \approx 31\times$ larger in levels. That gap is not a bug, it is the actual data. ETS-regulated firms are integrated steel plants, petroleum refineries, cement kilns, large chemical complexes, power stations. The non-ETS firms in the \emph{same} NACE 4d are very different objects: a small rolling mill in the same code as ArcelorMittal, a boutique chemical plant next to an Antwerp petrochemical giant, a printing shop in a paper-producing sector, etc. There is a massive baseline asymmetry between the two sets of firms along every dimension that matters for revenue dynamics --- plant scale, capital intensity, product mix, export orientation, customer base, energy intensity, cyclical sensitivity.
-
-Three things correlate with EUA prices and hit large industrial firms differently from small ones, regardless of carbon regulation:
-\begin{enumerate}
-  \item \textbf{Energy prices.} EU thermal power passes EUA costs through to wholesale electricity; natural gas competes with coal in the merit order. When EUA is high, industrial energy prices are high. Large energy-intensive ETS firms are much more exposed to these energy costs than small non-ETS firms in the same 4d.
-  \item \textbf{Business cycle.} EUA rose sharply in 2018 and again in 2021--22, both periods of strong industrial activity. Large export-oriented industrial firms (= the ETS set) are more cyclical than the small services-adjacent firms that make up much of the non-ETS side of a mixed 4d.
-  \item \textbf{Exchange rates and commodity prices.} The euro, Brent crude, and EUA all co-move to some extent over the sample. Large industrial exporters respond to the first two through channels that are not carbon policy.
-\end{enumerate}
-Without firm FE, any systematic difference in how ETS and non-ETS firms respond to macro conditions that happen to correlate with EUA gets loaded onto the $\mathrm{ETS} \times \mathrm{shock}$ coefficient. The comparison in spec 2 is cross-sectional: ETS firm $A$ in dirty sector $s$ versus non-ETS firm $B$ in the same dirty sector $s$. If $A$ is a 500-employee steel mill and $B$ is a 15-employee metal finisher, \emph{everything} distinguishes $A$ from $B$, not just carbon regulation. Firm FE in the main spec forces the comparison to be within-firm over time --- is $A$ weaker in high-EUA years than low-EUA years relative to $A$'s own trajectory --- and then $\beta$ is the differential of that within-firm response between ETS firms (scaled by their sector's $\mathrm{intensity\_base}$) and non-ETS firms (zero loading).
-
-The magnitude jump from $-0.026$ (main spec) to $-0.168$ (spec 2) is about $7\times$. That is exactly the pattern expected if most of the apparent ``reallocation'' in spec 2 is a compositional artefact: ETS firms differ from non-ETS firms along macro-correlated dimensions unrelated to the carbon regulation itself. Firm FE filters that out; the residual $-0.026$ is the best available estimate of the pure carbon-reallocation channel.
-
-\paragraph{First differences is null.} Spec 3 regresses $\Delta \log(\mathrm{real\_rev})_{i,s,t}$ on $\Delta \mathrm{shock}_{s,t}$ with the same firm and 4d $\times$ year FE. Result: $\hat\beta = +0.019$ ($p = 0.38$), null. First differences test year-on-year responses: does log revenue \emph{change} between $t-1$ and $t$ depend on how much $\mathrm{shock}$ \emph{changed}? If reallocation plays out slowly --- firms don't shrink instantly when EUA rises but lose contracts over 3--5 years, choose not to expand, close a line after a few bad years --- first differences miss it. Levels capture the cumulative equilibrium gap. The pattern (FD null, levels marginally negative) is \emph{consistent with} a slow reallocation effect, not proof of one. A local-projection IRF with explicit horizons $h = 1, 2, 3, 4$ would sharpen this --- a natural follow-up.
-
-\paragraph{Simpler spec without sector interaction is null.} Dropping $\mathrm{ETS} \times \mathrm{shock}$ and keeping only $\mathrm{ETS}_i \times \mathrm{EUA}_t$ yields $\hat\beta = -0.0009$ ($p = 0.46$). This tests whether ETS firms respond differently from non-ETS firms to any EUA movement, averaged across sectors. The null means there is no aggregate ETS-vs-non-ETS differential response. Whatever reallocation there is must be identified from \emph{sector heterogeneity} in $\mathrm{intensity\_base}_s$: concentrated in the subset of sectors whose ETS firms had high pre-MSR carbon cost exposure.
-
-\subsection{Economic magnitude and power}
-
-\paragraph{What $\hat\beta = -0.026$ would imply if real.} At peak EUA (80 EUR in 2022) and the dirtiest sector ($\mathrm{intensity\_base} \approx 0.005$):
-\[
-  \mathrm{shock} = 100 \cdot 0.005 \cdot 80 = 40, \qquad \hat\beta \cdot \mathrm{shock} = -1.04.
-\]
-Translation: an ETS firm in the dirtiest 4d sector at 2022 EUA levels has log real revenue $1.04$ below the non-ETS counterfactual in the same sector-year, or $\exp(-1.04) - 1 \approx -65\%$ in levels. That is a big effect, but it applies only to the dirtiest sectors. For the typical sector (median $\mathrm{intensity\_base} \approx 5 \times 10^{-6}$, i.e.\ near zero) the implied effect is essentially nil. The identified variation is concentrated in perhaps 15--20 NACE 4d sectors (cement/glass 23, basic metals 24, petroleum 19, parts of chemicals 20) --- consistent with the sector-level heterogeneity pattern in \S\ref{sec:sector}.
-
-\paragraph{Caveat: underpowered.} Across 92 mixed 4d sectors, only 15--20 have meaningful $\mathrm{intensity\_base}$. Power to detect reallocation is concentrated in the cells where both $\mathrm{intensity\_base}$ is non-trivial \emph{and} the sector has a mix of ETS and non-ETS firms. The null is compatible both with ``no reallocation effect'' and with ``real reallocation effect that we cannot detect with this sample''. Expanding the identification window (EU-wide data, or NBB data vintages that extend past 2022) would help; so would replacing the Bartik shock with a direct identification strategy keyed off the Carbon-Leakage-list revisions (\S\ref{sec:sectorphase}'s caveat points at the Threat-hypothesis Strategy C exercise for that).
 
 \section{Within-ETS cross-sector output response}
 \label{sec:withinets}
 
 \textbf{Script:} \texttt{analysis/phase0\_within\_ets\_cross\_sector.R}.
 
-§5 compares ETS firms to non-ETS firms within the same sector-year. This section asks a different question: across ETS firms only, do firms in sectors with higher pre-MSR carbon-cost exposure see larger real revenue declines as EUA price rises, compared to ETS firms in less exposed sectors?
+This section asks whether ETS firms in sectors with higher pre-MSR carbon-cost exposure see larger real revenue declines as the EUA price rises, compared to ETS firms in less exposed sectors. It is a cross-sector test inside the ETS panel only --- there is no non-ETS comparison group.
 
 \subsection{Variables}
 
-Same primitives as \S\ref{sec:etsvsnonets} ($\mathrm{real\_rev}_{i,t}$, $\mathrm{intensity\_base}_s$, $\mathrm{EUA}_t$, $\mathrm{shock}_{s,t} = 100 \cdot \mathrm{intensity\_base}_s \cdot \mathrm{EUA}_t$). Sample restricted to ETS firms only; no non-ETS firms. Three contaminated VATs excluded.
+Firm-level variables:
+\begin{itemize}
+  \item $\mathrm{real\_rev}_{i,t}$: nominal turnover deflated by NACE 4d PPI (2d fallback).
+  \item $\mathrm{intensity\_base}_s$: pre-MSR (2013--16 mean) carbon cost share of the ETS firms in NACE 4d sector $s$. Source: \texttt{data/processed/phase3\_sector\_exposure.RData}.
+  \item $\mathrm{EUA}_t$: annual mean EUA secondary-market price, 2005--2022.
+  \item $\mathrm{shock}_{s,t} = 100 \cdot \mathrm{intensity\_base}_s \cdot \mathrm{EUA}_t$: Bartik-style shock.
+\end{itemize}
+Sample: ETS firms only; three contaminated VATs excluded.
 
 \subsection{Specification}
 
@@ -487,21 +317,14 @@ The correct reading is that \textbf{the $\hat\beta \in [-0.040, -0.021]$ from th
 
 The familiar K\"anzig pathology is visible here too: $\mathrm{cpshock\_surprise}$ and $\mathrm{cpshock\_shock}$ deliver opposite-sign point estimates in the 2013--2019 window ($+0.46$ vs $-0.01$) and in the 2005--2019 window ($-0.05$ vs $+0.07$). Same shock-vs-surprise sign flip as the Phase 4 Spec 1.A exercise in \S\ref{sec:phase4}, and for the same unresolved reason. None of the flips are statistically significant here, so no interpretive weight either way.
 
-\subsection{How does this reconcile with \S\ref{sec:etsvsnonets}?}
+\subsection{Takeaway}
 
-Three specs, three answers:
+The EUA-based spec's significant negative coefficient was driven by sector-level energy-price and business-cycle channels that co-move with EUA. Under K\"anzig's clean identification, the within-ETS cross-sector channel is null. Consistent with the broader literature \citep{colmer2024, dechezleprêtre2023}: cleanly identified output effects of EU ETS regulation on ETS firms are small or null.
+
+Two caveats:
 \begin{itemize}
-  \item \textbf{§5 EUA-based (ETS vs non-ETS, firm + 4d $\times$ year FE):} $\hat\beta \in [-0.026, -0.012]$ across windows, all $p > 0.10$. Within-cell ETS vs non-ETS comparison partials out sector-level macro. \emph{Null.}
-  \item \textbf{§\ref{sec:withinets} EUA-based (ETS-only, firm + year FE):} $\hat\beta \in [-0.040, -0.021]$ across windows, all significant. Cross-sector comparison; energy-price / business-cycle channels contaminate.
-  \item \textbf{§\ref{sec:withinets} CPShock-based (ETS-only, firm + year FE):} $\hat\beta$ scattered, no significance. Clean identification via orthogonal shock; no carbon-cost response detected.
-\end{itemize}
-
-The three specs converge on the same answer once the identification is clean: \textbf{no statistically detectable reallocation of real revenue from ETS to non-ETS firms or across differently-exposed ETS firms} attributable to carbon pricing in the Belgian sample. Consistent with the broader literature \citep{colmer2024, dechezleprêtre2023}: cleanly identified output effects of EU ETS regulation are small or null.
-
-Two honest caveats:
-\begin{itemize}
-  \item \textbf{Power.} All three specs have limited power. CPShock at annual frequency is weak; §5 has 92 mixed 4d sectors, of which only 15--20 have meaningful $\mathrm{intensity\_base}$; §\ref{sec:withinets} has 244 ETS firms. The nulls are under-powered nulls, not power-robust zeros.
-  \item \textbf{Sample horizon ends 2022.} Post-2022 EUA trajectory (high 60--80 EUR sustained through Phase 4) could produce a detectable response that we cannot see. Requires next NBB data vintage to address.
+  \item \textbf{Power.} CPShock at annual frequency is weak; the panel has 244 ETS firms. The null is an under-powered null, not a power-robust zero.
+  \item \textbf{Sample horizon ends 2022.} Post-2022 EUA trajectory (high 60--80 EUR sustained through Phase 4) could produce a detectable response that we cannot see.
 \end{itemize}
 
 \section{Within-sector output shares by exposure tercile}
@@ -639,8 +462,8 @@ Test & Level & Finding \\
 \midrule
 Pairwise decomposition                    & Aggregate, ETS firms                      & Post-2012 decline is all Between-sector; aggregate Within-sector $\approx +5$ pp \\
 Sector-level heterogeneity                & NACE 2d, ETS firms                        & Cement (23) shows clean reallocation ($-15$); electricity/petroleum/chemicals show dirty gaining; aggregate null masks the split \\
-ETS vs.\ non-ETS revenue reallocation     & NACE 4d, firm panel, firm + 4d$\times$year FE & $\hat\beta \in [-0.026, -0.012]$ across windows, all $p > 0.10$; direction consistent with H1 but null at convention \\
-Within-ETS cross-sector response           & ETS-only, firm + year FE                  & EUA-based: $\hat\beta \in [-0.040, -0.021]$ significant but confounded; CPShock-based: null once confounders removed \\
+Sector-phase decomposition                & NACE 2d $\times$ phase, ETS firms         & Large heterogeneity across sectors and across phases; electricity hard to interpret (capacity-factor channel) \\
+Within-ETS cross-sector response          & ETS-only, firm + year FE                  & EUA-based: $\hat\beta \in [-0.040, -0.021]$ significant but confounded; CPShock-based: null once confounders removed \\
 Binary split by exposure, NACE 4d         & Within NACE 4d, ETS firms                 & Flat post-2017 \\
 Terciles within sector                    & Within NACE 4d, ETS firms                 & Long-run trend, no post-2017 break \\
 Phase 4 Spec 1.A (pooled)                 & Firm-year panel LP under ID-A             & Sign flip across shock/surprise; uninterpretable \\
