@@ -321,9 +321,13 @@ The firm-FE difference $(\alpha_i - \alpha_j)$ captures the 31$\times$ size gap 
 \]
 using $\mathrm{shock}_{s,t} = 100 \cdot \mathrm{intensity\_base}_s \cdot \mathrm{EUA}_t$. Each sector therefore has its own slope of the ETS$-$nonETS log-revenue gap on $\mathrm{EUA}_t$, equal to $\gamma + 100 \beta \cdot \mathrm{intensity\_base}_s$.
 
-$$
-\mathrm{phys_intensity}s ;=; \mathrm{mean}{t \in 2005..07}!\left(\frac{\mathrm{emissions}{s,t}}{\mathrm{total_cost}{s,t}}\right)
-$$
+%% Overleaf-added equation (LaTeX backslashes were lost in transit); fixed
+%% markup but left in place. Thematically this definition belongs in the
+%% Threat-hypothesis workstream (see TODO.md Step 1b), not in section 5 which
+%% is about EUA-based Bartik exposure. Move or delete as desired.
+\[
+  \mathrm{phys\_intensity}_s \;=\; \mathrm{mean}_{t \in 2005..07}\!\left(\frac{\mathrm{emissions}_{s,t}}{\mathrm{total\_cost}_{s,t}}\right)
+\]
 
 \paragraph{Separating $\beta$ from $\gamma$.} Two sources of identifying variation:
 \begin{itemize}
@@ -455,16 +459,50 @@ Robustness: 2d $\times$ year FE (full panel)                & $-0.040$ & $0.012$
 
 \textbf{All four specs give negative, statistically significant estimates.} Across windows, $\hat\beta$ ranges from $-0.021$ to $-0.040$. Economic magnitude: at peak EUA (80 EUR) and the dirtiest sector ($\mathrm{intensity\_base} \approx 0.005$), $\mathrm{shock} = 40$, so $\hat\beta \cdot \mathrm{shock} = -1.4$ log points ($\sim -75\%$ in levels) for window A, or $-0.82$ log points ($\sim -56\%$) for the Bartik-clean window C. The 2d $\times$ year FE robustness (absorbing NACE 2d-year macro and identifying off within-2d 4d variation across ETS firms) gives a magnitude very close to the main spec, suggesting the cross-sector signal is not a pure NACE-2d composition artefact.
 
+\subsection{Swapping EUA for K\"anzig's CPShock as the time-varying shifter}
+
+The identification caveat above warns that $\mathrm{EUA}_t$ co-moves with sector-level energy prices, business cycle, and commodity cycles, so $\beta$ conflates carbon-cost response with those channels. \citet{kanzig2025}'s monthly carbon policy surprise series is constructed precisely to be orthogonal to contemporaneous macro, financial, and oil-market news --- it is identified off EUA changes in narrow event windows around EU ETS regulatory announcements. Aggregating to annual (sum of the monthly surprises in each calendar year) and substituting it for $\mathrm{EUA}_t$ in the shifter gives a cleaner identification:
+\[
+  \mathrm{shock}^{\mathrm{cps}}_{s,t} \;=\; 100 \cdot \mathrm{intensity\_base}_s \cdot \mathrm{CPShock}^{\mathrm{ann}}_t.
+\]
+Two K\"anzig series: $\mathrm{cpshock\_surprise}$ (raw event-day surprise) and $\mathrm{cpshock\_shock}$ (VAR-identified structural response). Sample ends 2019 because that's the last year of K\"anzig's published series.
+
+\begin{center}
+\captionof{table}{Within-ETS cross-sector regression with CPShock-based shifter. Firm + year FE, cluster-robust SEs on NACE 4d.}
+\begin{tabular}{lrrrr}
+\toprule
+Shifter / Window & $\hat\beta$ & SE & $t$ & $p$ \\
+\midrule
+$\mathrm{cpshock\_surprise}$, 2005--2019 & $-0.050$ & $0.134$ & $-0.37$ & $0.71$ \\
+$\mathrm{cpshock\_surprise}$, 2013--2019 & $+0.462$ & $0.387$ & $+1.19$ & $0.24$ \\
+$\mathrm{cpshock\_shock}$, 2005--2019    & $+0.065$ & $0.079$ & $+0.82$ & $0.41$ \\
+$\mathrm{cpshock\_shock}$, 2013--2019    & $-0.011$ & $0.053$ & $-0.20$ & $0.84$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{The significant negative coefficients from the EUA-based spec completely evaporate.} All four CPShock-based estimates are null, with signs that flip across surprise vs shock and across windows. Point estimates become imprecise (SEs an order of magnitude larger in absolute terms) because annual CPShock has low variance (SD $\approx 0.53$ EUR at annual frequency; see \cite{passthrough}) and the identifying variation is now confined to regulatory-announcement-driven EUA moves, which are a fraction of the total EUA variance the EUA-based spec exploited.
+
+The correct reading is that \textbf{the $\hat\beta \in [-0.040, -0.021]$ from the EUA-based within-ETS cross-sector spec was picking up the sector-level energy-price / business-cycle confounders}, not a clean carbon-cost response. Under K\"anzig's exogenous identification, the within-ETS cross-sector channel is null.
+
+The familiar K\"anzig pathology is visible here too: $\mathrm{cpshock\_surprise}$ and $\mathrm{cpshock\_shock}$ deliver opposite-sign point estimates in the 2013--2019 window ($+0.46$ vs $-0.01$) and in the 2005--2019 window ($-0.05$ vs $+0.07$). Same shock-vs-surprise sign flip as the Phase 4 Spec 1.A exercise in \S\ref{sec:phase4}, and for the same unresolved reason. None of the flips are statistically significant here, so no interpretive weight either way.
+
 \subsection{How does this reconcile with \S\ref{sec:etsvsnonets}?}
 
-The §5 test (ETS vs non-ETS in same 4d sector-year) gave $\hat\beta \in [-0.026, -0.012]$ across windows, not significant. The §\ref{sec:withinets} test (ETS firms only, across sectors) gives $\hat\beta \in [-0.040, -0.021]$ across windows, all significant. The two tests answer different questions:
+Three specs, three answers:
 \begin{itemize}
-  \item §5 asks: \emph{within a sector-year}, do ETS firms lose revenue to non-ETS firms? The identifying variation is between ETS and non-ETS firms in the same 4d cell, so energy-price and business-cycle common components drop out within the cell.
-  \item §\ref{sec:withinets} asks: \emph{across ETS firms}, do those in dirtier sectors lose more revenue as EUA rises? The identifying variation is cross-sector, so energy-price and business-cycle differences across sectors are \emph{included} in the estimate.
+  \item \textbf{§5 EUA-based (ETS vs non-ETS, firm + 4d $\times$ year FE):} $\hat\beta \in [-0.026, -0.012]$ across windows, all $p > 0.10$. Within-cell ETS vs non-ETS comparison partials out sector-level macro. \emph{Null.}
+  \item \textbf{§\ref{sec:withinets} EUA-based (ETS-only, firm + year FE):} $\hat\beta \in [-0.040, -0.021]$ across windows, all significant. Cross-sector comparison; energy-price / business-cycle channels contaminate.
+  \item \textbf{§\ref{sec:withinets} CPShock-based (ETS-only, firm + year FE):} $\hat\beta$ scattered, no significance. Clean identification via orthogonal shock; no carbon-cost response detected.
 \end{itemize}
-The gap between the two is informative. If the §\ref{sec:withinets} $\hat\beta \approx -0.03$ is real carbon-cost response, §5 should have detected at least a substantial fraction of it --- and §5's null is hard to reconcile. The likely resolution: much of §\ref{sec:withinets}'s significant negative coefficient is picking up the sector-level energy-price / business-cycle confounders that §5 partial out through the non-ETS control, \emph{not} a pure carbon-cost reallocation channel.
 
-\textbf{Takeaway.} On the cleanest within-cell identification (§5), we cannot reject the null of no reallocation. The within-ETS cross-sector spec (§\ref{sec:withinets}) finds a negative and significant coefficient, but its identification is confounded by sector-level macro correlations with EUA. Both readings are consistent with the broader literature (Colmer et al., Dechezleprêtre et al.): detectable within-sector ETS-to-non-ETS reallocation is not a robust finding for Belgium, even for the MSR-era.
+The three specs converge on the same answer once the identification is clean: \textbf{no statistically detectable reallocation of real revenue from ETS to non-ETS firms or across differently-exposed ETS firms} attributable to carbon pricing in the Belgian sample. Consistent with the broader literature \citep{colmer2024, dechezleprêtre2023}: cleanly identified output effects of EU ETS regulation are small or null.
+
+Two honest caveats:
+\begin{itemize}
+  \item \textbf{Power.} All three specs have limited power. CPShock at annual frequency is weak; §5 has 92 mixed 4d sectors, of which only 15--20 have meaningful $\mathrm{intensity\_base}$; §\ref{sec:withinets} has 244 ETS firms. The nulls are under-powered nulls, not power-robust zeros.
+  \item \textbf{Sample horizon ends 2022.} Post-2022 EUA trajectory (high 60--80 EUR sustained through Phase 4) could produce a detectable response that we cannot see. Requires next NBB data vintage to address.
+\end{itemize}
 
 \section{Within-sector output shares by exposure tercile}
 
@@ -602,7 +640,7 @@ Test & Level & Finding \\
 Pairwise decomposition                    & Aggregate, ETS firms                      & Post-2012 decline is all Between-sector; aggregate Within-sector $\approx +5$ pp \\
 Sector-level heterogeneity                & NACE 2d, ETS firms                        & Cement (23) shows clean reallocation ($-15$); electricity/petroleum/chemicals show dirty gaining; aggregate null masks the split \\
 ETS vs.\ non-ETS revenue reallocation     & NACE 4d, firm panel, firm + 4d$\times$year FE & $\hat\beta \in [-0.026, -0.012]$ across windows, all $p > 0.10$; direction consistent with H1 but null at convention \\
-Within-ETS cross-sector response           & ETS-only, firm + year FE                  & $\hat\beta \in [-0.040, -0.021]$, all significant, but confounded by energy-price / business-cycle correlates of EUA \\
+Within-ETS cross-sector response           & ETS-only, firm + year FE                  & EUA-based: $\hat\beta \in [-0.040, -0.021]$ significant but confounded; CPShock-based: null once confounders removed \\
 Binary split by exposure, NACE 4d         & Within NACE 4d, ETS firms                 & Flat post-2017 \\
 Terciles within sector                    & Within NACE 4d, ETS firms                 & Long-run trend, no post-2017 break \\
 Phase 4 Spec 1.A (pooled)                 & Firm-year panel LP under ID-A             & Sign flip across shock/surprise; uninterpretable \\
@@ -615,6 +653,8 @@ Phase 4 Spec 1.C (sample split)           & Firm-year panel LP, high-pass-throug
 
 \begin{thebibliography}{99}
 \bibitem[K\"anzig(2025)]{kanzig2025} K\"anzig, D.~R. (2025). ``The Unequal Economic Consequences of Carbon Pricing.''
+\bibitem[Colmer et al.(2024)]{colmer2024} Colmer, J., R.~Martin, M.~Muuls, and U.~Wagner (2024). ``Does Pricing Carbon Mitigate Climate Change? Firm-Level Evidence from the European Union Emissions Trading System.''
+\bibitem[Dechezlepr\^etre et al.(2023)]{dechezleprêtre2023} Dechezlepr\^etre, A., D.~Nachtigall, and F.~Venmans (2023). ``The Joint Impact of the European Union Emissions Trading System on Carbon Emissions and Economic Performance.'' \emph{Journal of Environmental Economics and Management}.
 \bibitem[Phase 3 notes]{phase3} Internal: \texttt{phase3\_build\_exposure\_panel.R}.
 \bibitem[Pass-through notes]{passthrough} Internal: \texttt{PASSTHROUGH\_CPSHOCK.md}, S7--S12.
 \end{thebibliography}
