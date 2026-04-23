@@ -298,6 +298,36 @@ Three layers of FE absorption:
 
 Assumption: conditional on firm and 4d $\times$ year FE, $\mathrm{shock}_{s,t}$ is uncorrelated with other determinants of the ETS-vs-non-ETS revenue gap. Fails if macroeconomic shocks that raise EUA differentially affect ETS vs non-ETS firms in ways unrelated to carbon cost (e.g., ETS firms tend to be exporters, and EUA co-moves with the exchange rate). The Bartik structure (sector-fixed intensity $\times$ aggregate EUA) mitigates but does not eliminate this.
 
+\subsection{Conditional expectation and identification of $\beta$ and $\gamma$}
+\label{sec:etsvsnonets_derivation}
+
+Take the population expectation of the main equation conditional on firm identity, sector, year, and ETS status. For a \emph{non-ETS firm} $j$ in sector $s$ at year $t$, the interactions are zero and
+\begin{equation}
+  \mathbb{E}[\log(\mathrm{real\_rev})_{j,s,t} \mid \mathrm{ETS}_j = 0, s, t] = \alpha_j + \alpha_{s,t}. \label{eq:cond_nonets}
+\end{equation}
+For an \emph{ETS firm} $i$ in the same sector-year,
+\begin{equation}
+  \mathbb{E}[\log(\mathrm{real\_rev})_{i,s,t} \mid \mathrm{ETS}_i = 1, s, t] = \alpha_i + \alpha_{s,t} + \beta \cdot \mathrm{shock}_{s,t} + \gamma \cdot \mathrm{EUA}_t. \label{eq:cond_ets}
+\end{equation}
+The firm-FE terms $\alpha_i$ and $\alpha_j$ absorb every time-invariant firm characteristic: ETS status baseline, firm size, scale, export orientation, capital-labour ratio. The sector-year FE $\alpha_{s,t}$ absorbs everything that moves identically for ETS and non-ETS firms inside the same 4d cell in year $t$ --- macro, sectoral business cycle, the main effect of $\mathrm{shock}_{s,t}$ itself, and the main effect of $\mathrm{EUA}_t$.
+
+\paragraph{The ETS$-$nonETS gap is what identifies $\beta$ and $\gamma$.} Subtract \eqref{eq:cond_nonets} from \eqref{eq:cond_ets} within a $(s,t)$ cell:
+\begin{equation}
+  \Delta_{i,j,s,t} \;\equiv\; \mathbb{E}[\log(\mathrm{real\_rev})_{i,s,t}] - \mathbb{E}[\log(\mathrm{real\_rev})_{j,s,t}] = (\alpha_i - \alpha_j) + \beta \cdot \mathrm{shock}_{s,t} + \gamma \cdot \mathrm{EUA}_t. \label{eq:gap}
+\end{equation}
+The firm-FE difference $(\alpha_i - \alpha_j)$ captures the 31$\times$ size gap (in levels) between ETS and non-ETS firms. The time-varying part of the gap is
+\[
+  \beta \cdot \mathrm{shock}_{s,t} + \gamma \cdot \mathrm{EUA}_t \;=\; \big(100 \cdot \beta \cdot \mathrm{intensity\_base}_s + \gamma\big) \cdot \mathrm{EUA}_t,
+\]
+using $\mathrm{shock}_{s,t} = 100 \cdot \mathrm{intensity\_base}_s \cdot \mathrm{EUA}_t$. Each sector therefore has its own slope of the ETS$-$nonETS log-revenue gap on $\mathrm{EUA}_t$, equal to $\gamma + 100 \beta \cdot \mathrm{intensity\_base}_s$.
+
+\paragraph{Separating $\beta$ from $\gamma$.} Two sources of identifying variation:
+\begin{itemize}
+  \item \textbf{$\gamma$} is the common, sector-independent slope of the ETS$-$nonETS gap on $\mathrm{EUA}_t$. It is identified from sectors with $\mathrm{intensity\_base}_s \approx 0$, where the gap's sensitivity to EUA reduces to $\gamma \cdot \mathrm{EUA}_t$.
+  \item \textbf{$\beta$} is how that slope \emph{varies across sectors} with $\mathrm{intensity\_base}_s$. It is identified from the cross-sector heterogeneity: in a dirty sector ($\mathrm{intensity\_base}_s$ large), the ETS$-$nonETS gap responds more strongly to EUA than in a clean sector.
+\end{itemize}
+Under reallocation (H1), $\beta < 0$: ETS firms' log revenue falls \emph{more} than non-ETS firms' in sectors where the ETS firms were pre-MSR exposed to larger carbon costs. Under a common-trend-only story (no sector heterogeneity), $\beta = 0$ and $\gamma$ picks up any ETS-wide time drift.
+
 \subsection{Results}
 
 \begin{center}
