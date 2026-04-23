@@ -1,0 +1,145 @@
+% ================================================================
+% DATA AND DESCRIPTIVE EVIDENCE
+% ================================================================
+
+% ==================================================================
+% 3.1 INSTITUTIONAL CONTEXT
+% ==================================================================
+\subsection{The EU Emissions Trading System}\label{subsec:euets}
+
+% TODO: Describe the EU ETS:
+%   - European-wide cap-and-trade for GHG emissions, launched 2005
+%   - Sectoral targeting: ~60 NACE 4-digit categories (out of 732)
+%     covering energy + heavy manufacturing (cement, steel, etc.)
+%   - Covers ~45% of EU emissions, ~5% of global emissions
+%   - Within-sector firm-level targeting via participation thresholds
+%     (e.g., installations above certain capacity/output thresholds)
+%
+% Note: our sufficient statistic is derived for a carbon tax, but the
+% EU ETS can be interpreted as one for the purpose of first-order
+% comparative statics (given a price).
+
+
+% ==================================================================
+% 3.2 EU ETS COVERAGE IN BELGIUM
+% ==================================================================
+\subsection{EU ETS Coverage in Belgium}\label{subsec:coverage}
+
+% TODO: Show how much of Belgian emissions the EU ETS covers:
+%   - Aggregate: ~60% of emissions from stationary sources, ~40% of
+%     total Belgian emissions
+%   - By sector: present a table or figure showing coverage rates
+%     across NACE sectors in Belgium
+%   - Reference the sample coverage table (currently in slides appendix)
+%     showing count of firms, GDP coverage, wage bill coverage, and
+%     emissions coverage for selected years (2002, 2012, 2022)
+
+
+% ==================================================================
+% 3.3 DATA SOURCES
+% ==================================================================
+\subsection{Data}\label{subsec:data_sources}
+
+% TODO: Describe each data source:
+%
+% 1. EUTL (EU Transaction Log):
+%    - Installation-year-level data on verified emissions, firm ownership,
+%      4-digit sector classification
+%    - Covers all installations targeted by EU ETS, 2005-2022
+%    - We aggregate to firm-year level using ownership information
+%
+% 2. NBB firm-level micro data (2002-2022):
+%    - Business-to-business (B2B) transactions: firm-to-firm trade flows
+%      => construct firm-year-level I-O matrix Omega for the Belgian
+%      private sector
+%    - Annual accounts (balance sheets): firm-level value added, wage
+%      bill, employment, assets
+%
+% 3. Energy balances and national inventories:
+%    - Sector-level emissions data used for imputation of non-targeted
+%      firms' emissions
+%
+% Summary: we directly observe tau (targeting), E (emissions for targeted
+% firms), and Omega (I-O matrix) => can compute Psi and Psi_e.
+
+
+% ==================================================================
+% 3.4 EMISSIONS IMPUTATION
+% ==================================================================
+\subsection{Imputation of Non-Targeted Firms' Emissions}\label{subsec:imputation}
+
+% TODO: For firms not in the EU ETS, we impute emissions:
+%
+% Step 1: Obtain sector-level total emissions Z_{s,t} from energy
+% balances + national inventories.
+%
+% Step 2: For each sector s, compute non-targeted emissions as
+% Z_{s,t} - sum_{j in EUETS} z_{j,s,t}
+%
+% Step 3: Distribute non-targeted emissions proportional to firm size:
+%   z_{i(s),t} = [x_{i(s),t} / sum_{j(s) not in EUETS} x_{j,s,t}]
+%                * (Z_{s,t} - sum_{j(s) in EUETS} z_{j,s,t})
+%
+% Validation: show observed vs imputed emissions figure for firms where
+% we have both (R^2 = 0.56). Discuss plans to improve using firm-level
+% input bundle and product offering data.
+%
+% Include figure: output of imputation validation
+% (macro_lunch_may25/figures/obs_vs_imputed_emissions.png)
+
+
+% ==================================================================
+% 3.5 DESCRIPTIVE FACTS
+% ==================================================================
+\subsection{Descriptive Facts}\label{subsec:facts}
+
+% ------------------------------------------------------------------
+% 3.5.1 Emissions decomposition in Belgium
+% ------------------------------------------------------------------
+\subsubsection{Statistical Decomposition of Belgian Emissions}
+
+% TODO: Apply the scale/technique/composition decomposition to the
+% observed fall in Belgian emissions between [start year] and [end year].
+%
+% This is a purely statistical exercise (no model needed): using the
+% observed data on emissions, output, and emission intensities, decompose
+% the aggregate emissions change.
+%
+% Present results in a table or figure showing the contribution of each
+% channel over time.
+
+% ------------------------------------------------------------------
+% 3.5.2 Within-sector dispersion in emission intensity
+% ------------------------------------------------------------------
+\subsubsection{Dispersion in Emission Intensity}
+
+% TODO: Fact 1 — emission intensity is vastly heterogeneous across firms
+% within narrowly-defined sectors.
+%
+% For each firm i in year t, define:
+%   emissions productivity := log(1/e_{i,t})
+%   labor productivity     := log(1/Omega_{i,l,t})
+%   capital productivity   := log(1/Omega_{i,k,t})
+%
+% Measure dispersion as 90th - 10th percentile within industry.
+% Take average across industries.
+%
+% Show figure comparing dispersion in emissions productivity vs labor
+% and capital productivity (adapt from slides: avg_dispersion.png).
+%
+% Show separately for EUETS firms only and for all Belgian firms.
+
+% ------------------------------------------------------------------
+% 3.5.3 Within-sector dispersion in network-adjusted emission intensity
+% ------------------------------------------------------------------
+\subsubsection{Dispersion in Network-Adjusted Emission Intensity}
+
+% TODO: Fact 2 — network-adjusted emission intensity (Psi_e) is also
+% heterogeneous across firms within sector.
+%
+% This is a novel fact: even if two firms in the same sector have similar
+% scope 1 emissions, their network-adjusted emission intensity can differ
+% substantially because they source inputs from supply chains with
+% different emission profiles.
+%
+% Present dispersion statistics and/or figures analogous to Fact 1.

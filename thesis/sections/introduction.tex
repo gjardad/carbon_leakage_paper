@@ -1,0 +1,128 @@
+% ================================================================
+% INTRODUCTION
+% ================================================================
+
+% ------------------------------------------------------------------
+% 1. MOTIVATION
+% ------------------------------------------------------------------
+
+% TODO: Opening paragraph — carbon pricing policies (CPP) are one of the main
+% tools to reduce GHG emissions. 75+ initiatives globally (World Bank 2023).
+% Theoretical motivation is well-understood since Pigou: emissions are an
+% externality, first-best requires pricing all emissions.
+
+% TODO: But in practice, CPP are incomplete. Policymakers target a subset of
+% polluting sectors and, within sectors, a subset of firms.
+% Present Figure 1 here:
+%   - Panel A: share of CPP instruments covering each sector (output/figures/panel_a_sector_targeting.pdf)
+%   - Panel C: within-sector coverage heterogeneity in the EU ETS (output/figures/panel_c_within_sector_coverage.pdf)
+
+% \begin{figure}[t]
+%     \centering
+%     \begin{subfigure}[b]{0.48\textwidth}
+%         \centering
+%         \includegraphics[width=\textwidth]{../output/figures/panel_a_sector_targeting.pdf}
+%         \caption{Sectoral coverage across CPP instruments}
+%     \end{subfigure}
+%     \hfill
+%     \begin{subfigure}[b]{0.48\textwidth}
+%         \centering
+%         \includegraphics[width=\textwidth]{../output/figures/panel_c_within_sector_coverage.pdf}
+%         \caption{Within-sector coverage in the EU ETS}
+%     \end{subfigure}
+%     \caption{Carbon pricing policies are incomplete}
+%     \label{fig:cpp_incomplete}
+% \end{figure}
+
+% TODO: Cross-country heterogeneity figure/table. Different countries target
+% very different sectors and at very different rates.
+% [PLACEHOLDER — need data/source for this]
+
+% TODO: Firms operate in production networks. The effect of taxing a subset of
+% firms depends not only on who is taxed but on how they are connected to the
+% rest of the economy through input-output linkages.
+
+% ------------------------------------------------------------------
+% 2. LITERATURE GAP
+% ------------------------------------------------------------------
+
+% TODO: The existing literature has studied CPP effects along two dimensions
+% that this paper bridges:
+%
+% (a) Firm-level effects of CPP:
+%     - Colmer et al (2025): firm-level effects of EU ETS in France
+%     - Dechezlepetre et al (2023): firm-level effects across European countries
+%     - These papers estimate how individual firms respond but do not aggregate
+%       effects accounting for network interactions.
+%
+% (b) Aggregate effects of CPP with fixed targeting:
+%     - Metcalf and Stock (2023): aggregate emissions reductions from carbon taxes
+%     - Kaenzig (2025): macroeconomic effects of carbon pricing
+%     - These papers study aggregate outcomes but take the targeting scheme as
+%       given and do not explore how different targeting interacts with the I-O
+%       structure.
+%
+% Neither strand takes seriously both (i) the production network and (ii) the
+% fact that targeting is a choice variable.
+
+% ------------------------------------------------------------------
+% 3. POLICY RELEVANCE
+% ------------------------------------------------------------------
+
+% TODO: There are active discussions to expand the scope of existing CPP:
+%   - EU ETS 2 (extending to buildings and transport)
+%   - CBAM (Carbon Border Adjustment Mechanism)
+%   - Expansion of national carbon taxes
+% It is therefore natural to ask: what are the aggregate effects of different
+% targeting schemes, and which firms should be prioritized?
+
+% ------------------------------------------------------------------
+% 4. THIS PAPER'S CONTRIBUTION
+% ------------------------------------------------------------------
+
+% TODO: This paper takes a first step at answering the question above, taking
+% seriously that (a) firms operate in production networks and (b) CPP are
+% incomplete in practice.
+%
+% We make three contributions:
+%
+% First, we develop a theory of how targeted CPP affect aggregate emissions in
+% production networks. We decompose the aggregate effect into an abatement
+% channel and a reallocation channel, and derive a sufficient statistic — the
+% covariance between firms' policy exposure and their network-adjusted emission
+% intensity — that governs the reallocation channel.
+%
+% Second, we measure this sufficient statistic using Belgian micro-data,
+% combining firm-level emissions data with business-to-business transaction
+% records to construct the economy's I-O matrix at the firm level.
+%
+% Third, we evaluate counterfactual targeting schemes: what would happen if
+% Belgium targeted all industrial emissions? What if it targeted the same
+% fraction of emissions but chose firms with higher network centrality?
+
+% ------------------------------------------------------------------
+% 5. PREVIEW OF RESULTS
+% ------------------------------------------------------------------
+
+% TODO: Preview main findings:
+%   - The Belgian I-O structure amplifies the abatement effects of the current
+%     EU ETS targeting.
+%   - A small number of firms contribute disproportionately to this amplification.
+%   - Targeting firms with higher network centrality can achieve larger emissions
+%     reductions for the same coverage.
+%   - [Counterfactual results to be added]
+
+% ------------------------------------------------------------------
+% 6. RELATED LITERATURE
+% ------------------------------------------------------------------
+
+% TODO: Position the paper relative to:
+%   - Production networks: Acemoglu et al (2012), Baqaee & Farhi (2019, 2020),
+%     Carvalho & Tahbaz-Salehi (2019)
+%   - Environmental economics & carbon pricing: Nordhaus (1994), Metcalf & Stock
+%     (2023), Kaenzig (2025), Colmer et al (2025)
+%   - Carbon leakage and border adjustments: Fowlie et al (2016), Copeland et al
+%     (2022)
+%   - Emissions in production networks: Shapiro (2021), Shapiro & Walker (2018),
+%     Levinson (2009)
+%   - Belgian/European firm-level data: Dhyne et al (2020, 2023), Duprez et al (2023)

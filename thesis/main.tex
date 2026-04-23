@@ -1,0 +1,131 @@
+\documentclass[11pt, reqno]{amsart}
+
+% ---- Packages ----
+\usepackage{graphicx,amsmath,amssymb}
+\usepackage{color}
+\usepackage{natbib}
+\usepackage{url}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    citecolor=blue,
+    linkcolor=blue,
+    urlcolor=blue
+}
+\usepackage{float}
+\usepackage{tikz}
+\usetikzlibrary{positioning, calc}
+\usepackage{comment}
+\usepackage{booktabs}
+\usepackage{caption}
+\usepackage{subcaption}
+
+% ---- Page layout ----
+\oddsidemargin +0.2in
+\evensidemargin +0.2in
+\topmargin 40pt
+\textheight 8.1in
+\textwidth 6in
+\linespread{1.3}
+\parskip .05in
+\vfuzz2pt
+\hfuzz2pt
+
+% ---- Theorem environments ----
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}{Corollary}
+\newtheorem{lemma}{Lemma}
+\newtheorem{proposition}{Proposition}
+\newtheorem{assumption}{Assumption}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+\newtheorem{remark}{Comment}
+\newtheorem{example}{Example}
+
+% ---- TikZ styles ----
+\tikzset{place/.style={circle,thick,draw=blue!75,fill=blue!20,minimum size=10mm}}
+\tikzset{place2/.style={circle,thick,draw=blue!75,fill=green!20,minimum size=10mm}}
+\tikzset{place3/.style={circle,thick,draw=red!75,fill=orange!20,minimum size=10mm}}
+\tikzset{main node/.style={circle,draw,font=\sffamily\small\bfseries,minimum size=10mm}}
+
+% ---- Math commands ----
+\newcommand{\N}{\mathcal{N}}
+\newcommand{\Ntilde}{\tilde{\mathcal{N}}}
+\newcommand{\U}{\mathcal{U}}
+\renewcommand{\theequation}{\thesection.\arabic{equation}}
+
+% ---- Formatting shortcuts ----
+\usepackage{xspace}
+\newcommand{\eg}{e.g., \xspace}
+\newcommand{\ie}{i.e.,\xspace}
+
+% ================================================================
+\begin{document}
+
+\title[]{Carbon Policies in Production Networks}
+
+\author[]{Gabriel Jardanovski\textsuperscript{*} \and Gert Bijnens\textsuperscript{$\dagger$}}
+\thanks{\noindent \textsuperscript{*}Jardanovski (corresponding author): Northwestern University. E-mail: \texttt{gabrielj@u.northwestern.edu}.}
+\thanks{\textsuperscript{$\dagger$} Bijnens: National Bank of Belgium. E-mail: \texttt{gert.bijnens@nbb.be}.}
+
+\date{\tiny{\sc first version} July, 2024.  {\sc this version} of  \today. Gabriel is indebted to his advisors Alireza Tahbaz-Salehi, Diego Kaenzig, George-Marios Angeletos, and Mar Reguant. For helpful comments and suggestions, he thanks Nadia Lucas, Marti Mestieri, Jacopo Ponticelli, Chen Lian, Johanna Rayl, Miguel Jorquera, Luis Antonio Fantozzi Alvarez, Rodrigo Toneto, Angelo Mendes, Andrea Ferrara, and Fernando de Lima Lopes. He is grateful to the Alfred P. Sloan Foundation for generously supporting this research through the Mesoeconomics Sloan Small Grant Scheme, and for the National Bank of Belgium (NBB) for hosting him as a Young Researcher during part of the period when this research was conducted. This paper should not be reported as representing the views of the NBB. The views expressed are those of the authors and do not necessarily reflect those of the NBB.}
+
+\begin{abstract}
+When implementing carbon pricing policies, countries often target selected firms and sectors rather than pricing all emissions uniformly. This paper studies how targeted carbon pricing policies affect aggregate emissions in an economy with production networks. We develop a model in which firms exhibit heterogeneous emission intensities, face costs to abate emissions, and are connected via input-output linkages. We show that targeted carbon pricing affects aggregate emissions through two channels: an \textit{abatement channel} and a \textit{reallocation channel}. The abatement channel reduces emissions at targeted firms. The reallocation channel, however, can either amplify or dampen abatement effects depending on the interaction between the targeting scheme and the economy's input-output structure. We derive a sufficient statistic for the reallocation channel: the covariance between firms' exposure to the policy and their \textit{network-adjusted emission intensity}. We also propose a firm-level network centrality measure that ranks firms by their contribution to the reallocation channel. Using Belgian micro-data, we measure this sufficient statistic and show that the current targeting of the EU ETS is amplified by the Belgian production network. We then use the model to evaluate counterfactual targeting schemes, showing that targeting firms with higher network centrality can achieve larger emissions reductions for the same policy coverage.
+\end{abstract}
+
+\maketitle
+
+\pagebreak
+
+% ================================================================
+% INTRODUCTION
+% ================================================================
+\section{Introduction}\label{sec:introduction}
+
+\input{thesis/sections/introduction}
+
+% ================================================================
+% MODEL
+% ================================================================
+\section{Carbon Policy and Network Structure}\label{sec:model}
+
+\input{thesis/sections/model}
+
+% ================================================================
+% DATA
+% ================================================================
+\section{Data and Descriptive Evidence}\label{sec:data}
+
+\input{thesis/sections/data}
+
+% ================================================================
+% QUANTITATIVE
+% ================================================================
+\section{Quantitative Analysis}\label{sec:quantitative}
+
+\input{thesis/sections/quantitative}
+
+% ================================================================
+% CONCLUSION
+% ================================================================
+\section{Conclusion}\label{sec:conclusion}
+
+\input{thesis/sections/conclusion}
+
+% ================================================================
+% BIBLIOGRAPHY
+% ================================================================
+\newpage
+\bibliographystyle{apalike}
+\bibliography{thesis/sections/refs}
+
+% ================================================================
+% APPENDIX
+% ================================================================
+\newpage
+\appendix
+
+\input{thesis/sections/appendix}
+
+\end{document}

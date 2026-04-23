@@ -1,0 +1,544 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+\usepackage{booktabs}
+
+\newtheorem{proposition}{Proposition}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newtheorem{claim}{Claim}
+
+\newcommand{\N}{\mathcal{N}}
+
+\title{Derivation of the Reallocation Channel in the CES Economy}
+\author{Working Note}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section{Setup}
+
+We work with the CES economy evaluated at $p_z = 0$, with $p_i = 1$ for all $i$. Firms have CES production with a common elasticity of substitution $\sigma$. The household also has CES preferences with elasticity $\sigma$.
+
+From Proposition 4, aggregate emissions respond to the introduction of a carbon price according to:
+\begin{equation}
+    \label{eq:prop4}
+    \frac{d\log Z}{dp_z}\bigg|_{p_z=0} = \underbrace{\sum_{j \in \N} \frac{z_j}{Z}\frac{d\log e_j}{dp_z}}_{\text{abatement}} + \underbrace{\sum_{j \in \N} \frac{z_j}{Z}\frac{d\log x_j}{dp_z}}_{\text{reallocation}}
+\end{equation}
+where the second equality uses $d\log x_j = d\log \lambda_j - d\log p_j$ (from $\lambda_j = p_j x_j / Q$ with $Q$ as numeraire).
+
+The abatement channel is $-\sum_j (\tau_j z_j / Z)\alpha_j^2 \overline{e}_j$ (Proposition 1). We focus on the reallocation channel.
+
+\section{Key CES Result: $d\log x_j = -\sigma\, d\log p_j$}
+
+\begin{claim}
+\label{claim:ces}
+In the CES economy, at a first-order approximation around $p_z = 0$:
+$$\frac{d\log x_j}{dp_z} = -\sigma \frac{d\log p_j}{dp_z} \quad \text{for all } j \in \N$$
+\end{claim}
+
+\begin{proof}
+We proceed in three steps.
+
+\paragraph{Step 1: CES demand for intermediates.}
+For any firm $i \in \N$ with CES production and elasticity $\sigma$, cost minimization gives expenditure shares:
+$$\Omega_{ij} = \theta_{ij}\left(\frac{p_j}{p_i}\right)^{1-\sigma}$$
+
+Log-differentiating:
+\begin{equation}
+    \label{eq:dlogOmega}
+    d\log \Omega_{ij} = (1-\sigma)(d\log p_j - d\log p_i)
+\end{equation}
+
+Since $\Omega_{ij} = p_j x_{ij}/(p_i x_i)$, we also have $d\log \Omega_{ij} = d\log p_j + d\log x_{ij} - d\log p_i - d\log x_i$. Equating with (\ref{eq:dlogOmega}):
+\begin{equation}
+    \label{eq:cesdemand}
+    d\log x_{ij} = d\log x_i - \sigma(d\log p_j - d\log p_i)
+\end{equation}
+
+\paragraph{Step 2: CES demand for final goods.}
+The household has CES preferences with elasticity $\sigma$. Denoting $y_j$ as final demand and $P$ the ideal price index:
+$$d\log y_j = d\log C - \sigma(d\log p_j - d\log P)$$
+
+From Proposition 3 (Hulten): $d\log Y = d\log C = 0$. Combined with the numeraire normalization $d\log Q = 0$, this implies $d\log P = 0$. Therefore:
+\begin{equation}
+    \label{eq:ceshh}
+    d\log y_j = -\sigma\, d\log p_j
+\end{equation}
+
+\noindent\textit{Remark.} This expression does \textbf{not} mean demand for good $j$ depends only on its own price. The full CES demand depends on all prices through the price index $P$. What happens is that with $Q$ as numeraire, all prices are measured relative to nominal GDP, which ``centers'' them so that $\sum_k s_k\, d\log p_k = d\log P = 0$. The price $d\log p_j$ in (\ref{eq:ceshh}) is already a relative price: a firm with $d\log p_j > 0$ has a price that increased \textit{relative to the expenditure-weighted average}. A different numeraire would give $d\log y_j = -\sigma(d\log p_j - d\log P)$ with $d\log P \neq 0$, and the same real quantity changes.
+
+\paragraph{Step 3: Aggregation via market clearing.}
+From $x_j = y_j + \sum_{i \in \N} x_{ij}$:
+$$x_j\, d\log x_j = y_j\, d\log y_j + \sum_{i \in \N} x_{ij}\, d\log x_{ij}$$
+
+Substituting (\ref{eq:ceshh}) and (\ref{eq:cesdemand}), and using $x_{ij} = \Omega_{ij} x_i$ (with $p_i = 1$):
+\begin{align*}
+    x_j\, d\log x_j &= y_j(-\sigma\, d\log p_j) + \sum_{i \in \N} \Omega_{ij} x_i [d\log x_i - \sigma(d\log p_j - d\log p_i)]
+\end{align*}
+
+Define $q_j := d\log x_j$ and $v_j := d\log p_j / dp_z$ for short, and let $\widetilde{B}_{ji} := x_{ij}/x_j$ be the fraction of $j$'s output sold to firm $i$ as an intermediate input ($i \in \N$ only, excluding final demand). Then dividing by $x_j$:
+\begin{equation}
+    \label{eq:system}
+    q_j = \frac{y_j}{x_j}(-\sigma v_j) + \sum_{i \in \N} \widetilde{B}_{ji}[q_i - \sigma(v_j - v_i)]
+\end{equation}
+
+Since $y_j/x_j + \sum_{i \in \N} \widetilde{B}_{ji} = 1$ (all output is either final demand or intermediate), this simplifies to:
+$$q_j = -\sigma v_j + \sigma \sum_{i \in \N}\widetilde{B}_{ji} v_i + \sum_{i \in \N}\widetilde{B}_{ji} q_i$$
+
+In matrix form:
+$$(I - \widetilde{B})\mathbf{q} = -\sigma(I - \widetilde{B})\mathbf{v}$$
+
+The matrix $\widetilde{B}$ is sub-stochastic: its row sums satisfy $\sum_{i \in \N}\widetilde{B}_{ji} = 1 - y_j/x_j < 1$ for all $j$ (since final demand $y_j > 0$). Therefore $I - \widetilde{B}$ is invertible, and:
+$$\mathbf{q} = -\sigma\, \mathbf{v}$$
+\end{proof}
+
+\section{The Correct Reallocation Channel}
+
+Substituting Claim \ref{claim:ces} into (\ref{eq:prop4}):
+
+\begin{theorem}
+\label{thm:correct}
+In the CES economy, at a first-order approximation, the change in aggregate emissions in response to the introduction of a carbon price is:
+\begin{equation}
+    \label{eq:correct_theorem}
+    \frac{d\log Z}{dp_z}\bigg|_{p_z=0} = -\sum_{j \in \N} \frac{\tau_j z_j}{Z}\alpha_j^2 \overline{e}_j \;-\; \sigma \sum_{j \in \N} \frac{\overline{e}_j x_j}{Z}\frac{d\log p_j}{dp_z}
+\end{equation}
+where $d\log p_j / dp_z = \sum_{k \in \N}\Psi_{jk}\tau_k\overline{e}_k + \Psi_{jL}\, d\log \lambda_L / dp_z$ (Proposition 2).
+\end{theorem}
+
+\begin{proof}
+From (\ref{eq:prop4}) and $d\log e_j/dp_z = -\tau_j\alpha_j^2\overline{e}_j$ (Proposition 1):
+\begin{align*}
+    \frac{d\log Z}{dp_z} &= \sum_j \frac{z_j}{Z}\frac{d\log e_j}{dp_z} + \sum_j \frac{z_j}{Z}\frac{d\log x_j}{dp_z} \\
+    &= -\sum_j \frac{\tau_j z_j}{Z}\alpha_j^2\overline{e}_j + \sum_j \frac{z_j}{Z}(-\sigma v_j) \\
+    &= -\sum_j \frac{\tau_j z_j}{Z}\alpha_j^2\overline{e}_j - \sigma\sum_j \frac{\overline{e}_j x_j}{Z} v_j
+\end{align*}
+where the last line uses $z_j = \overline{e}_j x_j$ (at $p_z = 0$, $e_j = \overline{e}_j$).
+\end{proof}
+
+\paragraph{Interpretation.} The reallocation channel is:
+$$R = -\sigma \sum_j \frac{\overline{e}_j x_j}{Z}\frac{d\log p_j}{dp_z}$$
+
+This says: when the carbon price is introduced, firm $j$'s price changes by $v_j\, dp_z$, and its output changes by $-\sigma v_j\, dp_z$. The emission consequence of this output change is proportional to $j$'s direct emission intensity $\overline{e}_j$ and its size $x_j$. Summing across all firms gives the total reallocation effect.
+
+The network structure enters through the price propagation formula (Proposition 2): $v_j = \sum_k \Psi_{jk}\tau_k\overline{e}_k + \Psi_{jL}v_L$. Firms that are more exposed to targeted suppliers (through the Leontief inverse $\Psi$) experience larger price increases and therefore larger output declines.
+
+\section{Why the Covariance Form with $\Psi_e$ is Incorrect}
+
+The previous version of the theorem claimed:
+\begin{equation}
+    \label{eq:old_theorem}
+    R = -\sigma \sum_{i \in \N}\frac{x_i}{Z}\mathbb{C}_{\Omega_{(i,:)}}(v, \Psi_e) \quad \text{(INCORRECT)}
+\end{equation}
+where $\mathbb{C}_{\Omega_{(i,:)}}(v, \Psi_e) = \sum_m \Omega_{im}v_m(\Psi_e)_m - (\sum_m \Omega_{im}v_m)(\sum_m \Omega_{im}(\Psi_e)_m)$ is the input-weighted covariance between price changes and network-adjusted emission intensities.
+
+We show this is wrong with two counterexamples.
+
+\subsection{Counterexample 1: Equal network-adjusted emission intensities}
+
+\paragraph{Setup.}
+\begin{itemize}
+    \item Good 1: uses good 2 ($\Omega_{12} = 0.5$) and labor ($\Omega_{1L} = 0.5$). $\overline{e}_1 = 1$. Targeted ($\tau_1 = 1$).
+    \item Good 2: uses only labor ($\Omega_{2L} = 1$). $\overline{e}_2 = 2$. Not targeted ($\tau_2 = 0$).
+    \item Household: CES with $s_1 = s_2 = 0.5$.
+\end{itemize}
+
+\paragraph{Leontief inverse.}
+$$\Psi = \begin{pmatrix} 1 & 0.5 \\ 0 & 1 \end{pmatrix}$$
+
+\paragraph{Network-adjusted emission intensities.}
+$$(\Psi_e)_1 = 1 + 0.5 \times 2 = 2, \qquad (\Psi_e)_2 = 2$$
+
+Both are equal.
+
+\paragraph{Prices.}
+$v_L = -s_1\overline{e}_1 = -0.5$. Then $v_1 = 0.5$, $v_2 = -0.5$.
+
+\paragraph{Equilibrium quantities.}
+$x_1 = 0.5$, $x_2 = 0.75$. $Z = 1 \times 0.5 + 2 \times 0.75 = 2$.
+
+\paragraph{Direct form.}
+$$R = -\sigma\left[\frac{1 \times 0.5}{2}(0.5) + \frac{2 \times 0.75}{2}(-0.5)\right] = -\sigma(0.125 - 0.375) = 0.25\sigma$$
+
+\paragraph{Covariance form.}
+\begin{itemize}
+    \item Firm 1: inputs are good 2 and labor. $v_2 = v_L = -0.5$ (both inputs have the same price change). $(\Psi_e)_2 = 2$, $(\Psi_e)_L = 0$. The covariance is:
+    $$\mathbb{C}_1 = 0.5(-0.5)(2) + 0.5(-0.5)(0) - [-0.5][0.5 \times 2] = -0.5 + 0.5 = 0$$
+    \item Firm 2: single input (labor). $\mathbb{C}_2 = 0$.
+    \item Household: $(\Psi_e)_1 = (\Psi_e)_2 = 2$. Since network-adjusted EI is constant across goods, $\mathbb{C}_C = 0$.
+\end{itemize}
+
+Total covariance form: $R_{\text{cov}} = 0 \neq 0.25\sigma = R_{\text{direct}}$.
+
+\paragraph{Explanation.} Both goods generate the same total emissions per unit of final demand ($(\Psi_e)_1 = (\Psi_e)_2 = 2$), so the covariance with $\Psi_e$ is zero. But direct emission intensities differ ($\overline{e}_1 = 1 \neq \overline{e}_2 = 2$). When the carbon tax targets firm 1, its price rises, and firm 1 substitutes good 2 for labor in its input mix. This increases intermediate demand for the high-direct-emission good 2, raising aggregate emissions. The covariance form misses this because it only tracks network-adjusted emissions, not the within-firm input substitution toward dirtier direct inputs.
+
+\subsection{Counterexample 2: Heterogeneous network-adjusted emission intensities}
+
+\paragraph{Setup.}
+\begin{itemize}
+    \item Good 1 (upstream): labor only. $\overline{e}_1 = 3$. Targeted ($\tau_1 = 1$).
+    \item Good 2 (upstream): labor only. $\overline{e}_2 = 0$. Not targeted ($\tau_2 = 0$).
+    \item Good 3 (downstream): $\Omega_{31} = 0.3$, $\Omega_{32} = 0.3$, $\Omega_{3L} = 0.4$. $\overline{e}_3 = 1$. Targeted ($\tau_3 = 1$).
+    \item Household: $s_1 = 0.2$, $s_2 = 0.3$, $s_3 = 0.5$.
+\end{itemize}
+
+\paragraph{Network-adjusted emission intensities.}
+$$(\Psi_e)_1 = 3, \qquad (\Psi_e)_2 = 0, \qquad (\Psi_e)_3 = 1.9$$
+
+All different.
+
+\paragraph{Prices.} $v_L = -1.55$. $v_1 = 1.45$, $v_2 = -1.55$, $v_3 = 0.35$.
+
+\paragraph{Equilibrium quantities.}
+$x_1 = 0.35$, $x_2 = 0.45$, $x_3 = 0.5$. $Z = 1.55$.
+
+\paragraph{Direct form.}
+$$R = -\sigma\frac{1.05(1.45) + 0 + 0.5(0.35)}{1.55} = -1.095\sigma$$
+
+\paragraph{Covariance form (over $\N$ only).}
+\begin{itemize}
+    \item Firms 1, 2: single input (labor), $\mathbb{C} = 0$.
+    \item Firm 3: $\mathbb{C}_3 = 1.89$ (computed from inputs good 1, good 2, labor).
+\end{itemize}
+$$R_{\text{cov},\N} = -\sigma \frac{0.5}{1.55}(1.89) = -0.610\sigma$$
+
+\paragraph{Covariance form (over $\N \cup \{C\}$).}
+Adding the household: $\mathbb{C}_C = 1.2025$.
+$$R_{\text{cov}, \N \cup C} = -\sigma\left[\frac{0.5}{1.55}(1.89) + \frac{1}{1.55}(1.2025)\right] = -1.386\sigma$$
+
+\paragraph{Summary.}
+
+\begin{center}
+\begin{tabular}{lc}
+\toprule
+Expression & Value \\
+\midrule
+Direct form (correct) & $-1.095\sigma$ \\
+Covariance with $\Psi_e$, sum over $\N$ & $-0.610\sigma$ \\
+Covariance with $\Psi_e$, sum over $\N \cup \{C\}$ & $-1.386\sigma$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Neither covariance form matches the correct answer, even with heterogeneous $(\Psi_e)$ and multiple layers.
+
+\section{Can We Write $R$ as a Covariance?}
+
+The correct reallocation channel is:
+$$R = -\sigma \sum_j \frac{\overline{e}_j x_j}{Z}v_j = -\sigma\, \mathbb{E}_{z}[v]$$
+
+where $\mathbb{E}_z[\cdot]$ denotes the expectation under the emission distribution $z_j/Z$. This is a \textit{weighted average}, not a covariance.
+
+We can decompose it using output-share weights:
+$$\mathbb{E}_z[v] = \frac{X}{Z}\text{Cov}_{x/X}(\overline{e}, v) + \frac{X}{Z}\overline{e}_{\text{avg}} \cdot v_{\text{avg}}$$
+
+where $X = \sum_j x_j$, $\overline{e}_{\text{avg}} = Z/X$, and $v_{\text{avg}} = \sum_j (x_j/X)v_j$. So:
+\begin{equation}
+    \label{eq:cov_decomposition}
+    R = -\sigma\frac{X}{Z}\text{Cov}_{x/X}(\overline{e}, v) - \sigma\, v_{\text{avg}}
+\end{equation}
+
+There IS a covariance, but:
+\begin{itemize}
+    \item It uses \textbf{direct} emission intensities $\overline{e}_j$, not network-adjusted $(\Psi_e)_j$.
+    \item It uses \textbf{output-share} weights $x_j/X$, not input-share weights $\Omega_{ij}$.
+    \item There is a \textbf{level term} $v_{\text{avg}}$ that does not vanish in general.
+\end{itemize}
+
+\paragraph{Verification of (\ref{eq:cov_decomposition}) in Counterexample 2.}
+
+$X = 1.3$, $\overline{e}_{\text{avg}} = Z/X = 1.55/1.3 = 1.1923$.
+
+$v_{\text{avg}} = (0.35 \times 1.45 + 0.45 \times (-1.55) + 0.5 \times 0.35)/1.3 = -0.015/1.3 = -0.01154$.
+
+$\text{Cov}_{x/X}(\overline{e}, v) = \sum_j \frac{x_j}{X}\overline{e}_j v_j - \overline{e}_{\text{avg}} \cdot v_{\text{avg}} = 1.3056 - (1.1923)(-0.01154) = 1.3194$.
+
+$R = -\sigma\left[\frac{1.3}{1.55}(1.3194) + (-0.01154)\right] = -\sigma(1.1069 - 0.01154) = -1.095\sigma$. \checkmark
+
+%% ================================================================
+%% ================================================================
+%%
+%%   CORRECTED DERIVATION
+%%
+%% ================================================================
+%% ================================================================
+
+\newpage
+\part*{Corrected Derivation}
+
+\section{The Firm's Cost Minimization Problem}
+
+Before identifying the error, we carefully solve the firm's problem and derive the expenditure shares. We distinguish between \textbf{per-unit} input demands (from the cost minimization, denoted $\hat{x}_{ij}$) and \textbf{total} input demands (used in market clearing, denoted $x_{ij} = \hat{x}_{ij} \cdot x_i$).
+
+\paragraph{Objective.} Firm $i$ has CES production $f_i(\{\hat{x}_{ij}\}, \hat{\ell}_i) = \left(\sum_j \theta_{ij}^{1/\sigma} \hat{x}_{ij}^{(\sigma-1)/\sigma} + \theta_{i\ell}^{1/\sigma}\hat{\ell}_i^{(\sigma-1)/\sigma}\right)^{\sigma/(\sigma-1)}$ and emission intensity $e_i = (1-\kappa_i)^{\alpha_i}\overline{e}_i$. By CRS, the cost of producing one unit of $x_i$ is:
+\begin{equation}
+    \label{eq:firm_cost}
+    mc_i = \min_{\{\hat{x}_{ij}\}, \hat{\ell}_i, \kappa_i} \left\{\sum_{j \in \N} p_j \hat{x}_{ij} + w\hat{\ell}_i + \tau_i p_z (1-\kappa_i)^{\alpha_i}\overline{e}_i + \frac{\kappa_i^2}{2} \quad \text{s.t.} \quad f_i(\{\hat{x}_{ij}\}, \hat{\ell}_i) \geq 1 \right\}
+\end{equation}
+Here $\hat{x}_{ij}$ and $\hat{\ell}_i$ are \textit{per-unit} input demands: the amount of input $j$ (resp.\ labor) needed to produce one unit of good $i$.
+
+The key observation is that $\kappa_i$ does not enter the production constraint (Assumption 1). The problem therefore separates into two independent parts:
+\begin{enumerate}
+    \item[(i)] \textbf{Input choice}: minimize $\sum_j p_j \hat{x}_{ij} + w\hat{\ell}_i$ subject to $f_i \geq 1$
+    \item[(ii)] \textbf{Abatement choice}: minimize $\tau_i p_z(1-\kappa_i)^{\alpha_i}\overline{e}_i + \kappa_i^2/2$ (unconstrained)
+\end{enumerate}
+
+\paragraph{Solving the input problem.} Part (i) is a standard CES cost minimization. The Lagrangian is:
+$$\mathcal{L} = \sum_j p_j \hat{x}_{ij} + w\hat{\ell}_i - \mu\left[f_i(\{\hat{x}_{ij}\}, \hat{\ell}_i) - 1\right]$$
+
+The FOC for input $j$ is:
+$$p_j = \mu \frac{\partial f_i}{\partial \hat{x}_{ij}} = \mu \theta_{ij}^{1/\sigma} \hat{x}_{ij}^{-1/\sigma} f_i^{1/\sigma}$$
+
+At the optimum $f_i = 1$, so $\hat{x}_{ij} = (\mu \theta_{ij}^{1/\sigma}/p_j)^{\sigma}$. Similarly, $\hat{\ell}_i = (\mu\theta_{i\ell}^{1/\sigma}/w)^{\sigma}$. Substituting back into the constraint $f_i = 1$ pins down $\mu$:
+$$1 = \left(\sum_j \theta_{ij} (\mu/p_j)^{\sigma-1} + \theta_{i\ell}(\mu/w)^{\sigma-1}\right)^{\sigma/(\sigma-1)}$$
+
+This gives $\mu = c_i^{int}$ where:
+\begin{equation}
+    \label{eq:cint}
+    c_i^{int} := \left(\sum_j \theta_{ij} p_j^{1-\sigma} + \theta_{i\ell}\, w^{1-\sigma}\right)^{1/(1-\sigma)}
+\end{equation}
+is the \textbf{CES input cost index} --- the unit cost of the input bundle, excluding emission tax and abatement cost.
+
+\paragraph{Per-unit expenditure shares.} The optimal expenditure on input $j$ per unit of output, relative to input costs, is:
+\begin{equation}
+    \label{eq:omega_int}
+    \omega_{ij} := \frac{p_j \hat{x}_{ij}}{c_i^{int}} = \theta_{ij}\left(\frac{p_j}{c_i^{int}}\right)^{1-\sigma}
+\end{equation}
+
+These shares sum to one: $\sum_j \omega_{ij} + \omega_{i\ell} = 1$. Log-differentiating (\ref{eq:omega_int}):
+\begin{equation}
+    \label{eq:dlog_omega_int}
+    d\log \omega_{ij} = (1-\sigma)(d\log p_j - d\log c_i^{int})
+\end{equation}
+
+This is the standard CES result: per-unit expenditure shares respond to \textit{relative input prices} (input price $p_j$ relative to the input cost index $c_i^{int}$). Crucially, these per-unit demands do not depend on firm $i$'s total output $x_i$.
+
+\paragraph{Per-unit demand for physical quantities.} From $\omega_{ij} = p_j\hat{x}_{ij}/c_i^{int}$:
+$$d\log \hat{x}_{ij} = d\log\omega_{ij} + d\log c_i^{int} - d\log p_j = -\sigma(d\log p_j - d\log c_i^{int})$$
+
+That is, the per-unit demand for input $j$ falls when $p_j$ rises relative to the input cost index, with elasticity $\sigma$. This depends only on prices, not on $x_i$.
+
+\paragraph{From per-unit to total demands.} Total demand for input $j$ by firm $i$ is $x_{ij} = \hat{x}_{ij} \cdot x_i$, so:
+\begin{equation}
+    \label{eq:total_from_perunit}
+    d\log x_{ij} = d\log \hat{x}_{ij} + d\log x_i = d\log x_i - \sigma(d\log p_j - d\log c_i^{int})
+\end{equation}
+
+The $d\log x_i$ term is the \textbf{scale effect}: when firm $i$'s total output changes, all its input demands scale proportionally. The $-\sigma(\cdot)$ term is the \textbf{substitution effect}: firm $i$ shifts its input mix toward relatively cheaper inputs. Only total demands $x_{ij}$ enter market clearing.
+
+\paragraph{Expenditure shares relative to output price.} In the paper, the I-O matrix uses shares relative to the \textit{output price} $p_i = mc_i$:
+$$\Omega_{ij} := \frac{p_j x_{ij}}{p_i x_i} = \frac{p_j\hat{x}_{ij}}{p_i} = \omega_{ij}\cdot\frac{c_i^{int}}{p_i}$$
+
+Note that $x_i$ cancels: $\Omega_{ij}$ does not depend on scale (a consequence of CRS). Since $p_i = c_i^{int} + \tau_i p_z e_i + \kappa_i^2/2$, at $p_z = 0$ we have $c_i^{int} = p_i = 1$ and $\Omega_{ij} = \omega_{ij}$. But their \textit{derivatives} differ:
+\begin{equation}
+    \label{eq:dlog_Omega}
+    d\log \Omega_{ij} = d\log\omega_{ij} + d\log c_i^{int} - d\log p_i
+\end{equation}
+
+This is the critical point. From Shephard's lemma on (\ref{eq:cint}):
+$$\frac{d\log c_i^{int}}{dp_z} = \sum_m \Omega_{im} v_m = v_i - \tau_i\overline{e}_i$$
+where the last equality uses the forward equation (Proposition 2). Thus:
+$$d\log c_i^{int} - d\log p_i = -\tau_i\overline{e}_i\, dp_z$$
+
+Substituting (\ref{eq:dlog_omega_int}) into (\ref{eq:dlog_Omega}):
+\begin{equation}
+    \label{eq:dlog_Omega_correct}
+    \frac{d\log\Omega_{ij}}{dp_z} = (1-\sigma)(v_j - v_i + \tau_i\overline{e}_i) - \tau_i\overline{e}_i = (1-\sigma)(v_j - v_i) - \sigma\tau_i\overline{e}_i
+\end{equation}
+
+\paragraph{Total demand in terms of output prices.} Substituting $d\log c_i^{int} = (v_i - \tau_i\overline{e}_i)dp_z$ into (\ref{eq:total_from_perunit}):
+\begin{equation}
+    \label{eq:cesdemand_derived}
+    \frac{d\log x_{ij}}{dp_z} = \frac{d\log x_i}{dp_z} - \sigma(v_j - v_i + \tau_i\overline{e}_i)
+\end{equation}
+
+The term $\tau_i\overline{e}_i$ captures the wedge between output price and input cost for targeted firms. The emission tax raises $p_i$ but does not change any input's relative cost from firm $i$'s perspective. This equation is for \textit{total} demands $x_{ij}$, which is why $d\log x_i$ appears (the scale effect).
+
+
+\section{What Was Wrong}
+
+The error in the preceding derivation is in equation (\ref{eq:dlogOmega}), which claimed:
+$$d\log \Omega_{ij} = (1-\sigma)(d\log p_j - d\log p_i) \quad \textbf{(WRONG)}$$
+
+This is wrong because the CES expenditure share $\Omega_{ij} = p_j x_{ij}/(p_i x_i)$ is \textit{not} simply $\theta_{ij}(p_j/p_i)^{1-\sigma}$. The reason is that $p_i$ is the \textit{output price} (which includes the emission tax and abatement cost), while the CES substitution is governed by the \textit{input cost index} $c_i^{int}$, which only reflects input prices.
+
+Specifically, firm $i$'s unit cost decomposes as:
+$$p_i = mc_i = \underbrace{c_i^{int}(\mathbf{p}, w)}_{\text{input costs}} + \underbrace{\tau_i p_z e_i + \kappa_i^2/2}_{\text{emission tax + abatement}}$$
+
+where $c_i^{int} = (\sum_j \theta_{ij} p_j^{1-\sigma} + \theta_{i\ell} w^{1-\sigma})^{1/(1-\sigma)}$ is the CES cost function for intermediate inputs and labor. At $p_z = 0$, $c_i^{int} = p_i = 1$, but their \textit{derivatives} differ:
+\begin{align*}
+    \frac{d\log c_i^{int}}{dp_z} &= \sum_{m} \Omega_{im} v_m = v_i - \tau_i\overline{e}_i \\
+    \frac{d\log p_i}{dp_z} &= v_i
+\end{align*}
+where the first line follows from Shephard's lemma on the CES cost function, and the gap $\tau_i\overline{e}_i$ is the direct emission tax.
+
+The CES expenditure share \textit{relative to input costs} is $\omega_{ij} := p_j x_{ij}/(c_i^{int} x_i) = \theta_{ij}(p_j/c_i^{int})^{1-\sigma}$, which satisfies:
+$$d\log \omega_{ij} = (1-\sigma)(d\log p_j - d\log c_i^{int})$$
+
+The expenditure share relative to the \textit{output price} is $\Omega_{ij} = \omega_{ij} \cdot c_i^{int}/p_i$, so:
+$$d\log \Omega_{ij} = d\log \omega_{ij} + d\log c_i^{int} - d\log p_i = (1-\sigma)(d\log p_j - d\log c_i^{int}) - \tau_i\overline{e}_i\, dp_z$$
+
+The corrected equation is therefore:
+\begin{equation}
+    \label{eq:dlogOmega_correct}
+    \frac{d\log \Omega_{ij}}{dp_z} = (1-\sigma)(v_j - v_i + \tau_i\overline{e}_i) - \tau_i\overline{e}_i = (1-\sigma)(v_j - v_i) - \sigma\tau_i\overline{e}_i
+\end{equation}
+
+For \textbf{non-targeted firms} ($\tau_i = 0$), this reduces to $(1-\sigma)(v_j - v_i)$ and the old equation was correct. The error only matters for \textbf{targeted firms}, where the emission tax drives a wedge between $p_i$ and $c_i^{int}$.
+
+\paragraph{Consequence for equation (\ref{eq:cesdemand}).}
+The corrected CES demand for intermediates is:
+\begin{equation}
+    \label{eq:cesdemand_correct}
+    \frac{d\log x_{ij}}{dp_z} = \frac{d\log x_i}{dp_z} - \sigma(v_j - v_i + \tau_i\overline{e}_i)
+\end{equation}
+
+The extra term $-\sigma\tau_i\overline{e}_i$ says: a targeted firm substitutes \textit{less} aggressively than equation (\ref{eq:cesdemand}) suggested. The emission tax raises $p_i$ but does not change any input's relative cost. From firm $i$'s perspective, the tax is a lump-sum cost per unit of output — it doesn't make good 2 cheaper relative to good 1. The old equation (\ref{eq:cesdemand}) incorrectly treated the tax-induced increase in $p_i$ as if it made all inputs relatively cheaper.
+
+\paragraph{Note on the household.} For the household, $\tau_C = 0$ and $\overline{e}_C = 0$, so the correction term vanishes. Step 2 of the original proof (equation \ref{eq:ceshh}) remains correct: $d\log y_j / dp_z = -\sigma v_j$.
+
+
+\section{Corrected Claim 1}
+
+\begin{claim}
+\label{claim:ces_correct}
+In the CES economy, at a first-order approximation around $p_z = 0$:
+$$\frac{d\log x_j}{dp_z} = -\sigma v_j - \sigma\left[(\widetilde{\Psi} - I)(\tau \circ \overline{\mathcal{E}})\right]_j$$
+where $\widetilde{\Psi} := (I - \widetilde{B})^{-1}$ is the demand-side Leontief inverse.
+\end{claim}
+
+\begin{proof}
+Using the corrected demand (\ref{eq:cesdemand_correct}) and the unchanged household demand (\ref{eq:ceshh}), the market clearing aggregation (Step 3) becomes:
+\begin{align*}
+    q_j &= \frac{y_j}{x_j}(-\sigma v_j) + \sum_{i \in \N}\widetilde{B}_{ji}\left[q_i - \sigma(v_j - v_i + \tau_i\overline{e}_i)\right] \\
+    &= -\sigma v_j + \sigma\sum_i \widetilde{B}_{ji} v_i + \sum_i \widetilde{B}_{ji} q_i - \sigma\sum_i \widetilde{B}_{ji}\tau_i\overline{e}_i
+\end{align*}
+where we used $y_j/x_j + \sum_i \widetilde{B}_{ji} = 1$ in the second line. In matrix form:
+$$(I - \widetilde{B})\mathbf{q} = -\sigma(I - \widetilde{B})\mathbf{v} - \sigma\widetilde{B}(\tau \circ \overline{\mathcal{E}})$$
+
+Since $I - \widetilde{B}$ is invertible (sub-stochastic):
+\begin{equation}
+    \label{eq:q_correct}
+    \mathbf{q} = -\sigma\mathbf{v} - \sigma\underbrace{(I - \widetilde{B})^{-1}\widetilde{B}}_{\widetilde{\Psi} - I}(\tau \circ \overline{\mathcal{E}})
+\end{equation}
+using $(I-\widetilde{B})^{-1}\widetilde{B} = (I-\widetilde{B})^{-1}[I - (I-\widetilde{B})] = \widetilde{\Psi} - I$.
+\end{proof}
+
+The old Claim \ref{claim:ces} set $\mathbf{q} = -\sigma\mathbf{v}$, which corresponds to dropping the second term. This term is nonzero whenever there are targeted firms ($\tau_i > 0$) with positive emissions ($\overline{e}_i > 0$) that sell intermediate inputs (so that $\widetilde{B}(\tau \circ \overline{\mathcal{E}}) \neq 0$).
+
+\paragraph{Interpretation.} The two terms have distinct economic content:
+$$\frac{d\log x_j}{dp_z} = \underbrace{-\sigma v_j}_{\text{price effect}} \underbrace{- \sigma\left[(\widetilde{\Psi} - I)(\tau \circ \overline{\mathcal{E}})\right]_j}_{\text{tax wedge propagation}}$$
+
+The \textbf{price effect} ($-\sigma v_j$) is the standard GE response: good $j$'s price rises by $v_j\,dp_z$, and all its buyers substitute away with elasticity $\sigma$. This already accounts for network propagation through $v_j = \sum_k\Psi_{jk}\tau_k\overline{e}_k + \Psi_{jL}v_L$.
+
+The \textbf{tax wedge propagation} is an additional demand reduction that arises because the emission tax creates a wedge between targeted firms' output prices and their input costs. When targeted firm $k$ faces the tax, its output price $p_k$ rises by $\tau_k\overline{e}_k\,dp_z$ more than its input cost index $c_k^{int}$. Firm $k$'s customers see the full price increase and substitute away, reducing $k$'s output. But firm $k$'s own per-unit input demands are driven by $c_k^{int}$, not $p_k$ --- from $k$'s perspective, nothing changed about relative input costs. The tax is a lump-sum cost per unit that does not trigger input substitution within firm $k$. The result is a demand reduction that propagates \textit{backward} through the supply chain: $k$'s suppliers lose demand, their suppliers lose demand, and so on.
+
+The matrix $\widetilde{\Psi} - I$ tracks this backward propagation. The entry $[(\widetilde{\Psi} - I)(\tau \circ \overline{\mathcal{E}})]_j$ measures good $j$'s total (direct and indirect) exposure to the demand reduction caused by the tax wedge at all downstream targeted firms.
+
+
+\section{Corrected Theorem}
+
+\begin{theorem}
+\label{thm:correct2}
+In the CES economy, at a first-order approximation, the change in aggregate emissions in response to the introduction of a carbon price is:
+\begin{equation}
+    \label{eq:correct_theorem2}
+    \frac{d\log Z}{dp_z}\bigg|_{p_z=0} = -\sum_{j \in \N} \frac{\tau_j z_j}{Z}\alpha_j^2\overline{e}_j \;-\; \sigma\sum_{i \in \N \cup \{C\}} \frac{x_i}{Z}\,\mathbb{C}_{\Omega_{(i,:)}}(v, \Psi_e)
+\end{equation}
+where the sum in the reallocation channel runs over all producing firms \textbf{and the consumption sector}.
+\end{theorem}
+
+\begin{proof}
+We show that the reallocation channel $R = \sum_j (z_j/Z) q_j$ (from Proposition 4, with $q_j = d\log x_j/dp_z$ given by Claim \ref{claim:ces_correct}) equals the covariance expression. The proof has three steps: expand $R$ using the corrected quantity responses, expand the covariance form using structural identities, and show they coincide.
+
+\paragraph{Step 1: Expand $R$.}
+From Claim \ref{claim:ces_correct}, $q_j = -\sigma v_j - \sigma[(\widetilde{\Psi} - I)(\tau \circ \overline{\mathcal{E}})]_j$. Using $z_j = \overline{e}_j x_j$ and the relation $\widetilde{\Psi} = D^{-1}\Psi^T D$ (where $D = \text{diag}(\lambda_1,...,\lambda_N)$; see below), we get $[(\widetilde{\Psi} - I)(\tau \circ \overline{\mathcal{E}})]_j = (1/\lambda_j)\sum_k\lambda_k\Psi_{kj}\tau_k\overline{e}_k - \tau_j\overline{e}_j$, and therefore:
+\begin{equation}
+    \label{eq:R_three_terms}
+    R = -\frac{\sigma}{Z}\bigg[\underbrace{\sum_j \overline{e}_j x_j v_j}_{(A)} + \underbrace{\sum_j \overline{e}_j\sum_k x_k\Psi_{kj}\tau_k\overline{e}_k}_{(B)} - \underbrace{\sum_j \tau_j\overline{e}_j^2 x_j}_{(C)}\bigg]
+\end{equation}
+
+\textit{Derivation of $\widetilde{\Psi} = D^{-1}\Psi^T D$}: at $p_i = 1$, $\widetilde{B}_{ji} = x_{ij}/x_j = \Omega_{ij}x_i/x_j = \Omega_{ij}\lambda_i/\lambda_j$, so $\widetilde{B} = D^{-1}\Omega^T D$. Then $I - \widetilde{B} = D^{-1}(I - \Omega^T)D$, and inverting: $(I - \widetilde{B})^{-1} = D^{-1}(I-\Omega^T)^{-1}D = D^{-1}\Psi^T D$.
+
+\paragraph{Step 2: Expand the covariance form.}
+For any buyer $i$ (firm or household), the covariance decomposes using two structural identities:
+\begin{itemize}
+    \item $\sum_m \Omega_{im}v_m = v_i - \tau_i\overline{e}_i$ \hfill (forward equation, Proposition 2)
+    \item $\sum_m \Omega_{im}(\Psi_e)_m = (\Psi_e)_i - \overline{e}_i$ \hfill (Leontief identity: $\Psi_e = \overline{\mathcal{E}} + \Omega\Psi_e$)
+\end{itemize}
+where both sums include labor (with $(\Psi_e)_L = 0$). Substituting into the covariance:
+\begin{align*}
+    \mathbb{C}_{\Omega_{(i,:)}}(v, \Psi_e) &= \sum_m \Omega_{im}v_m(\Psi_e)_m - (v_i - \tau_i\overline{e}_i)((\Psi_e)_i - \overline{e}_i)
+\end{align*}
+
+Summing over all buyers $i \in \N \cup \{C\}$, weighted by $x_i/Z$:
+
+\textit{First term}: $\sum_{i \in \N \cup \{C\}} x_i\Omega_{im} = \sum_{i \in \N}x_{im} + y_m = x_m$ (market clearing). So:
+$$\frac{1}{Z}\sum_i x_i \sum_m \Omega_{im}v_m(\Psi_e)_m = \frac{1}{Z}\sum_m x_m v_m (\Psi_e)_m$$
+
+\textit{Second term}: for the consumption sector, $\tau_C = \overline{e}_C = v_C = 0$, so only $i \in \N$ contributes. Expanding the product over $i \in \N$:
+$$\frac{1}{Z}\sum_i x_i(v_i - \tau_i\overline{e}_i)((\Psi_e)_i - \overline{e}_i) = \frac{1}{Z}\bigg[\sum_i x_i v_i(\Psi_e)_i - \sum_i x_i v_i\overline{e}_i - \sum_i x_i\tau_i\overline{e}_i(\Psi_e)_i + \sum_i x_i\tau_i\overline{e}_i^2\bigg]$$
+
+Combining and noting that $\sum_m x_m v_m(\Psi_e)_m = \sum_i x_i v_i(\Psi_e)_i$ (same sum, relabeled; the $C$ term vanishes since $v_C = 0$), these cancel, leaving:
+\begin{equation}
+    \label{eq:cov_simplified}
+    \sum_{i \in \N \cup \{C\}} \frac{x_i}{Z}\mathbb{C}_{\Omega_{(i,:)}}(v, \Psi_e) = \frac{1}{Z}\sum_j \overline{e}_j x_j v_j + \frac{1}{Z}\sum_j \tau_j\overline{e}_j x_j\big[(\Psi_e)_j - \overline{e}_j\big]
+\end{equation}
+
+\paragraph{Step 3: Show (\ref{eq:R_three_terms}) $=$ (\ref{eq:cov_simplified}).}
+Comparing term by term: $(A)$ matches the first sum in (\ref{eq:cov_simplified}), and $(C)$ appears in both with opposite signs. It remains to show that $(B)$ equals $\sum_j \tau_j\overline{e}_j x_j(\Psi_e)_j$. Swapping the order of summation in $(B)$:
+$$\sum_j \overline{e}_j \sum_k x_k\Psi_{kj}\tau_k\overline{e}_k = \sum_k \tau_k\overline{e}_k x_k \underbrace{\sum_j \Psi_{kj}\overline{e}_j}_{= (\Psi_e)_k} = \sum_k \tau_k\overline{e}_k x_k (\Psi_e)_k$$
+
+Relabeling $k \to j$, this is $\sum_j \tau_j\overline{e}_j x_j(\Psi_e)_j$. \checkmark
+
+Therefore $R = -\sigma\sum_{i \in \N \cup \{C\}} (x_i/Z)\,\mathbb{C}_{\Omega_{(i,:)}}(v, \Psi_e)$. \qed
+\end{proof}
+
+
+\section{Numerical Verification with Corrected $\mathbf{q}$}
+
+We re-verify the counterexamples using the corrected quantity responses.
+
+\subsection{Counterexample 1 (revisited)}
+
+Recall: $\overline{e}_1 = 1, \overline{e}_2 = 2, \tau_1 = 1, \tau_2 = 0, \Omega_{12} = 0.5, s_1 = s_2 = 0.5$.
+
+\paragraph{Demand-side Leontief.}
+$$\widetilde{B} = \begin{pmatrix} 0 & 0 \\ 1/3 & 0 \end{pmatrix}, \quad
+\widetilde{\Psi} - I = \begin{pmatrix} 0 & 0 \\ 1/3 & 0 \end{pmatrix}$$
+
+$$(\widetilde{\Psi} - I)(\tau \circ \overline{\mathcal{E}}) = \begin{pmatrix} 0 \\ 1/3 \end{pmatrix}$$
+
+\paragraph{Corrected quantities.}
+$$q_1 = -\sigma(0.5) - \sigma(0) = -0.5\sigma, \qquad q_2 = -\sigma(-0.5) - \sigma(1/3) = 0.5\sigma - \sigma/3 = \sigma/6$$
+
+Compare with old (incorrect): $q_1 = -0.5\sigma$, $q_2 = 0.5\sigma$.
+
+The correction reduces $q_2$: firm 1's substitution toward good 2 is weaker than the old formula predicted, because the emission tax on firm 1 does not make good 2 relatively cheaper from firm 1's perspective.
+
+\paragraph{Reallocation channel.}
+$$R = \frac{0.5}{2}(-0.5\sigma) + \frac{1.5}{2}(\sigma/6) = -0.125\sigma + 0.125\sigma = 0$$
+
+This matches the covariance form (which gives 0 since $(\Psi_e)_1 = (\Psi_e)_2 = 2$). \checkmark
+
+\subsection{Counterexample 2 (revisited)}
+
+Recall: $\overline{e}_1 = 3, \overline{e}_2 = 0, \overline{e}_3 = 1, \tau_1 = 1, \tau_2 = 0, \tau_3 = 1$.
+
+$$(\widetilde{\Psi} - I)(\tau \circ \overline{\mathcal{E}}) = \begin{pmatrix} 0.4286 \\ 0.3333 \\ 0 \end{pmatrix}$$
+
+\paragraph{Corrected quantities.}
+\begin{align*}
+    q_1 &= -\sigma(1.45) - \sigma(0.4286) = -1.879\sigma \\
+    q_2 &= -\sigma(-1.55) - \sigma(0.3333) = 1.217\sigma \\
+    q_3 &= -\sigma(0.35) - 0 = -0.35\sigma
+\end{align*}
+
+\paragraph{Reallocation.}
+$$R = \frac{1.05}{1.55}(-1.879\sigma) + 0 + \frac{0.5}{1.55}(-0.35\sigma) = -1.273\sigma - 0.113\sigma = -1.386\sigma$$
+
+Covariance form (over $\N \cup \{C\}$) gave $-1.386\sigma$. \checkmark
+
+\end{document}

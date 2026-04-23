@@ -1,0 +1,240 @@
+% ================================================================
+% APPENDIX
+% ================================================================
+
+\section{Proofs}\label{app:proofs}
+
+% TODO: Include proofs for:
+%   - Proposition: decomposition of covariance into firm-level contributions
+
+\subsection{Proof of Proposition \ref{prop: abatement}}
+
+We prove the result in three steps: first, we show that non-targeted firms do not abate; second, we show that for targeted firms the first-order condition yields a smooth interior solution at $p_z = 0$; third, we compute the semi-elasticity of emission intensity with respect to $p_z$.
+
+\paragraph{Step 1: Non-targeted firms.} Consider a firm with $\tau_i = 0$. Its cost minimization problem is
+\begin{equation*}
+    mc_i = \min_{\{x_{ij}\}, \ell_i, \kappa_i} \left\{ \sum_{j \in \N} p_j x_{ij} + w\ell_i + \frac{\kappa_i^2}{2} \quad \text{s.t.} \quad f_i(\{x_{ij}\}, \ell_i) \geq 1 \right\}
+\end{equation*}
+where the emission cost term $\tau_i p_z e_i$ vanishes. Since the objective is increasing in $\kappa_i$ for $\kappa_i > 0$ and $\kappa_i$ does not enter the production constraint (Assumption 1), the minimum is achieved at $\kappa_i^* = 0$. Thus, $e_i^* = \overline{e}_i$ and $d \log e_i / d p_z = 0$.
+
+\paragraph{Step 2: Interior solution for targeted firms.} Consider a targeted firm ($\tau_i = 1$). Substituting the abatement function $e_i = (1-\kappa_i)^{\alpha_i}\overline{e}_i$ into the objective, the terms involving $\kappa_i$ are
+\begin{equation*}
+    p_z (1-\kappa_i)^{\alpha_i}\overline{e}_i + \frac{\kappa_i^2}{2}
+\end{equation*}
+Since $\kappa_i$ does not enter the constraint $f_i \geq 1$ (Assumption 1), the first-order condition for $\kappa_i$ is
+\begin{equation}
+    \label{eq: foc kappa}
+    F(\kappa_i, p_z) := p_z \alpha_i (1-\kappa_i)^{\alpha_i - 1}\overline{e}_i - \kappa_i = 0
+\end{equation}
+At $p_z = 0$, this is satisfied by $\kappa_i^* = 0$: both the marginal benefit of abatement ($0 \cdot \alpha_i \overline{e}_i = 0$) and the marginal cost ($\kappa_i = 0$) are zero. This is an interior solution (tangency), not a corner.
+
+To verify that this characterizes a minimum, note that the second derivative with respect to $\kappa_i$ is
+\begin{equation*}
+    p_z \alpha_i (\alpha_i - 1)(1-\kappa_i)^{\alpha_i - 2}\overline{e}_i + 1 > 0
+\end{equation*}
+which is strictly positive for all $(\kappa_i, p_z)$ with $\kappa_i \in [0,1)$.
+
+\paragraph{Step 3: Semi-elasticity at $p_z = 0$.} We apply the implicit function theorem to (\ref{eq: foc kappa}). At $(\kappa_i, p_z) = (0, 0)$:
+\begin{align*}
+    \frac{\partial F}{\partial p_z}\bigg|_{(0,0)} &= \alpha_i (1 - 0)^{\alpha_i - 1} \overline{e}_i = \alpha_i \overline{e}_i \\
+    \frac{\partial F}{\partial \kappa_i}\bigg|_{(0,0)} &= -0 \cdot \alpha_i(\alpha_i - 1)(1-0)^{\alpha_i - 2}\overline{e}_i - 1 = -1 \neq 0
+\end{align*}
+Since $\partial F / \partial \kappa_i \neq 0$, the implicit function theorem guarantees that $\kappa_i^*(p_z)$ is a smooth function of $p_z$ in a neighborhood of $p_z = 0$, with
+\begin{equation}
+    \label{eq: dkappa dpz}
+    \frac{d\kappa_i^*}{dp_z}\bigg|_{p_z = 0} = -\frac{\partial F / \partial p_z}{\partial F / \partial \kappa_i}\bigg|_{(0,0)} = -\frac{\alpha_i \overline{e}_i}{-1} = \alpha_i \overline{e}_i
+\end{equation}
+
+Now, $\log e_i = \alpha_i \log(1 - \kappa_i) + \log \overline{e}_i$, so
+\begin{equation*}
+    \frac{d \log e_i}{d p_z} = -\frac{\alpha_i}{1 - \kappa_i^*} \cdot \frac{d\kappa_i^*}{dp_z}
+\end{equation*}
+Evaluating at $p_z = 0$ (where $\kappa_i^* = 0$) and substituting (\ref{eq: dkappa dpz}):
+\begin{equation*}
+    \frac{d \log e_i}{d p_z}\bigg|_{p_z = 0} = -\alpha_i \cdot \alpha_i \overline{e}_i = -\alpha_i^2 \overline{e}_i
+\end{equation*}
+Including the targeting dummy, the result for any firm $i$ is $d \log e_i / dp_z|_{p_z=0} = -\tau_i \alpha_i^2 \overline{e}_i$. \qed
+
+\subsection{Proof of Proposition \ref{prop: price propagation}}
+
+From $p_i = mc_i$ and the envelope theorem, the total derivative of the unit cost function with respect to $p_z$ is
+\begin{equation*}
+    \frac{dp_i}{dp_z} = \sum_{j \in \N} \frac{\partial mc_i}{\partial p_j}\frac{dp_j}{dp_z} + \frac{\partial mc_i}{\partial w}\frac{dw}{dp_z} + \frac{\partial mc_i}{\partial p_z}
+\end{equation*}
+By Shephard's lemma, $\partial mc_i / \partial p_j = x_{ij}^*$ and $\partial mc_i / \partial w = \ell_i^*$. For the direct effect of $p_z$, the envelope theorem gives $\partial mc_i / \partial p_z = \tau_i e_i^*$, since the indirect effects through the optimal choices $\kappa_i^*$, $x_{ij}^*$, and $\ell_i^*$ vanish at the optimum. Thus:
+\begin{equation}
+    \label{eq: total deriv p}
+    \frac{dp_i}{dp_z} = \sum_{j \in \N} x_{ij}^* \frac{dp_j}{dp_z} + \ell_i^* \frac{dw}{dp_z} + \tau_i e_i^*
+\end{equation}
+Dividing both sides by $p_i$ and multiplying and dividing each term by the appropriate price to form cost shares:
+\begin{equation*}
+    \frac{d \log p_i}{dp_z} = \sum_{j \in \N} \frac{p_j x_{ij}^*}{p_i} \frac{d \log p_j}{dp_z} + \frac{w \ell_i^*}{p_i} \frac{d \log w}{dp_z} + \frac{\tau_i e_i^*}{p_i}
+\end{equation*}
+Evaluating at $p_z = 0$, where $e_i^* = \overline{e}_i$ and $p_i = 1$ (normalization), this becomes the forward equation:
+\begin{equation}
+    \label{eq: forward eq proof}
+    \frac{d \log p_i}{dp_z} = \sum_{j \in \N} \Omega_{ij} \frac{d \log p_j}{dp_z} + \Omega_{iL} \frac{d \log w}{dp_z} + \tau_i \overline{e}_i
+\end{equation}
+
+In matrix form, letting $\mathbf{v} := d \log \mathbf{p} / dp_z$ denote the vector of price semi-elasticities for the $N$ goods (excluding the consumption and labor sectors):
+\begin{equation*}
+    \mathbf{v} = \Omega_{\N \times \N} \, \mathbf{v} + \Omega_{(:, L)} \frac{d \log w}{dp_z} + \tau \circ \overline{\mathcal{E}}
+\end{equation*}
+where $\Omega_{\N \times \N}$ is the $N \times N$ submatrix of intermediate input shares. Rearranging:
+\begin{equation*}
+    (I - \Omega_{\N \times \N}) \, \mathbf{v} = \tau \circ \overline{\mathcal{E}} + \Omega_{(:, L)} \frac{d \log w}{dp_z}
+\end{equation*}
+Since $(I - \Omega_{\N \times \N})$ is invertible with inverse $\Psi$ (the Leontief inverse), we obtain:
+\begin{equation*}
+    \mathbf{v} = \Psi (\tau \circ \overline{\mathcal{E}}) + \Psi_{(:,L)} \frac{d \log w}{dp_z}
+\end{equation*}
+
+Finally, with nominal output as numeraire and fixed labor supply ($d \log L = 0$), $d \log w = d \log \lambda_L$, yielding the result:
+\begin{equation*}
+    \frac{d \log p_i}{dp_z} = \sum_{j \in \N} \Psi_{ij} \tau_j \overline{e}_j + \Psi_{iL} \frac{d \log \lambda_L}{dp_z}
+\end{equation*}
+\qed
+
+\subsection{Proof of Proposition \ref{prop: agg output doesn't move}}
+
+We show that $d \log Y / dp_z|_{p_z = 0} = 0$ by establishing that the competitive equilibrium at $p_z = 0$ is efficient, and that the introduction of a carbon tax is a first-order-irrelevant perturbation of the allocation.
+
+\paragraph{Step 1: The no-policy equilibrium is efficient.} At $p_z = 0$, the economy has no distortions: prices equal marginal cost ($p_i = mc_i$), profits are zero (CRS), tax revenue is zero, and abatement costs are zero ($\kappa_i^* = 0$ implies $g(\kappa_i^*) = 0$). By the first welfare theorem, the competitive equilibrium allocation $\{x_{ij}^*, \ell_i^*, y_i^*\}$ is Pareto efficient. With a representative household, this means the equilibrium allocation maximizes real output:
+\begin{equation*}
+    Y^* = \max_{\{x_{ij}, \ell_i, y_i\}} \mathcal{C}(y_1, \ldots, y_N) \quad \text{s.t.} \quad f_i(\{x_{ij}\}, \ell_i) \geq y_i + \sum_{j \in \N} x_{ji} \;\; \forall i, \quad \sum_{i \in \N} \ell_i \leq L
+\end{equation*}
+
+\paragraph{Step 2: The carbon tax does not change the feasible set.} Note that neither $p_z$, nor $\tau$, nor $\kappa_i$ appear in the resource constraints above. The production functions $f_i$ are unchanged by the carbon tax (Assumption 1: emission intensity is not a function of the input bundle). The carbon tax and abatement affect equilibrium prices and allocations, but the set of physically feasible allocations is independent of $p_z$.
+
+\paragraph{Step 3: First-order irrelevance.} For $dp_z > 0$, the competitive equilibrium allocation changes: firms substitute across inputs and invest in abatement. Denote the new equilibrium allocation as a function of $p_z$. The resulting real output satisfies $Y(p_z) \leq Y^*$ for all $p_z$, since the distorted equilibrium is generically inefficient. Since $Y(0) = Y^*$ and $Y(p_z) \leq Y^*$, the function $Y(p_z)$ achieves its maximum at $p_z = 0$, and therefore:
+\begin{equation*}
+    \frac{d \log Y}{dp_z}\bigg|_{p_z = 0} = 0
+\end{equation*}
+
+Note that the convexity of the abatement cost ($g(\kappa_i) = \kappa_i^2/2$) plays a role here: since $g'(0) = 0$, the total abatement expenditure $\sum_i g(\kappa_i^*) x_i$ is second-order in $dp_z$ (because $\kappa_i^* \propto dp_z$ and $g(\kappa_i^*) \propto dp_z^2$). With a linear abatement cost, abatement expenditure would be first-order in $dp_z$, and one would need the additional assumption that abatement resources are rebated to the household for the result to hold. \qed
+
+\subsection{Proof of Proposition \ref{prop: agg emissions}}
+
+Start from $Z = \sum_{i \in \N} e_i x_i$. By the product rule:
+\begin{equation*}
+    d \log Z = \frac{dZ}{Z} = \sum_{i \in \N} \frac{e_i x_i}{Z}\left(\frac{de_i}{e_i} + \frac{dx_i}{x_i}\right) = \sum_{i \in \N} \frac{z_i}{Z}\left(d \log e_i + d \log x_i\right)
+\end{equation*}
+
+From the definition of the Domar weight $\lambda_i = p_i x_i / Q$ and the normalization that nominal output $Q$ is the numeraire ($d \log Q = 0$):
+\begin{equation*}
+    d \log \lambda_i = d \log p_i + d \log x_i - d \log Q = d \log p_i + d \log x_i
+\end{equation*}
+so that $d \log x_i = d \log \lambda_i - d \log p_i$. Substituting:
+\begin{equation*}
+    d \log Z = \sum_{i \in \N} \frac{z_i}{Z} d \log e_i + \sum_{i \in \N} \frac{z_i}{Z}\left[d \log \lambda_i - d \log p_i\right]
+\end{equation*}
+Dividing both sides by $dp_z$ and evaluating at $p_z = 0$ yields the result. The scale channel --- the change in aggregate emissions due to a change in aggregate output holding emission intensities and the allocation constant --- is absent because aggregate output does not move at first order (Proposition \ref{prop: agg output doesn't move}). \qed
+
+\subsection{Proof of Theorem \ref{theorem}}
+
+The proof proceeds in three steps. We first derive the equilibrium quantity responses in the CES economy, then expand the covariance form using structural identities, and finally show they coincide.
+
+\paragraph{Step 1: Equilibrium quantity responses.}
+In the CES economy, firm $i$'s cost of producing one unit of output decomposes as $p_i = c_i^{int} + \tau_i p_z e_i + \kappa_i^2/2$, where $c_i^{int} = (\sum_j \theta_{ij}p_j^{1-\sigma} + \theta_{i\ell}w^{1-\sigma})^{1/(1-\sigma)}$ is the CES input cost index. Cost minimization gives per-unit input demands with elasticity $\sigma$ with respect to relative input prices:
+\begin{equation}
+    \label{eq: per unit demand}
+    \frac{d \log \hat{x}_{ij}}{dp_z} = -\sigma\left(\frac{d \log p_j}{dp_z} - \frac{d \log c_i^{int}}{dp_z}\right)
+\end{equation}
+where $\hat{x}_{ij}$ denotes per-unit demand (the amount of input $j$ needed to produce one unit of good $i$). By Shephard's lemma on $c_i^{int}$ and the forward equation (Proposition \ref{prop: price propagation}):
+$$\frac{d \log c_i^{int}}{dp_z} = \sum_{m \in \U} \Omega_{im} v_m = v_i - \tau_i \overline{e}_i$$
+where $v_m := d\log p_m / dp_z$. Total demands are $x_{ij} = \hat{x}_{ij} \cdot x_i$, so:
+\begin{equation}
+    \label{eq: total demand ces}
+    \frac{d \log x_{ij}}{dp_z} = \frac{d \log x_i}{dp_z} - \sigma(v_j - v_i + \tau_i\overline{e}_i)
+\end{equation}
+
+For the household, $\tau_C = 0$ and $\overline{e}_C = 0$, and $d\log P/dp_z = 0$ (Proposition \ref{prop: agg output doesn't move} and the numeraire normalization), so final demand satisfies $d \log y_j / dp_z = -\sigma v_j$.
+
+Aggregating through market clearing ($x_j = y_j + \sum_{i \in \N} x_{ij}$) and defining $\widetilde{B}_{ji} := x_{ij}/x_j$ (the fraction of $j$'s output sold to firm $i$ as intermediate input, with $\sum_{i \in \N}\widetilde{B}_{ji} < 1$ since $y_j > 0$):
+\begin{equation}
+    \label{eq: quantity system}
+    (I - \widetilde{B})\mathbf{q} = -\sigma(I - \widetilde{B})\mathbf{v} - \sigma\widetilde{B}(\tau \circ \overline{\mathcal{E}})
+\end{equation}
+where $\mathbf{q} := d \log \mathbf{x}/dp_z$. Since $\widetilde{B}$ is sub-stochastic, $I - \widetilde{B}$ is invertible and:
+\begin{equation}
+    \label{eq: q solved}
+    \mathbf{q} = -\sigma\mathbf{v} - \sigma(\widetilde{\Psi} - I)(\tau \circ \overline{\mathcal{E}})
+\end{equation}
+where $\widetilde{\Psi} := (I - \widetilde{B})^{-1}$ is the demand-side Leontief inverse, satisfying $\widetilde{\Psi} = D^{-1}\Psi^T D$ with $D = \text{diag}(\lambda_1, \ldots, \lambda_N)$.
+
+\paragraph{Step 2: Expand the reallocation channel.}
+From Proposition \ref{prop: agg emissions}, the reallocation channel is $R = \sum_{j \in \N}(z_j/Z)\, q_j$. Substituting (\ref{eq: q solved}) and using $z_j = \overline{e}_j x_j$, $\widetilde{\Psi}_{jk} = (\lambda_k/\lambda_j)\Psi_{kj}$, and $x_j = \lambda_j Q$:
+\begin{equation}
+    \label{eq: R expanded}
+    R = -\frac{\sigma}{Z}\bigg[\underbrace{\sum_j \overline{e}_j x_j v_j}_{(A)} + \underbrace{\sum_j \overline{e}_j \sum_k x_k \Psi_{kj}\tau_k\overline{e}_k}_{(B)} - \underbrace{\sum_j \tau_j \overline{e}_j^2 x_j}_{(C)}\bigg]
+\end{equation}
+
+\paragraph{Step 3: Expand the covariance form and match.}
+For any buyer $i \in \N \cup \{C\}$, we substitute the structural identities
+\begin{align*}
+    \sum_{m \in \U} \Omega_{im} v_m &= v_i - \tau_i\overline{e}_i & &\text{(forward equation)} \\
+    \sum_{m \in \U} \Omega_{im} (\Psi_e)_m &= (\Psi_e)_i - \overline{e}_i & &\text{(Leontief identity: } \Psi_e = \overline{\mathcal{E}} + \Omega\Psi_e\text{)}
+\end{align*}
+into the covariance $\mathbb{C}_{\Omega_{(i,:)}}(v, \Psi_e) = \sum_m \Omega_{im}v_m(\Psi_e)_m - (v_i - \tau_i\overline{e}_i)((\Psi_e)_i - \overline{e}_i)$. Summing over all buyers weighted by $x_i/Z$:
+
+\textit{Cross-moment term}: using market clearing, $\sum_{i \in \N \cup \{C\}} x_i \Omega_{im} = x_m$ for all $m \in \N$, so
+$$\frac{1}{Z}\sum_{i \in \N \cup \{C\}} x_i \sum_{m} \Omega_{im}v_m(\Psi_e)_m = \frac{1}{Z}\sum_m x_m v_m (\Psi_e)_m$$
+
+\textit{Mean-product term}: for the consumption sector, $\tau_C = \overline{e}_C = v_C = 0$, so only $i \in \N$ contributes. Expanding:
+$$\frac{1}{Z}\sum_{i \in \N} x_i(v_i - \tau_i\overline{e}_i)((\Psi_e)_i - \overline{e}_i) = \frac{1}{Z}\bigg[\sum_i x_i v_i(\Psi_e)_i - \sum_i x_i v_i \overline{e}_i - \sum_i x_i\tau_i\overline{e}_i(\Psi_e)_i + \sum_i x_i\tau_i\overline{e}_i^2\bigg]$$
+
+\textit{Combining}: the cross-moment and the first term of the mean-product cancel ($\sum_m x_m v_m(\Psi_e)_m = \sum_i x_i v_i(\Psi_e)_i$, same sum relabeled; the $C$ term vanishes since $v_C = 0$). We are left with:
+$$\sum_{i \in \N \cup \{C\}} \frac{x_i}{Z}\mathbb{C}_{\Omega_{(i,:)}}(v, \Psi_e) = \frac{1}{Z}\sum_j \overline{e}_j x_j v_j + \frac{1}{Z}\sum_j \tau_j\overline{e}_j x_j\big[(\Psi_e)_j - \overline{e}_j\big]$$
+
+\textit{Matching with (\ref{eq: R expanded})}: term $(A)$ matches the first sum. For $(B)$, swap the order of summation:
+$$\sum_j \overline{e}_j \sum_k x_k\Psi_{kj}\tau_k\overline{e}_k = \sum_k \tau_k\overline{e}_k x_k \underbrace{\sum_j \Psi_{kj}\overline{e}_j}_{= (\Psi_e)_k} = \sum_k \tau_k\overline{e}_k x_k(\Psi_e)_k$$
+Relabeling $k \to j$, this equals $\sum_j \tau_j\overline{e}_j x_j(\Psi_e)_j$, so $(B) - (C) = \sum_j \tau_j\overline{e}_j x_j[(\Psi_e)_j - \overline{e}_j]$, matching the second sum. \qed
+
+
+\section{Data Appendix}\label{app:data}
+
+% ------------------------------------------------------------------
+% Sample coverage
+% ------------------------------------------------------------------
+\subsection{Sample Coverage}
+
+% TODO: Include the sample coverage table showing for selected years:
+%   - Number of firms in sample
+%   - Number of EU ETS firms
+%   - GDP (value added) coverage as % of aggregate
+%   - Wage bill coverage as % of aggregate
+%   - Emissions coverage as % of aggregate and as % of EUETS sectors
+
+% ------------------------------------------------------------------
+% Imputation details
+% ------------------------------------------------------------------
+\subsection{Imputation Details}
+
+% TODO: Detailed description of the emissions imputation procedure:
+%   - Data sources for sector-level emissions
+%   - Concordance between energy balance sectors and NACE codes
+%   - Validation exercises beyond the R^2 = 0.56 reported in the text
+%   - Robustness to alternative imputation methods
+
+% ------------------------------------------------------------------
+% Covariance operator
+% ------------------------------------------------------------------
+\subsection{Covariance Operator}
+
+% TODO: Formal definition of the input-weighted covariance operator:
+%
+% Definition: The input-weighted covariance operator between vectors
+% A_{(:,m)} and B_{(:,n)} is
+%
+%   C_{Omega(i,:)}(A_{(:,m)}, B_{(:,n)}) :=
+%     sum_j Omega_{(i,j)} A_{(j,m)} B_{(j,n)}
+%     - (sum_j Omega_{(i,j)} A_{(j,m)}) (sum_j Omega_{(i,j)} B_{(j,n)})
+%
+% where Omega_{(i,:)} denotes the i-th row of Omega and A_{(:,m)} the
+% m-th column of A. It is the covariance between A and B using input
+% shares as probability weights.
+
+
+\section{Additional Figures and Tables}\label{app:additional}
+
+% TODO: Additional figures and tables referenced in the text.
