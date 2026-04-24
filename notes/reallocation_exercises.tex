@@ -397,7 +397,8 @@ Analog of Peter-Ruane's 1989$\to$1989+$h$ long difference with within-ASICC-1d F
   \item $\beta^h$ is the horizon-$h$ elasticity of supplier share to pre-period carbon cost share, within a buyer's basket for a given 4d input.
   \item Under H1 (reallocation), $\beta^h<0$ and $|\beta^h|$ rising in $h$ until adjustment completes.
   \item SEs clustered two-way on seller and buyer.
-  \item \textbf{Identification requirement:} a buyer must purchase from $\geq 2$ sellers in the same 4d sector with heterogeneous $\mathrm{firm\_cost\_share}$, in year 2015 \emph{and} in year 2015+$h$. Mixed ETS + non-ETS cells are the high-power comparison. Sample shrinks at larger $h$ as pairs exit.
+  \item \textbf{Sample.} Pairs active at $t_0=2015$ are retained at every horizon. For pairs that separate by $2015+h$ ($\mathrm{flow}_{j,b,2015+h}=0$), $\mathrm{share}_{j,b,2015+h}$ is imputed to $0$ (the correct post-separation share). This avoids a survivorship bias that would drop precisely the pairs where reallocation is sharpest --- the links that die entirely.
+  \item \textbf{Identification requirement:} a buyer must purchase from $\geq 2$ sellers in the same 4d sector with heterogeneous $\mathrm{firm\_cost\_share}$ in year 2015. With the imputation above, the sample at every $h$ is fixed to the $t_0$-active pair set (800k pairs, 26k ETS).
 \end{itemize}
 
 \paragraph{Spec 4.A-event --- Flow long difference.}
@@ -436,11 +437,69 @@ These are \emph{not} the primary tests. Because $\mathrm{EUA}_t$ co-moves with o
   \item \textbf{Horizon truncation.} Data ends 2022, giving $h\leq 7$. BLPN finds 7--10 years for convergence; P\&R uses a 7-year window. Our longest-horizon $\beta^7$ should be framed as ``medium- to long-run'' rather than fully converged long-run.
 \end{itemize}
 
-\subsection{Status}
+\subsection{Results}
 
-Rewritten to run event-study horizons $h=1,\ldots,7$ on RMD directly; local-1 output is diagnostic only.
+Run on the full B2B panel on RMD (2026-04-23). Sample: 800k seller-buyer pairs active at $t_0=2015$, 26k of which have an ETS seller. Annual benchmark Bartik regressions use the full 9M pair-year annual-difference sample (4.1M for the within-sector share version).
 
-\textbf{RMD deployment:} the script is fully self-contained (rebuilds \texttt{firm\_cost\_share} on 2013--2015 from \texttt{phase3\_firm\_exposure.RData}; no dependence on \texttt{phase4\_firm\_treatment.rds}). It runs unchanged on RMD given the same data file paths (see \texttt{paths.R}). Run on full B2B + full annual accounts to obtain reportable estimates.
+\begin{center}
+\captionof{table}{Angle 4 headline coefficients. ``Sep.'' is the count of $t_0$-active pairs whose $t_0+h$ flow is zero (imputed share $= 0$).}
+\small
+\begin{tabular}{lrrrrrr}
+\toprule
+Spec & $h$ & $\beta^h$ & SE & $p$ & Sep.\ & $n$ \\
+\midrule
+Benchmark Bartik, Spec 4.A-annual & ---   & $-0.0015$ & $0.0017$ & $0.38$ & --- & 9.1M \\
+Benchmark Bartik, Spec 4.B-annual & ---   & $-5\times 10^{-5}$ & $4\times 10^{-5}$ & $0.17$ & --- & 4.1M \\
+\midrule
+Spec 4.A-event (log flow, survivors) & $1$ & $+1.55$ & $1.00$ & $0.12$ & --- & 221k \\
+Spec 4.A-event                       & $2$ & $+0.78$ & $1.51$ & $0.61$ & --- & 186k \\
+Spec 4.A-event                       & $3$ & $+3.06$ & $3.72$ & $0.41$ & --- & 162k \\
+Spec 4.A-event                       & $4$ & $-2.06$ & $2.49$ & $0.41$ & --- & 142k \\
+Spec 4.A-event                       & $5$ & $\mathbf{+5.67}$ & $1.86$ & $\mathbf{0.002}$ & --- & 119k \\
+Spec 4.A-event                       & $6$ & $\mathbf{+4.44}$ & $1.94$ & $\mathbf{0.022}$ & --- & 109k \\
+Spec 4.A-event                       & $7$ & $+4.38$ & $2.35$ & $0.062$ & --- &  96k \\
+\midrule
+Spec 4.B-event (share, 0-imputed)    & $1$ & $\mathbf{+0.37}$ & $0.18$ & $\mathbf{0.036}$ & 292k & 372k \\
+Spec 4.B-event                       & $2$ & $\mathbf{+0.44}$ & $0.20$ & $\mathbf{0.024}$ & 362k & 372k \\
+Spec 4.B-event                       & $3$ & $\mathbf{+0.48}$ & $0.22$ & $\mathbf{0.030}$ & 412k & 372k \\
+Spec 4.B-event                       & $4$ & $+0.29$ & $0.19$ & $0.132$ & 455k & 372k \\
+Spec 4.B-event                       & $5$ & $+0.06$ & $0.39$ & $0.887$ & 504k & 372k \\
+Spec 4.B-event                       & $6$ & $\mathbf{+0.45}$ & $0.21$ & $\mathbf{0.035}$ & 528k & 372k \\
+Spec 4.B-event                       & $7$ & $+0.55$ & $0.28$ & $0.054$ & 554k & 372k \\
+\midrule
+Extensive margin                     & $1$ & $\mathbf{-1.04}$ & $0.45$ & $\mathbf{0.020}$ & --- & 372k \\
+Extensive margin                     & $2$ & $-0.40$ & $0.62$ & $0.515$ & --- & 372k \\
+Extensive margin                     & $3$ & $-0.64$ & $0.53$ & $0.228$ & --- & 372k \\
+Extensive margin                     & $4$ & $\mathbf{-1.25}$ & $0.46$ & $\mathbf{0.007}$ & --- & 372k \\
+Extensive margin                     & $5$ & $-4.19$ & $2.46$ & $0.089$ & --- & 372k \\
+Extensive margin                     & $6$ & $-0.33$ & $0.46$ & $0.471$ & --- & 372k \\
+Extensive margin                     & $7$ & $-0.41$ & $0.47$ & $0.381$ & --- & 372k \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\paragraph{Reading these numbers.} No clean reallocation signal emerges.
+
+\begin{itemize}
+  \item \textbf{The benchmark Bartik is null,} as expected under the commodity-cycle confound.
+  \item \textbf{Spec 4.A (log flow, conditional on survival) is wrong-signed where significant.} $\beta^{h=5}=+5.7$ and $\beta^{h=6}=+4.4$ say that, among pairs still active at $h$, high-exposure ETS sellers have higher log-flow growth since 2015 --- the opposite of H1. Other horizons are null.
+  \item \textbf{Spec 4.B (share, with 0-imputation for separations) is wrong-signed where significant.} $\beta^{h=1,2,3,6} \approx +0.4$ ($p<0.05$) says high-exposure ETS sellers \emph{gain} within-seller-sector share relative to low-exposure ETS sellers and non-ETS sellers in the same 4d input market. The survivorship correction (imputing $0$ for $\sim 37$--$69\%$ of $t_0$-active pairs that separate by $h$) does not reverse the sign.
+  \item \textbf{Extensive margin goes in the expected direction at isolated horizons,} significant at $h=1$ ($-1.04$, $p=0.02$) and $h=4$ ($-1.25$, $p=0.007$), but null at $h=2,3,6,7$. Magnitudes ($-0.4$ to $-4.2$) and significance are not monotonic in $h$.
+  \item \textbf{No horizon builds up the way BLPN or Peter-Ruane find.} Neither Spec 4.A nor 4.B nor the extensive margin produces a monotone profile in $h$. Scattered significance does not amount to an event-study signal.
+\end{itemize}
+
+\paragraph{Possible reasons, not mutually exclusive.}
+\begin{enumerate}
+  \item Buyer--seller reallocation by carbon-cost exposure may genuinely not be present at this margin.
+  \item Buyer $\times$ seller-NACE 4d fixed effects may absorb most of the identifying variation if cells with multiple heterogeneous-$\mathrm{firm\_cost\_share}$ sellers are thin.
+  \item $\mathrm{firm\_cost\_share}$ built from 2010--12 / 2013--15 windows is noisy and correlated with idiosyncratic firm characteristics (e.g.\ free-allocation generosity, gas intensity) that predict share evolution in ways unrelated to H1.
+  \item The MSR regime change, while legally permanent, may not be a sharp enough pre/post contrast to identify a Peter-Ruane-style horizon elasticity in Belgian B2B data over 2015--2022.
+  \item A genuine survivor-selection effect: high-exposure ETS sellers that retain buyer relationships may be those with generous free-allocation grandfathering or efficient abatement options, making them \emph{more} competitive than low-exposure ETS sellers among surviving links. The extensive margin being negative at some horizons is consistent with this, but the evidence for any such story is thin.
+\end{enumerate}
+
+\paragraph{What has not been run.} Pre-trend placebo ($h = -1, -2, -3$) and ETS-only sensitivity. The pre-trend placebo is the most informative missing check --- if $\beta^{h<0}$ is already positive in Spec 4.B, the post-2015 $\beta>0$ reflects a pre-existing differential trend rather than a causal response, and the null reading becomes definitive.
+
+\textbf{Bottom line for Angle 4.} The specs do not deliver a clean reallocation signal in either direction. They do not support H1, they do not decisively reject it, and the sign pattern across 4.A / 4.B / extensive margin does not converge on a single story.
 
 \section{Summary of reallocation tests}
 
@@ -456,12 +515,12 @@ Binary split by exposure, NACE 4d         & Within NACE 4d, ETS firms           
 Terciles within sector                    & Within NACE 4d, ETS firms                 & Long-run trend, no post-2017 break \\
 Phase 4 Spec 1.A (pooled)                 & Firm-year panel LP under ID-A             & Sign flip across shock/surprise; uninterpretable \\
 Phase 4 Spec 1.C (sample split)           & Firm-year panel LP, high-pass-through sectors & Negative under surprise $h\geq 2$, positive under shock; same flip \\
-Angle 4 Spec 4.A-event / 4.B-event (B2B) & Event-study long diff around $t_0=2015$, within buyer $\times$ seller-4d cell, horizons $h=1..7$ & RMD only. Primary Peter-Ruane-style horizon-$\beta^h$ estimator for supplier substitution \\
+Angle 4 Spec 4.A-event / 4.B-event (B2B) & Event-study long diff around $t_0=2015$, within buyer $\times$ seller-4d cell, horizons $h=1..7$ & No clean signal. Intensive margin wrong-signed where significant; extensive margin negative at $h=1,4$ only; no monotone horizon profile \\
 \bottomrule
 \end{tabular}
 \end{center}
 
-\textbf{Bottom line.} Across every pre-Phase-4 test, within-sector reallocation is approximately zero or uncorrelated with carbon cost exposure. Phase 4 Spec 1.A/1.C under ID-A cannot deliver a directional answer because of the annual-CPShock shock-vs-surprise sign flip. Identifications ID-B (EUA level) and ID-C (event study), plus Angle 4 event-study specs (\S\ref{sec:b2b}, $\beta^h$ over $h=1,\ldots,7$ on RMD), remain to be run.
+\textbf{Bottom line.} Across every test run to date, within-sector reallocation is approximately zero or uncorrelated with carbon cost exposure. Phase 4 Spec 1.A/1.C under ID-A cannot deliver a directional answer because of the annual-CPShock shock-vs-surprise sign flip. Angle 4 (B2B supplier switching) on RMD produced no clean reallocation signal either: intensive-margin coefficients are wrong-signed where significant, the extensive-margin negative response shows up at $h=1$ and $h=4$ only, and no spec builds a monotone horizon profile. Identifications ID-B (EUA level) and ID-C (event study) at the firm-year level remain to be run, and a pre-trend placebo for Angle 4 is the most informative remaining check.
 
 \begin{thebibliography}{99}
 \bibitem[K\"anzig(2025)]{kanzig2025} K\"anzig, D.~R. (2025). ``The Unequal Economic Consequences of Carbon Pricing.''
