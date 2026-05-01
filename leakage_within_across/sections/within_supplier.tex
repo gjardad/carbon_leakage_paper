@@ -1,0 +1,128 @@
+\subsection{The reallocation margin}
+
+We now turn to the buyer side. Consider a buyer $b$ that, in any given year, purchases inputs in NACE 4-digit category $n$ from a set of suppliers $\mathcal{J}_{b,n}$. If at least one supplier $j \in \mathcal{J}_{b,n}$ is ETS-regulated and faces a binding allowance shortfall priced at the prevailing EUA, that supplier's marginal cost rises in proportion to its emission intensity. If pass-through is positive (as documented in \S\ref{sec:passthrough}), the buyer faces a relative-price increase on a specific supplier's variety. The within-NACE-4d, across-supplier substitution margin is whether the buyer reallocates expenditure away from this supplier toward other suppliers in $\mathcal{J}_{b,n}$.
+
+To test this margin we identify, for each (buyer $\times$ NACE 4-digit) cell, the most-exposed ETS supplier --- the supplier $j^*(b,n)$ with the largest pre-shock cost-share intensity (as defined in equation~\ref{eq:fcs}) among the ETS suppliers active in the cell at any point in 2005--2014.
+
+\subsection{Substitution feasibility}
+
+Before testing for substitution we ask whether substitution is even feasible at the population level. Table~\ref{tab:substitution_universe} reports counts.
+
+\begin{table}[H]
+    \centering
+    \caption{The substitution universe in Belgian B2B (2005--2022 panel).}
+    \label{tab:substitution_universe}
+    \begin{tabular}{lrr}
+        \toprule
+        & Count & Share of all buyers \\
+        \midrule
+        NACE 4-digit sectors with $\geq 1$ ETS supplier      &   117 / 540 & 22\% of sectors \\
+        Total Belgian B2B buyers                              & 307{,}536 & 100\% \\
+        \quad of which: $\geq 2$ suppliers in some NACE 4-digit & 214{,}675 & 70\% \\
+        \quad \quad of which: also $\geq 1$ ETS supplier        &  27{,}053 & 9\% \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+Substitution is structurally feasible for the typical buyer: 70\% of Belgian buyers have at least two suppliers in at least one NACE 4-digit category. Substitution \emph{from an ETS supplier toward an alternative within the same NACE 4-digit} is feasible for $\sim$9\% of buyers ($\sim$27{,}000 firms) --- a substantial slice of the Belgian economy, but a small share of the buyer population. The 9\% number bounds where the test has economic content: the population-level effect of within-NACE-4d substitution is, by construction, at most the effect among these 27{,}000 buyers scaled by their share of total B2B spending.
+
+\subsection{Specification: pair-exposure as the headline regressor}
+
+Our headline specification uses the buyer-side pair-exposure regressor that has the right units to bound the buyer's incentive to substitute and a flat pre-trend in the data. Define
+\begin{equation}
+    \text{pair exposure}_{b,n}^{\text{pre}}
+    \;=\; \text{firm cost share}_{j^*(b,n)} \;\times\; \overline{s}_{j^*,b}^{\text{pre}},
+    \qquad
+    \overline{s}_{j^*,b}^{\text{pre}}
+    \;=\; \overline{
+        \frac{\text{spending}_{b \to j^*,t}}{\text{total inputs}_{b,t}}
+    }_{\,t \in 2010..2014},
+    \label{eq:pair_exposure}
+\end{equation}
+the time-invariant pre-shock percentage of the buyer's total input bill that would be at risk under full pass-through if $j^*$ absorbed the carbon shock and the buyer did not substitute. The dependent variable is the share of $j^*$ in the cell's annual spending,
+\begin{equation}
+    \text{share top}_{b,n,t} \;=\; \frac{\text{spending from } b \text{ to } j^*(b,n) \text{ in } t}{\sum_{j \in \mathcal{J}_{b,n,t}} \text{spending from } b \text{ to } j \text{ in } t},
+    \label{eq:share_top}
+\end{equation}
+and the regression is
+\begin{equation}
+    \text{share top}_{b,n,t} \;=\; \beta\;\cdot\;\text{pair exposure}_{b,n}^{\text{pre}} \times \mathbf{1}[t \geq 2015] \;+\; \alpha_{b,n} \;+\; \delta_{n,t} \;+\; \varepsilon_{b,n,t}.
+    \label{eq:test_h_spec}
+\end{equation}
+$\alpha_{b,n}$ absorbs the cell mean (so $\beta$ is identified from within-cell variation over time); $\delta_{n,t}$ absorbs sector-year aggregates (so $\beta$ does not load on common trends in the supplier sector). Standard errors are two-way clustered on buyer and on supplier-NACE 4-digit. The sample is 14{,}450 buyer $\times$ NACE-4d cells across 78{,}220 cell-years.
+
+The pre-trend is not statistically distinguishable from zero on this regressor: in the augmented specification that adds $\text{pair exposure}_{b,n}^{\text{pre}} \times \text{year}_c$ as a continuous control over 2005--2014, the trend coefficient is $-3.12$ per year (s.e.\ $3.90$, $p = 0.42$). Equation~\eqref{eq:test_h_spec}'s post-2015 coefficient is therefore identified from a level shift relative to a pre-trend that the data does not reject as flat.
+
+We also estimate \eqref{eq:test_h_spec} with the firm-level cost-share intensity itself as the regressor, on a different sample of 32{,}631 cells with positive pre-2015 spending in the cell. We report both as a robustness check on the choice of regressor.
+
+\subsection{Headline results}
+
+Table~\ref{tab:test_h_main} reports estimates of $\beta$.
+
+\begin{table}[H]
+    \centering
+    \caption{Within-NACE-4d, across-supplier substitution test (Test~H). Outcome: share of the most-exposed ETS supplier in the cell's annual spending, in percentage points.}
+    \label{tab:test_h_main}
+    \begin{tabular}{lcccc}
+        \toprule
+        Specification & $\beta$ & s.e. & $p$-value & N (cells / obs) \\
+        \midrule
+        \multicolumn{5}{l}{\emph{Headline: pair-exposure regressor (UP4)}} \\
+        Pair-exposure pooled                                & $-16.7$ & 17.4   & 0.34 & 14{,}450 / 78{,}220 \\
+        Pair-exposure with linear trend control             & $+5.4$  & 20.4   & 0.79 & 14{,}450 / 78{,}220 \\
+        Q4 pair-exposure (right-tail)                       & $+29.0$ & 20.7   & 0.16 & 3{,}613 / 23{,}242 \\
+        \midrule
+        \multicolumn{5}{l}{\emph{Robustness: firm-cost-share regressor}} \\
+        Pooled spec                                         & $+1.34$ & 0.96   & 0.16 & 32{,}631 / 110{,}870 \\
+        With buyer-NACE2d $\times$ year FE                  & $+1.31$ & 1.04   & 0.21 & 31{,}836 / 109{,}508 \\
+        \midrule
+        \multicolumn{5}{l}{\emph{Quartile splits by buyer's pre-shock NACE-4d expenditure share}} \\
+        Q1 (lowest)                                         & $-16.98$ & 13.5  & 0.21 & 5{,}936 / 14{,}590 \\
+        Q2                                                  & $+1.55$  & 1.66  & 0.35 & 5{,}935 / 21{,}341 \\
+        Q3                                                  & $+1.98$  & 1.52  & 0.19 & 5{,}936 / 27{,}276 \\
+        Q4 (highest)                                        & $+0.03$  & 1.39  & 0.98 & 5{,}936 / 34{,}214 \\
+        \midrule
+        \multicolumn{5}{l}{\emph{Extensive margin: outcome = $\mathbf{1}[j^*$ active in $t]$ (LPM)}} \\
+        Extensive margin LPM                                & $-3.61$ & 1.47   & 0.014 & 32{,}631 / 110{,}870 \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+Three readings tighten the same conclusion. First, the pair-exposure regressor on the buyer-magnitude scale gives a pooled $\beta = -16.7$ (s.e.\ $17.4$, $p = 0.34$); after adding a 2005--2014 linear-trend control (whose coefficient is itself not significant), the post-2015 level shift is $+5.4$ (s.e.\ $20.4$, $p = 0.79$). Both are statistically indistinguishable from zero. Second, restricting to the right tail of pair-exposure (Q4: cells with pre-shock pair-exposure in the top quartile, where any per-unit price change converts to the largest dollar shock at the buyer's total-cost level), the coefficient is $+29.0$ (s.e.\ $20.7$, $p = 0.16$) --- wrong-signed for substitution and not significant. Third, on the larger 32{,}631-cell sample using the firm-cost-share regressor, the pooled coefficient is $+1.34$ (s.e.\ $0.96$, $p = 0.16$). The Q4 of buyer's pre-shock NACE-4d expenditure share --- cells where the buyer's spending in $j^*$'s NACE 4-digit is highest, so the supplier-level price change converts into the largest dollar shock --- gives $\beta = +0.03$ (s.e.\ $1.39$, $p = 0.98$).
+
+The Q4 result deserves emphasis. The 95\% confidence interval is approximately $[-2.7, +2.8]$ percentage points of share per unit of cost-share intensity. At the 99th percentile of cost-share intensity ($\approx 0.05$, the most-exposed cement and steel installations), the lower bound corresponds to a $\sim$13.5 percentage-point share loss; the test rules out very large substitution at the right tail.
+
+\subsection{Pre-trend behavior of the headline regressor}
+
+The pair-exposure regressor's pre-trend is not statistically detectable. Figure~\ref{fig:test_h_event_study} (right panel) plots the year-by-year coefficients for $\text{pair exposure}_{b,n}^{\text{pre}} \times \mathbf{1}[\text{year}=t]$ on the UP4 sample. The pre-period coefficients oscillate around zero with confidence intervals that always contain zero, and the formal trend test gives $\widehat{\beta}_{\text{trend}} = -3.12$ per year (s.e.\ $3.90$, $p = 0.42$). Parallel trends is not rejected on the headline regressor.
+
+The corresponding test on the firm-cost-share regressor in a smaller selected subsample of cells (those where $j^*$ is active throughout the entire 2005--2022 panel) shows two anomalous pre-period coefficients in 2010 and 2011 (Figure~\ref{fig:test_h_event_study}, left panel). We do not headline that subsample because (i) it is selected on always-active suppliers --- a Heise-style age-mix selection that has its own dynamics --- and (ii) the larger 32{,}631-cell sample, where this selection is absent, is null in any case ($\beta = +1.34$, $p = 0.16$). The 2010--2011 coefficients on the selected subsample are most plausibly an aftermath of the 2008--2009 financial crisis combined with the small-sample composition; they are not a reading of the post-2015 ETS price increment.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[t]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{../output_rmd/figures/phase5_test_h_event_study.pdf}
+        \caption{Firm-cost-share regressor, ref.\ 2014, on the 705-cell selected subsample. Reported as a transparency check; the headline does not use this subsample.}
+        \label{fig:test_h_event_study_raw}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{../output_rmd/figures/phase5_test_h_upgrades_event_study_detrended_pe.pdf}
+        \caption{Pair-exposure regressor (headline), ref.\ 2014. Trend coefficient is statistically indistinguishable from zero ($p = 0.42$).}
+        \label{fig:test_h_event_study_detrended}
+    \end{subfigure}
+    \caption{Event-study coefficients for the within-NACE-4d substitution test under the two regressors.}
+    \label{fig:test_h_event_study}
+\end{figure}
+
+\subsection{Cement-only test}
+
+A natural worry is that the pooled null reflects mostly cells where the shock is too small to bite. Our \citet{peter2023} comparison in Section~\ref{sec:discussion} shows that cement (NACE 23) is the only Belgian sector where the typical pair-shock-total signal-to-noise ratio exceeds 0.5 of buyers' input-share standard deviation. Restricting Test~H to buyers in NACE 23 with the pair-exposure regressor, with winsorization at the cement-subsample 99th percentile, yields $\beta = -213$ ($p = 0.41$): right-signed for substitution but not statistically significant. The cement subsample contains $\sim$15 distinct ETS suppliers and the LPM coefficients are heavy-tailed; we treat the cement-only test as not statistically powerful.
+
+\subsection{Extensive margin}
+
+The bottom row of Table~\ref{tab:test_h_main} reports a linear probability model where the outcome is whether $j^*$ remains active in the buyer-cell in year $t$. The coefficient is $-3.61$ (s.e.\ $1.47$, $p = 0.014$). At the 90th percentile of cost-share intensity ($\approx 0.0014$), the implied probability of $j^*$ exiting the relationship rises by $\approx 0.5$ percentage points. The point estimate is statistically detectable; the implied magnitude is small at typical exposure but non-trivial at the right tail.
+
+We frame the headline of this section accordingly: there is no detectable intensive-margin reweighting of expenditure toward less-exposed suppliers, and a small but statistically significant extensive-margin response in which the most-exposed supplier becomes mildly less likely to remain active in the cell. The intensive-margin null is the load-bearing finding; the extensive-margin estimate is small in economic terms at typical exposure but is real.

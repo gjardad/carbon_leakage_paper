@@ -1,0 +1,111 @@
+\documentclass[11pt, reqno]{amsart}
+
+% ---- Packages ----
+\usepackage{graphicx,amsmath,amssymb}
+\usepackage{color}
+\usepackage{natbib}
+\usepackage{url}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    citecolor=blue,
+    linkcolor=blue,
+    urlcolor=blue
+}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{comment}
+
+% ---- Page layout ----
+\oddsidemargin +0.2in
+\evensidemargin +0.2in
+\topmargin 40pt
+\textheight 8.1in
+\textwidth 6in
+\linespread{1.3}
+\parskip .05in
+\vfuzz2pt
+\hfuzz2pt
+
+% ---- Theorem environments ----
+\newtheorem{assumption}{Assumption}
+\theoremstyle{definition}
+\newtheorem{remark}{Comment}
+
+\renewcommand{\theequation}{\thesection.\arabic{equation}}
+
+% ---- Formatting shortcuts ----
+\usepackage{xspace}
+\newcommand{\eg}{e.g.,\xspace}
+\newcommand{\ie}{i.e.,\xspace}
+
+% ================================================================
+\begin{document}
+
+\title[]{Carbon Leakage Within and Across Countries}
+
+\author[]{Gabriel Jardanovski\textsuperscript{*} \and Gert Bijnens\textsuperscript{$\dagger$}}
+\thanks{\noindent \textsuperscript{*}Jardanovski (corresponding author): Northwestern University. E-mail: \texttt{gabrielj@u.northwestern.edu}.}
+\thanks{\textsuperscript{$\dagger$} Bijnens: National Bank of Belgium. E-mail: \texttt{gert.bijnens@nbb.be}.}
+
+\date{\tiny{\sc this version} of \today. We are grateful to the National Bank of Belgium (NBB) for hosting one of us as a Young Researcher during part of the period when this research was conducted. The views expressed are those of the authors and do not necessarily reflect those of the NBB. This paper should not be reported as representing the views of the NBB.}
+
+\begin{abstract}
+\textbf{[Abstract to be rewritten in step 4: joint within-and-across-country leakage framing.]}
+
+We jointly measure two margins of carbon leakage from the EU Emissions Trading System --- domestic across-firm reallocation in firm-to-firm transactions, and international cross-border reallocation in customs imports --- on the same Belgian micro-data and the same EU ETS regime. Both margins are quantitatively small. Domestic across-firm leakage: under our preferred CES mapping, the elasticity of substitution between regulated and unregulated suppliers within the same NACE 4-digit category is bounded at $\sigma \in [0.74, 1.26]$ (95\% CI), centered at Cobb-Douglas, ruling out the elasticities typically used in trade-microdata work. International cross-border leakage: replicating \citet{CosterMejeanDiGiovanni2024} on the Belgian customs panel returns Phase~3 coefficients that are two orders of magnitude smaller than the corresponding French estimates, and where statistically significant, point in the opposite direction from leakage. The joint pattern --- both margins small, in the same dense-network economy, under the largest realized EU ETS price increment to date --- challenges the empirical premises behind both the free-allocation and CBAM rationales for protecting unilateral carbon prices from leakage, and identifies cross-country heterogeneity (Belgium vs.\ France) as a first-order feature of the leakage debate.
+\end{abstract}
+
+\maketitle
+
+\pagebreak
+
+% ================================================================
+\section{Introduction}\label{sec:introduction}
+\input{leakage_within_across/sections/introduction}
+
+% ================================================================
+\section{Setting and Data}\label{sec:data}
+\input{leakage_within_across/sections/data}
+
+% ================================================================
+\section{Pass-Through of Carbon Costs to Regulated-Supplier Prices}\label{sec:passthrough}
+\input{leakage_within_across/sections/passthrough}
+
+% ================================================================
+\section{Within-Country Leakage: Across-Supplier Reallocation Within NACE 4-digit}\label{sec:test_h}
+\input{leakage_within_across/sections/within_supplier}
+
+% ================================================================
+\section{Within-Country Leakage: Across-Category Reallocation}\label{sec:test_i}
+\input{leakage_within_across/sections/within_category}
+
+% ================================================================
+\section{Across-Country Leakage: Customs Evidence}\label{sec:across}
+\input{leakage_within_across/sections/across_country}
+
+% ================================================================
+\section{Discussion}\label{sec:discussion}
+\input{leakage_within_across/sections/discussion}
+
+% ================================================================
+\section{Policy Implications}\label{sec:policy}
+\input{leakage_within_across/sections/policy}
+
+% ================================================================
+\section{Conclusion}\label{sec:conclusion}
+\input{leakage_within_across/sections/conclusion}
+
+% ================================================================
+\newpage
+\bibliographystyle{apalike}
+\bibliography{thesis/sections/refs}
+
+% ================================================================
+\newpage
+\appendix
+\input{leakage_within_across/sections/appendix}
+
+\end{document}

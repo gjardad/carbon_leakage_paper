@@ -1,0 +1,21 @@
+\section{Test~H: full sector decomposition}\label{app:test_h_sectors}
+
+Sector decomposition of the within-NACE-4d test is reported in the supplementary table file; the headline is that the LPM coefficient on $\text{firm cost share}_{j^*} \times \mathbf{1}[t \geq 2015]$ is dominated by extreme-fcs cells in small NACE 2-digit sectors (NACE 73: $\beta = +3{,}600$; NACE 26: $\beta = -1{,}906$; NACE 22: $\beta = +6{,}121$). These outliers are not interpretable as structural effects without bounding the regressor first. The two sectors with cleaner sample sizes are cement (NACE 23: $\beta = +4.42$, $p = 0.17$) and chemicals (NACE 20: $\beta = +2.74$, $p = 0.06$). Both are wrong-signed for substitution. We do not draw structural conclusions from the sector decomposition without winsorization and report it only for completeness.
+
+\section{Test~I: alternative outcome and quartile zero-mass}\label{app:test_i_alt}
+
+Section~\ref{sec:test_i} notes that the quartile split of Test~I is degenerate because most NACE 4-digit categories have $\text{nace exposure}_n = 0$. The Q4 coefficient (the only one with positive treatment mass) coincides with the all-data continuous-treatment coefficient.
+
+We also report a robustness check using $\log(\text{spend}_{b,n,t} + 1)$ as the outcome rather than the share. The coefficient is $\beta = +154.0$ (s.e.\ $13.4$, $p < 10^{-30}$), wrong-signed and very significant. The wrong sign reflects the same trend issue that affects I.1: high-exposure categories' total spend rose faster than other categories' spend across the entire sample, including before 2015. The outcome share, in contrast, mechanically constrains the buyer's total to one and absorbs scale changes; it is the cleaner outcome for testing reallocation. We use the share-based I.3 specification as the headline.
+
+\section{Variable definitions}\label{app:variables}
+
+\begin{itemize}
+    \item \textbf{firm cost share} (\eqref{eq:fcs}): pre-shock firm-level carbon cost share, time-invariant. Numerator: 2013--2016 average annual allowance shortfall in tCO$_2$ priced at the year-specific EUA. Denominator: 2010--2012 average total operating cost from Annual Accounts. Falls back to the earliest available three-year window for firms without 2010--2012 data.
+    \item \textbf{nace exposure} (\eqref{eq:nace_exposure}): sales-weighted average firm cost share within a NACE 4-digit category, time-invariant; equals zero for categories with no ETS sellers.
+    \item \textbf{share top} (\eqref{eq:share_top}): annual share of the most-exposed ETS supplier $j^*(b,n)$ in cell $(b,n)$'s total spending in that NACE 4-digit category.
+    \item \textbf{share} (\eqref{eq:share_bnt}): annual buyer expenditure share in NACE 4-digit category $n$ as a fraction of buyer's total input bill.
+    \item \textbf{pair exposure pre} (UP4 in Section~\ref{sec:test_h}): $\text{firm cost share}_{j^*(b,n)} \times \bar{s}_{j^*(b,n)}$, where $\bar{s}_{j^*(b,n)} = \overline{\text{spending from } b \text{ to } j^*}_{2010..2014} / \overline{\text{total inputs of } b}_{2010..2014}$. Units: percentage of buyer's total input bill at risk if $j^*$'s carbon shock fully passes through and the buyer does not substitute.
+    \item \textbf{Post}: $\mathbf{1}[t \geq 2015]$.
+    \item \textbf{regulated}: $\mathbf{1}[\text{nace exposure}_n > 0]$.
+\end{itemize}

@@ -1,0 +1,66 @@
+\subsection{The reallocation margin}
+
+The within-NACE-4d test in Section~\ref{sec:test_h} restricts attention to the substitution choice within a single supplier sector, and bounds the population effect by the share of buyers facing that decision (9\% of all Belgian buyers). A second, larger reallocation margin operates across NACE 4-digit \emph{categories}: when carbon pricing raises the average price of inputs in some category $n$ relative to other categories, buyers may shift expenditure from $n$ toward less-exposed alternatives. This is the Belgian B2B analog of the regulated/unregulated event study in \citet{colmeretal2023} but on the input-mix rather than the output-PPI margin, and is identified from within-buyer variation across categories.
+
+The outcome is the buyer's expenditure share in NACE 4-digit category $n$:
+\begin{equation}
+    \text{share}_{b,n,t} \;=\; \frac{\sum_{j: \text{ NACE-4d}_j = n} \text{spending from } b \text{ to } j \text{ in } t}{\sum_{j} \text{spending from } b \text{ to } j \text{ in } t}.
+    \label{eq:share_bnt}
+\end{equation}
+
+The sample is the buyer $\times$ NACE 4-digit $\times$ year panel of cells with positive pre-shock spending in that category --- 5{,}699{,}180 cells across 71{,}743{,}064 cell-years. Identification comes from buyer $\times$ year fixed effects (which absorb each buyer's overall scale and time path) and buyer $\times$ NACE 4-digit fixed effects (which absorb persistent buyer-specific category preferences). The remaining variation that identifies $\beta$ is whether, within a buyer's input bill, expenditure shares in regulated categories shifted differently than in unregulated categories after 2015.
+
+\subsection{Specification: the binary regulated $\times$ \textit{Post} estimator}
+
+Our headline specification follows the regulated/unregulated event-study logic of \citet{colmeretal2023} directly: the treatment is whether NACE 4-digit category $n$ contains any ETS sellers. Define $\text{regulated}_n = \mathbf{1}[n \in \mathcal{N}_{\text{ETS}}]$ where $\mathcal{N}_{\text{ETS}}$ is the set of NACE 4-digit categories with at least one ETS seller. The regression is
+\begin{equation}
+    \text{share}_{b,n,t} \;=\; \beta\;\cdot\;\text{regulated}_n \times \mathbf{1}[t \geq 2015] \;+\; \alpha_{b,n} \;+\; \delta_{b,t} \;+\; \varepsilon_{b,n,t},
+    \label{eq:test_i_spec}
+\end{equation}
+with $\alpha_{b,n}$ a buyer-category fixed effect and $\delta_{b,t}$ a buyer-year fixed effect. Standard errors are two-way clustered on buyer and on NACE 4-digit. The binary treatment is robust to within-category trend heterogeneity in two ways: (i) pre-existing trends in any single regulated category enter $\alpha_{b,n}$ if persistent and are netted out cell by cell; (ii) buyer-year fixed effects absorb buyer-specific scale changes, so $\beta$ is identified from a level shift in the regulated-vs-unregulated share gap within the same buyer-year.
+
+\subsection{Headline result}
+
+\begin{table}[H]
+    \centering
+    \caption{Across-NACE-4d, across-category substitution test (Test~I). Sample: 5.7M buyer $\times$ NACE 4-digit cells $\times$ 18 years. Outcome: buyer's expenditure share in the category, scaled to fraction (0--1) for I.3 and to share$\times$100 for I.1--I.2.}
+    \label{tab:test_i_main}
+    \begin{tabular}{llcccc}
+        \toprule
+        Specification & Outcome & $\beta$ & s.e. & $p$ & Reading \\
+        \midrule
+        \textbf{I.3 regulated $\times$ \textit{Post}} (binary, headline) & share & $-0.0026$ & 0.0087 & 0.76 & \textbf{null} \\
+        \midrule
+        \multicolumn{6}{l}{\emph{Robustness with continuous treatment $\text{nace exposure}_n$}} \\
+        I.1 pooled (continuous, no detrend) & share$\times$100 & $+34.5$ & 15.2 & 0.023 & wrong sign \\
+        I.2 detrended ($\beta$ on \textit{Post})  & share$\times$100 & $-43.3$ & 12.5 & $<$0.001 & artifact (see text) \\
+        I.2 detrended trend term  & share$\times$100/yr & $+9.1$ & 2.2 & $<$0.001 & full-sample drift \\
+        I.4 log expenditure (level not share) & log spend & $+154.0$ & 13.4 & $<10^{-30}$ & wrong outcome (see text) \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+The headline I.3 coefficient is $\beta = -0.003$ (s.e.\ $0.009$, $p = 0.76$). The implied effect is a $\sim$0.26 percentage-point shift in within-buyer expenditure share away from regulated categories post-2015 --- a magnitude the standard error cannot statistically distinguish from zero. Figure~\ref{fig:test_i_event_study} plots the year-by-year coefficients on a continuous-treatment version of the specification with post-hoc detrending; the post-2015 coefficients are uniformly positive in every clean year (2015--2019 and 2021), pointing in the opposite direction from substitution.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{../output_rmd/figures/phase5_test_i_event_study.pdf}
+    \caption{Event-study coefficients for the across-NACE-4d substitution test, reference year 2014. Coefficients are on $\text{nace exposure}_n \times \mathbf{1}[\text{year} = t]$ (the continuous-treatment version), scaled by share $\times$ 100. The post-period coefficients are uniformly positive in every clean year (2015--2019 and 2021). The 2020 coefficient ($-41.3$) and the 2022 coefficient ($+411.5$) are dominated by COVID and the 2022 European gas crisis respectively.}
+    \label{fig:test_i_event_study}
+\end{figure}
+
+\subsection{Why the binary specification is preferred over continuous-treatment alternatives}
+
+The continuous-treatment specifications (I.1 and I.2) give different point estimates than I.3 not because the binary and continuous treatments measure different things, but because the continuous-treatment regression is dominated by a small number of extreme-exposure NACE 4-digit categories (cement, primary chemicals, refined petroleum) whose pre-existing trend is non-linear. Imposing a single linear trend on this jagged pattern (I.2) mechanically forces the post-period level shift to be negative even though the year-by-year detrended coefficients (Figure~\ref{fig:test_i_event_study}) are uniformly positive in the clean post-2015 years.
+
+The binary specification absorbs this issue. Within a buyer-year, the regulated and unregulated categories' shares are differenced directly --- the level path of any single category is absorbed by $\alpha_{b,n}$, and any time-varying buyer-specific scale change is absorbed by $\delta_{b,t}$. The remaining identifying variation is the post-2015 level shift in the regulated-share-minus-unregulated-share gap.
+
+We also report a robustness check using $\log(\text{spend}_{b,n,t} + 1)$ as the outcome rather than the share. This is not a valid reallocation outcome because it conflates buyer-scale changes with within-buyer reallocation: a buyer that grew its total inputs by 50\% post-2015 will mechanically have higher log spend in every category, including high-exposure ones. The share-based I.3 is the cleaner test for reallocation. We report the log-spend coefficient ($+154.0$, $p < 10^{-30}$, wrong-signed) only to flag that pure level-spending in regulated categories rose, not fell --- the opposite of what a substitution story would predict.
+
+\subsection{Quartile splits}
+
+We attempted a quartile split of the continuous-treatment specification by quartile of $\text{nace exposure}_n$. The quartile split is degenerate: most NACE 4-digit categories have $\text{nace exposure}_n = 0$ (no ETS sellers), so Q1, Q2, and Q3 collapse to zero treatment intensity and only Q4 has positive mass. The Q4 coefficient equals the all-data continuous-treatment coefficient because Q4 contains all the variation. This kind of quartile-split kink test is not identifiable on Test~I and we do not pursue it further.
+
+\subsection{Reading}
+
+The most defensible single-number summary of the across-NACE-4d test is the I.3 binary regulated $\times$ \textit{Post} coefficient: $\beta = -0.003$ (s.e.\ $0.009$, $p = 0.76$). The corroborating evidence is the year-by-year continuous-treatment event study (Figure~\ref{fig:test_i_event_study}), which shows uniformly positive coefficients in every clean post-2015 year. Continuous-treatment specifications give estimates that are sensitive to the linear-trend assumption that the year-by-year evidence rules out. We conclude that the across-NACE-4d substitution margin shows no detectable buyer reallocation.

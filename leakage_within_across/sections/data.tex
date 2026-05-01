@@ -1,0 +1,72 @@
+\subsection{The EU ETS in Belgium}
+
+The EU Emissions Trading System has covered electricity generation and energy-intensive manufacturing installations across the European Economic Area since 2005. Coverage is at the level of the regulated installation, not the firm; we link installations to their parent firm via Belgian VAT identifiers. Phase~III (2013--2020) and Phase~IV (2021--) span our sample window.
+
+The Belgian ETS roster is stable: 281 installations are present in the European Union Transaction Log (EUTL) every year between 2005 and 2023. After requiring positive verified emissions and matched Annual Accounts revenue, our analysis sample covers 88.4\% of total Belgian ETS emissions in 2005, ranging from 162 to 194 firms per year. We refer to this as the \emph{ETS firm sample} below.
+
+\subsection{The Market Stability Reserve as the identifying event}\label{sec:msr_identification}
+
+Identification in this paper relies on a sharp pre/post contrast around the 2015 Market Stability Reserve (MSR) reform. Three features of the MSR make it well-suited as a quasi-exogenous structural break that defines the post-period.
+
+\paragraph{Rules-based, pre-committed cap-tightening.} Decision (EU) 2015/1814 of October 2015 established the MSR as a rules-based mechanism that automatically removes a fixed fraction of allowances from circulation whenever the Total Number of Allowances in Circulation (TNAC) exceeds 833~million tons \citep{Perino2018}. Because the rule is mechanical and pre-specified, the post-2018 EUA price path is determined by accumulated surplus and the MSR's intake rule rather than by contemporaneous economic conditions. The Decision was negotiated and adopted in 2014--2015 with no significant amendments thereafter, and the operational reserve began functioning in January 2019. The post-2015 cap stringency is therefore best read as a pre-committed structural reform, not as a flexible policy response to short-run macro variables.
+
+\paragraph{Magnitude.} The reform triggered a roughly tenfold rise in EUA prices: from a 2015--2016 average of approximately €6--8 per tCO$_2$ to an average above €80 in 2022. This dwarfs the magnitude of plausible alternative explanations operating contemporaneously. By comparison, the Phase~II $\to$ Phase~III transition produced a price collapse, not a sharp positive break, so a ``Phase III'' cutoff would not generate the kind of break we exploit. The MSR is the only ETS reform of the relevant magnitude and direction in our window.
+
+\paragraph{Cross-sectional exogeneity.} The MSR works through the EU-wide cap, which is a single instrument acting symmetrically across all ETS sectors. Cross-firm variation in exposure --- which is the source of identification in our regressions --- comes from pre-MSR firm characteristics: a firm's emission intensity, its allowance allocation, and the cost share these imply at pre-period EUA prices. Our treatment intensity (equation~\eqref{eq:fcs} below) is constructed from data ending in 2015, so it is mechanically pre-determined relative to the post-2015 regime change.
+
+\paragraph{Permanence.} Identification of long-run reallocation responses (in the spirit of \citealp{peter2023}) requires that the shock be perceived as permanent. The MSR has features that satisfy this: the underlying decision is legally binding, the Fit-for-55 package adopted in 2021 tightens the linear reduction factor through 2030, and CBAM phased in from 2023 further locks in carbon-pricing permanence by reducing the leakage-induced political pressure to relax the cap. In the language of \citet{peter2023}, the MSR regime is closer to a permanent tariff binding than to a transitory price shock --- arguably more so, since EU institutional commitment binds tighter than a WTO tariff schedule.
+
+\paragraph{Validation through the high-frequency CPS series.} \citet{kanzig2023unequal} compiles 114 EU ETS regulatory events between 2005 and 2019 and constructs a daily ``carbon-policy surprise'' (CPS) series from EUA-futures price moves in narrow event windows, refined for orthogonality to contemporaneous macroeconomic and commodity-price news. The MSR adoption and subsequent strengthening events are central nodes in this event set, and the post-2015 cumulated CPS series accounts for a large share of the realized EUA price rise. \citet{BauerKaenzigRudebusch2026} extend the series through 2024 with 45 additional Phase~IV events, including the Fit-for-55 package and CBAM milestones, and document a first-stage F~$> 16$ and identifying R$^2 \approx 2.4\%$ \emph{after} orthogonalization, confirming the regulatory-news content of the post-2015 price path. We do not use the high-frequency CPS series in our main specifications --- our regressors are pre-determined and our outcome panel is annual --- but it provides external validation that the post-2015 EUA price path is policy-driven rather than endogenous to macroeconomic conditions, addressing the canonical concern that ``carbon prices are not set in a vacuum'' \citep{kanzig2023unequal}. Section~\ref{sec:passthrough} reports our own panel local projection on the \citet{kanzig2023unequal} CPS series, recovering a peak PPI response of $+4.08$ (s.e.\ $0.64$) at 12 months on Belgian ETS-regulated sectors.
+
+\paragraph{Cutoff choice.} We treat 2015 as the cutoff year for ``Post'' periods. The justification combines three considerations: (i) 2015 marks the trough of EUA prices before the reform-driven rise; (ii) the MSR Decision was adopted in October~2015, locking in market expectations of permanent post-period scarcity; and (iii) pre-2015 EUA prices were dominated by the Phase~II/III surplus, so a 2015 cutoff isolates the regime in which the cap binds. We also report event-study coefficients separately for each post-2015 calendar year, so the choice of cutoff is not load-bearing for the headline result; it is a labeling convention that the year-by-year coefficients let the reader audit.
+
+\subsection{Belgian B2B firm-to-firm transaction records}
+
+The National Bank of Belgium maintains a near-universal panel of business-to-business transactions, derived from VAT-listing reports that all Belgian firms above a low size threshold are required to submit annually. Each record is a (seller VAT, buyer VAT, calendar year, EUR amount) tuple. The panel covers 2002--2023 and includes domestic transactions only. We use 2005--2022 to align with the ETS sample. We restrict attention to private-sector buyers and sellers with a primary NACE 4-digit code, dropping public administration and a small set of NACE codes with known data-quality issues. The B2B records are merged with each firm's Annual Accounts at the firm $\times$ year level (revenue, total costs, employment) and with the EUTL at the installation $\times$ year level (verified emissions, free allowances).
+
+\subsection{Treatment intensity}
+
+For each ETS supplier $j$ we construct a time-invariant pre-shock measure of carbon-cost intensity:
+\begin{equation}
+    \text{firm cost share}_j = \frac{\overline{\text{shortage}_{j,t}}_{\,t \in 2013..2016}\;\times\;\overline{\text{EUA}_t}_{\,t \in 2013..2016}}{\overline{\text{total cost}_{j,t}}_{\,t \in 2010..2012}},
+    \label{eq:fcs}
+\end{equation}
+where $\text{shortage}_{j,t} = \max(0,\,\text{emissions}_{j,t} - \text{free allowances}_{j,t})$ in tCO$_2$, EUA is the average annual allowance price in EUR/tCO$_2$, and total cost is from Annual Accounts. The numerator is the firm's pre-shock allowance shortfall priced at the prevailing EUA, and the denominator is the firm's total operating cost in the pre-Phase-III base window. We use 2010--2012 for total cost (the most recent stable pre-Phase-III window with consistent reporting) and 2013--2016 for the shortage and EUA (the post-allocation, pre-MSR window where Phase~III's tighter cap was binding but the price was still low). For firms without 2010--2012 coverage, we fall back to the earliest available three-year window.
+
+The cost-share intensity ranges from approximately zero (no shortage, or shortage covered by free allowances) to approximately 5--10\% of total cost in the most-exposed installations (cement clinker, primary steel, refined petroleum). The cross-firm standard deviation of firm cost share within NACE 4-digit, after partialling out a sector mean, is 0.037 (\ie 3.7 percentage points of total cost).
+
+For the across-category test (Section~\ref{sec:test_i}) we aggregate to NACE 4-digit:
+\begin{equation}
+    \text{nace exposure}_n = \frac{\sum_{j \in \text{ETS sellers in } n} \overline{\text{corr sales}_{j,t}}_{\,t \in 2010..14} \times \text{firm cost share}_j}{\sum_{j \in \text{all sellers in } n} \overline{\text{corr sales}_{j,t}}_{\,t \in 2010..14}},
+    \label{eq:nace_exposure}
+\end{equation}
+where ``corr sales'' is the firm's domestic B2B sales corrected for the small known under-reporting on the small-firm threshold. This is a sales-weighted average ETS exposure within the supplier sector, set to zero in NACE 4-digit codes with no ETS sellers.
+
+\paragraph{Pre-period validity.}
+Both \eqref{eq:fcs} and \eqref{eq:nace_exposure} are constructed from data ending in 2014 or 2016, so neither inherits any information from the post-2015 period over which we estimate effects. There is a separate concern about survivorship through the construction windows --- firms that exited before 2010 or 2013 cannot enter our exposure measure, and their absence may bias the post-2015 cell composition --- but this concern is independent of the post-2015 outcome and we discuss it in Section~\ref{sec:discussion}.
+
+\subsection{Belgian customs panel}\label{sec:data_customs}
+
+For the across-country test (Section~\ref{sec:across}) we use the Belgian customs panel maintained by the NBB and Eurostat, covering 2000--2019 at the firm $\times$ HS6 product $\times$ source country $\times$ year level. The panel records the value (EUR) and quantity (kg) of every Belgian import declaration above administrative thresholds, separately for intra-EU (Intrastat) and extra-EU (Extrastat) flows. We follow \citet{CosterMejeanDiGiovanni2024} in restricting attention to imports from non-ETS source countries to define the leakage outcome, and in classifying HS6 products as ``regulated'' or ``unregulated'' via concordance to the EUTL installation activity codes (\S\ref{sec:across} details the concordance). The customs panel ends in 2019 because of administrative changes to the Belgian customs collection that are not retroactively reconciled with the pre-2020 series; the resulting Phase~III post-period (2013--2019) covers the bulk of the EU ETS price rise but stops one year before Phase~IV begins. The within-country B2B test (Sections~\ref{sec:test_h} and \ref{sec:test_i}) runs through 2022 and so spans Phase~IV; we discuss the asymmetry in Sections~\ref{sec:across} and \ref{sec:discussion}.
+
+\subsection{Sample sizes}
+
+Table~\ref{tab:sample_sizes} summarizes the analysis samples used in each section.
+
+\begin{table}[H]
+    \centering
+    \caption{Analysis samples}
+    \label{tab:sample_sizes}
+    \begin{tabular}{lll}
+        \toprule
+        Section & Unit of observation & Count \\
+        \midrule
+        Pass-through (\S\ref{sec:passthrough})       & NACE 4-digit $\times$ month / year             & 2005m1--2019m12 monthly; 2001--2022 annual \\
+        Within-country, across suppliers (\S\ref{sec:test_h}) & buyer $\times$ supplier-NACE-4d $\times$ year & 32{,}631 cells, 110{,}870 obs \\
+        Within-country, across categories (\S\ref{sec:test_i}) & buyer $\times$ NACE-4d $\times$ year          & 5{,}699{,}180 cells, 71{,}743{,}064 obs \\
+        Across-country, customs (\S\ref{sec:across}) & firm $\times$ HS6 $\times$ source country $\times$ year & 2000--2019; non-ETS sources subset \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+The $\sim$32K cells in the within-country across-supplier test are buyer $\times$ NACE-4d combinations in which the buyer purchases from at least one ETS supplier and at least two suppliers total (so substitution is feasible). The $\sim$5.7M cells in the within-country across-category test are buyer $\times$ NACE-4d combinations in which the buyer had positive spending in at least one of the pre-shock years 2010--2014. The customs panel sample sizes for the across-country test are reported in Section~\ref{sec:across}.
