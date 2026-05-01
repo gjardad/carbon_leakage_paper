@@ -1,0 +1,51 @@
+\subsection{The EU ETS in Belgium}
+
+The EU Emissions Trading System has covered electricity generation and energy-intensive manufacturing installations across the European Economic Area since 2005. Coverage is at the level of the regulated installation, not the firm; we link installations to their parent firm via Belgian VAT identifiers. Phase~III (2013--2020) and Phase~IV (2021--) span our sample window. Two features of Phase~IV are relevant for identification. First, the 2017 Market Stability Reserve (MSR) reform tightened cap stringency and triggered a roughly tenfold rise in EUA prices: from a 2015--2016 average around €6--8 per tCO$_2$ to an average above €80 in 2022. Second, the reform was discussed publicly throughout 2015--2017 and codified in stages, so we treat 2015 as the cutoff year for ``Post'' periods in our event-study and difference-in-differences specifications, and report event-study coefficients separately for each subsequent calendar year.
+
+The Belgian ETS roster is stable: 281 installations are present in the European Union Transaction Log (EUTL) every year between 2005 and 2023. After requiring positive verified emissions and matched Annual Accounts revenue, our analysis sample covers 88.4\% of total Belgian ETS emissions in 2005, ranging from 162 to 194 firms per year. We refer to this as the \emph{ETS firm sample} below.
+
+\subsection{Belgian B2B firm-to-firm transaction records}
+
+The National Bank of Belgium maintains a near-universal panel of business-to-business transactions, derived from VAT-listing reports that all Belgian firms above a low size threshold are required to submit annually. Each record is a (seller VAT, buyer VAT, calendar year, EUR amount) tuple. The panel covers 2002--2023 and includes domestic transactions only. We use 2005--2022 to align with the ETS sample. We restrict attention to private-sector buyers and sellers with a primary NACE 4-digit code, dropping public administration and a small set of NACE codes with known data-quality issues. The B2B records are merged with each firm's Annual Accounts at the firm $\times$ year level (revenue, total costs, employment) and with the EUTL at the installation $\times$ year level (verified emissions, free allowances).
+
+\subsection{Treatment intensity}
+
+For each ETS supplier $j$ we construct a time-invariant pre-shock measure of carbon-cost intensity:
+\begin{equation}
+    \text{firm cost share}_j = \frac{\overline{\text{shortage}_{j,t}}_{\,t \in 2013..2016}\;\times\;\overline{\text{EUA}_t}_{\,t \in 2013..2016}}{\overline{\text{total cost}_{j,t}}_{\,t \in 2010..2012}},
+    \label{eq:fcs}
+\end{equation}
+where $\text{shortage}_{j,t} = \max(0,\,\text{emissions}_{j,t} - \text{free allowances}_{j,t})$ in tCO$_2$, EUA is the average annual allowance price in EUR/tCO$_2$, and total cost is from Annual Accounts. The numerator is the firm's pre-shock allowance shortfall priced at the prevailing EUA, and the denominator is the firm's total operating cost in the pre-Phase-III base window. We use 2010--2012 for total cost (the most recent stable pre-Phase-III window with consistent reporting) and 2013--2016 for the shortage and EUA (the post-allocation, pre-MSR window where Phase~III's tighter cap was binding but the price was still low). For firms without 2010--2012 coverage, we fall back to the earliest available three-year window.
+
+The cost-share intensity ranges from approximately zero (no shortage, or shortage covered by free allowances) to approximately 5--10\% of total cost in the most-exposed installations (cement clinker, primary steel, refined petroleum). The cross-firm standard deviation of firm cost share within NACE 4-digit, after partialling out a sector mean, is 0.037 (\ie 3.7 percentage points of total cost).
+
+For the across-category test (Section~\ref{sec:test_i}) we aggregate to NACE 4-digit:
+\begin{equation}
+    \text{nace exposure}_n = \frac{\sum_{j \in \text{ETS sellers in } n} \overline{\text{corr sales}_{j,t}}_{\,t \in 2010..14} \times \text{firm cost share}_j}{\sum_{j \in \text{all sellers in } n} \overline{\text{corr sales}_{j,t}}_{\,t \in 2010..14}},
+    \label{eq:nace_exposure}
+\end{equation}
+where ``corr sales'' is the firm's domestic B2B sales corrected for the small known under-reporting on the small-firm threshold. This is a sales-weighted average ETS exposure within the supplier sector, set to zero in NACE 4-digit codes with no ETS sellers.
+
+\paragraph{Pre-period validity.}
+Both \eqref{eq:fcs} and \eqref{eq:nace_exposure} are constructed from data ending in 2014 or 2016, so neither inherits any information from the post-2015 period over which we estimate effects. There is a separate concern about survivorship through the construction windows --- firms that exited before 2010 or 2013 cannot enter our exposure measure, and their absence may bias the post-2015 cell composition --- but this concern is independent of the post-2015 outcome and we discuss it in Section~\ref{sec:discussion}.
+
+\subsection{Sample sizes}
+
+Table~\ref{tab:sample_sizes} summarizes the analysis samples used in each section.
+
+\begin{table}[H]
+    \centering
+    \caption{Analysis samples}
+    \label{tab:sample_sizes}
+    \begin{tabular}{lll}
+        \toprule
+        Section & Unit of observation & Count \\
+        \midrule
+        Decomposition (\S\ref{sec:decomposition})    & ETS firm $\times$ year                       & 162--194 firms/year \\
+        Within-NACE-4d (\S\ref{sec:test_h})          & buyer $\times$ supplier-NACE-4d $\times$ year & 32{,}631 cells, 110{,}870 obs \\
+        Across-NACE-4d (\S\ref{sec:test_i})          & buyer $\times$ NACE-4d $\times$ year          & 5{,}699{,}180 cells, 71{,}743{,}064 obs \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+The $\sim$32K cells in the within-NACE-4d test are buyer $\times$ NACE-4d combinations in which the buyer purchases from at least one ETS supplier and at least two suppliers total (so substitution is feasible). The $\sim$5.7M cells in the across-NACE-4d test are buyer $\times$ NACE-4d combinations in which the buyer had positive spending in at least one of the pre-shock years 2010--2014.

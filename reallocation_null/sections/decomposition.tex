@@ -1,0 +1,69 @@
+This section provides a descriptive supplier-side complement to the buyer-side substitution tests in Sections~\ref{sec:test_h} and~\ref{sec:test_i}. It is intentionally non-causal: the decomposition is a mechanical accounting identity and attributes emission changes to channels but does not attribute them to policy.
+
+\subsection{Set-up}
+
+Total emissions of Belgian ETS firms in year $t$ admit the identity
+\begin{equation}
+    E_t \;=\; Y_t \cdot \sum_{i} \theta_{it}\,z_{it},
+    \label{eq:identity}
+\end{equation}
+where $Y_t$ is total real revenue (deflated by NACE 4-digit domestic PPI), $\theta_{it} = Y_{it}/Y_t$ is firm $i$'s share of total revenue, and $z_{it} = E_{it}/Y_{it}$ is firm $i$'s emission intensity in tCO$_2$ per million EUR of real revenue. Following \citet{grossman1993}, we construct three counterfactual paths from a fixed base year $t_0$:
+\begin{itemize}
+    \item \emph{Scale only:} hold $\theta_{it}$ and $z_{it}$ at their base-year values and let only $Y_t$ vary.
+    \item \emph{Scale + reallocation:} hold $z_{it}$ at base-year values; let $\theta_{it}$ and $Y_t$ vary as in the data.
+    \item \emph{Actual:} let everything vary as in the data.
+\end{itemize}
+The gap between scale-only and scale+reallocation isolates the \emph{reallocation} channel; the gap between scale+reallocation and actual isolates the \emph{within-firm} (technique) channel. Reallocation can be decomposed further into \emph{between-sector} (NACE 2-digit shares changing) and \emph{within-sector} (firm shares shifting within the same 2-digit code). The within-sector reallocation term is the supplier-side analog of buyer reallocation across suppliers in the same narrow sector.
+
+\subsection{Aggregate results, 2005--2022}
+
+Table~\ref{tab:gk_decomp} reports the Grossman--Krueger decomposition under two complementary specifications. The fixed-base specification anchors at 2005 and tracks the same firms over time; it is exact but suffers from sample attrition (162 firms in 2005, 100 firms in 2022) because Annual Accounts coverage is not perfectly stable. The year-on-year chained specification computes one-step changes on the largest balanced subsample for each consecutive year-pair and chains them multiplicatively; it avoids attrition but cannot cleanly separate within-sector reallocation from within-firm abatement, so we report only the between-sector and within-sector residual.
+
+\begin{table}[H]
+\centering
+\caption{Grossman--Krueger emissions decomposition, Belgian ETS firms, 2005--2022.\\
+\footnotesize Values in percentage points relative to 2005 = 100.}
+\label{tab:gk_decomp}
+\begin{tabular}{lcccccc}
+\toprule
+ & & & \multicolumn{4}{c}{Decomposition (pp)} \\
+ \cmidrule(lr){4-7}
+Year & Firms & Total $\Delta$ & Scale & Between-sector & Within-sector & Within-firm \\
+\midrule
+\multicolumn{7}{l}{\emph{Panel A: fixed-base (2005 = 100)}} \\
+2005 & 162 &   0.0 &   0.0 &   0.0 & 0.0 &   0.0 \\
+2008 & 141 &  $-1.2$ &  $+12.1$ &  $+16.3$ & $+1.9$ & $-31.5$ \\
+2012 & 127 & $-27.2$ &  $+3.3$  &  $+17.1$ & $+2.0$ & $-49.6$ \\
+2016 & 114 & $-26.1$ & $-3.7$  &  $+1.7$  & $+7.2$ & $-31.3$ \\
+2019 & 104 & $-25.9$ & $-7.4$  & $-7.4$   & $+3.2$ & $-16.9$ \\
+2022 & 100 & $-45.8$ & $-2.7$  & $-19.2$  & $+1.7$ & $-25.6$ \\
+\midrule
+\multicolumn{7}{l}{\emph{Panel B: year-on-year chained}} \\
+ & & Total $\Delta$ & & Between-sector & Within-sector residual & \\
+2008 & 145 & $-12.4$ & & $+13.3$ & $-25.6$ & \\
+2012 & 161 & $-32.3$ & & $+10.1$ & $-42.3$ & \\
+2016 & 162 & $-23.9$ & & $+1.0$ & $-25.0$ & \\
+2019 & 156 & $-21.3$ & & $-7.0$ & $-14.3$ & \\
+2022 & 149 & $-46.4$ & & $-22.9$ & $-23.5$ & \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Three patterns are robust across specifications:
+\begin{enumerate}
+    \item \textbf{Aggregate decline.} Total ETS emissions fell by approximately 46\% over 2005--2022, consistent across the two specifications ($-45.8$ vs.\ $-46.4$).
+
+    \item \textbf{Between-sector reallocation contributes after $\sim$2017.} Belgium's manufacturing mix shifted toward less emission-intensive sectors. The contribution is positive (\ie wrong-signed) through Phase~II, becomes negligible in 2016, and turns substantially negative in Phase~IV. The 2022 between-sector contribution is $-19$ to $-23$ pp.
+
+    \item \textbf{Within-sector reallocation among ETS firms is essentially zero in every year.} The fixed-base panel is the only specification that can identify it cleanly. The within-sector reallocation channel ranges from $+1.7$ to $+7.2$ pp across all years and is, if anything, mildly positive --- dirtier firms slightly gained share within their NACE 2-digit sectors. There is no year in which the within-sector reallocation channel is meaningfully negative.
+\end{enumerate}
+
+\subsection{Robustness to entry, exit, and post-2020 reclassification}
+
+The fixed-base panel drops firms that exit Annual Accounts coverage. To check that this drives neither the magnitude nor the sign of the within-sector channel, we run two alternatives. First, a six-channel pairwise decomposition for each $(t_{\text{base}}, t_{\text{end}})$ pair that includes entry and exit terms. On the triple-balanced 101-firm panel (firms with positive emissions in 2005, 2012, and 2020 simultaneously, so entry and exit are zero by construction) the within-sector reallocation term is $+9.2$ pp over 2005--2012, $-16.2$ pp over 2012--2020, and $+12.0$ pp over 2005--2020. The 2012--2020 negative figure is the most favorable to a substitution story but it is on a 101-firm panel and is dominated by between-sector movement ($-16.2$ pp between, $+12.5$ pp scale, $+9.5$ pp technique).
+
+Second, we identified three large post-2020 EUTL reclassifications --- one NACE 24 installation (whose emissions fell from 4.6 Mt to 0.09 Mt over 2020--2022 while revenue grew from €3.4 bn to €6.5 bn) and two NACE 20 installations whose emissions and free allocations collapse to near-zero in 2021 while revenue continues. These are installation-level reporting changes, not real abatement or firm closure. Excluding the three VATs from every year of the analysis reduces the 2005--2022 total emission decline from $-37.3$ to $-24.9$ pp and the within-firm technique channel from $-25.6$ to $-11.6$ pp. The within-sector reallocation channel remains close to zero on the cleaned sample. We use the cleaned sample as the default in the table above.
+
+\subsection{Reading}
+
+Within-sector reallocation among ETS firms is approximately zero across the entire 2005--2022 window. This is consistent with the buyer-side null we report in Sections~\ref{sec:test_h} and~\ref{sec:test_i} but it is not a substitute for those tests. The decomposition is a within-ETS exercise --- it cannot speak to substitution from ETS firms toward non-ETS firms in the same NACE 4-digit sector, and it is purely mechanical. The buyer-side tests look directly at the substitution decision, with controls for buyer-specific composition and time effects, and on the much larger universe of all Belgian buyers rather than the 100--160 ETS firms.

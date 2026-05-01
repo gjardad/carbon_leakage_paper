@@ -1,0 +1,101 @@
+\documentclass[11pt, reqno]{amsart}
+
+% ---- Packages ----
+\usepackage{graphicx,amsmath,amssymb}
+\usepackage{color}
+\usepackage{natbib}
+\usepackage{url}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    citecolor=blue,
+    linkcolor=blue,
+    urlcolor=blue
+}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{comment}
+
+% ---- Page layout ----
+\oddsidemargin +0.2in
+\evensidemargin +0.2in
+\topmargin 40pt
+\textheight 8.1in
+\textwidth 6in
+\linespread{1.3}
+\parskip .05in
+\vfuzz2pt
+\hfuzz2pt
+
+% ---- Theorem environments ----
+\newtheorem{assumption}{Assumption}
+\theoremstyle{definition}
+\newtheorem{remark}{Comment}
+
+\renewcommand{\theequation}{\thesection.\arabic{equation}}
+
+% ---- Formatting shortcuts ----
+\usepackage{xspace}
+\newcommand{\eg}{e.g.,\xspace}
+\newcommand{\ie}{i.e.,\xspace}
+
+% ================================================================
+\begin{document}
+
+\title[]{Carbon Pricing and the Reallocation of Inputs:\\ A Null Result from Belgian Firm-to-Firm Data}
+
+\author[]{Gabriel Jardanovski\textsuperscript{*} \and Gert Bijnens\textsuperscript{$\dagger$}}
+\thanks{\noindent \textsuperscript{*}Jardanovski (corresponding author): Northwestern University. E-mail: \texttt{gabrielj@u.northwestern.edu}.}
+\thanks{\textsuperscript{$\dagger$} Bijnens: National Bank of Belgium. E-mail: \texttt{gert.bijnens@nbb.be}.}
+
+\date{\tiny{\sc this version} of \today. We are grateful to the National Bank of Belgium (NBB) for hosting one of us as a Young Researcher during part of the period when this research was conducted. The views expressed are those of the authors and do not necessarily reflect those of the NBB. This paper should not be reported as representing the views of the NBB.}
+
+\begin{abstract}
+A standard prediction of the carbon-leakage literature is that, when carbon pricing raises the marginal cost of regulated suppliers, downstream buyers reallocate purchases toward less-regulated alternatives. We test this prediction directly on Belgian firm-to-firm transaction data covering 2005--2022. We examine two reallocation margins: (i) within a narrowly defined supplier sector (NACE 4-digit), substitution from the most carbon-exposed ETS supplier toward the buyer's other suppliers in the same sector; and (ii) across NACE 4-digit input categories within the same buyer-year, substitution away from heavily regulated input categories toward less-regulated ones. Using two-way fixed-effects difference-in-differences and an event study with post-hoc detrending, we find no evidence of buyer reallocation at either margin. The most direct CMdG-style domestic analog (a binary regulated $\times$ \textit{Post} regression at the across-category margin) yields a coefficient of $-0.003$ (s.e.\ $0.009$); the most-favorable subset of the within-NACE-4d test (cells where the buyer holds the largest share of its input bill in the supplier's sector) yields a coefficient of $+0.03$ (s.e.\ $1.39$). A descriptive Grossman--Krueger decomposition delivers a complementary fact on the supplier side: within-sector reallocation accounts for essentially none of the 46\% decline in Belgian ETS emissions over 2005--2022. We interpret these as observational nulls subject to important caveats --- a parallel-trends violation in the within-NACE-4d test, a small but statistically detectable extensive-margin response, and limited power against modest substitution at the right tail of pair-shock magnitudes --- but the joint pattern across margins, sample subsets, and specifications is difficult to reconcile with first-order reallocation in response to Phase III/IV carbon prices.
+\end{abstract}
+
+\maketitle
+
+\pagebreak
+
+% ================================================================
+\section{Introduction}\label{sec:introduction}
+\input{reallocation_null/sections/introduction}
+
+% ================================================================
+\section{Setting and Data}\label{sec:data}
+\input{reallocation_null/sections/data}
+
+% ================================================================
+\section{Descriptive Decomposition: Within-Sector Reallocation Among ETS Firms}\label{sec:decomposition}
+\input{reallocation_null/sections/decomposition}
+
+% ================================================================
+\section{Buyer Substitution Within NACE 4-digit, Across Suppliers}\label{sec:test_h}
+\input{reallocation_null/sections/test_h}
+
+% ================================================================
+\section{Buyer Substitution Across NACE 4-digit Input Categories}\label{sec:test_i}
+\input{reallocation_null/sections/test_i}
+
+% ================================================================
+\section{Discussion}\label{sec:discussion}
+\input{reallocation_null/sections/discussion}
+
+% ================================================================
+\section{Conclusion}\label{sec:conclusion}
+\input{reallocation_null/sections/conclusion}
+
+% ================================================================
+\newpage
+\bibliographystyle{apalike}
+\bibliography{thesis/sections/refs}
+
+% ================================================================
+\newpage
+\appendix
+\input{reallocation_null/sections/appendix}
+
+\end{document}

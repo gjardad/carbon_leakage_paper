@@ -1,0 +1,55 @@
+\section{Six-channel pairwise emissions decomposition}\label{app:six_channel}
+
+Section~\ref{sec:decomposition} reports the standard Grossman--Krueger decomposition; the table below extends it to a six-channel decomposition that explicitly accounts for entry and exit. For an arbitrary $(t_{\text{base}},\,t_{\text{end}})$ pair we partition the firm panel into survivors (positive emissions in both years), entrants (positive emissions only in $t_{\text{end}}$), and exiters (positive emissions only in $t_{\text{base}}$). The identity is
+\[
+    E_{t_{\text{end}}} - E_{t_{\text{base}}} \;=\; \text{Scale}_S + \text{Between}_S + \text{Within}_S + \text{Technique}_S + \text{Entry} - \text{Exit},
+\]
+where the first four channels are the standard GK terms restricted to the survivor sample. All channels are reported in percentage points of $E_{t_{\text{base}}}$. The bottom three rows restrict to the 101-firm triple-balanced panel (firms with positive emissions in 2005, 2012, and 2020), so entry/exit are zero by construction.
+
+\begin{table}[H]
+\centering
+\caption{Six-channel pairwise decomposition of Belgian ETS emissions.\\\footnotesize Rows ending in 2022 exclude three contaminated VATs in every year (one NACE 24, two NACE 20) flagged as installation-level reclassification rather than real abatement.}
+\label{tab:six_channel}
+\footnotesize
+\begin{tabular}{lcccccccccc}
+\toprule
+Pair & $n_S$ & $n_E$ & $n_X$ & Total & Scale & Between & Within & Technique & Entry & Exit \\
+\midrule
+2005 $\to$ 2012             & 127 & 37 & 35 & $-16.4$ & $+10.8$ & $+7.4$  & $+10.5$ & $-49.6$ & $+10.8$ & $-6.4$ \\
+2005 $\to$ 2020             & 105 & 55 & 57 & $-20.3$ & $+1.6$  & $-14.3$ & $+11.1$ & $-21.5$ & $+10.3$ & $-7.4$ \\
+2005 $\to$ 2022$^{c}$       &  99 & 49 & 61 & $-24.9$ & $+15.9$ & $-35.1$ & $+4.9$  & $-11.6$ & $+10.2$ & $-9.2$ \\
+2007 $\to$ 2020             & 109 & 51 & 53 & $-16.8$ & $-12.6$ & $-18.5$ & $+9.3$  & $+2.6$  & $+9.5$  & $-7.1$ \\
+2012 $\to$ 2020             & 126 & 34 & 38 & $-4.7$  & $-7.0$  & $-17.1$ & $+14.5$ & $+4.2$  & $+3.1$  & $-2.3$ \\
+2012 $\to$ 2022$^{c}$       & 120 & 28 & 41 & $-12.6$ & $+6.8$  & $-29.5$ & $+11.1$ & $-0.9$  & $+2.9$  & $-2.9$ \\
+\midrule
+\multicolumn{11}{l}{\emph{Triple-balanced panel (101 firms, no entry/exit by construction)}} \\
+2005 $\to$ 2012 [TB]        & 101 & 0 & 0 & $-22.2$ & $+12.5$ & $+9.2$  & $+9.8$  & $-53.7$ & 0 & 0 \\
+2012 $\to$ 2020 [TB]        & 101 & 0 & 0 & $-3.3$  & $-9.1$  & $-16.2$ & $+12.5$ & $+9.5$  & 0 & 0 \\
+2005 $\to$ 2020 [TB]        & 101 & 0 & 0 & $-24.8$ & $+2.2$  & $-15.9$ & $+12.0$ & $-23.1$ & 0 & 0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The triple-balanced panel makes the post-2012 within-firm reversal explicit: among the 101 firms present in all three years, the technique channel is $-53.7$ over 2005--2012 but $+9.5$ over 2012--2020. The within-sector reallocation (``Within'') channel is consistently positive across all rows including the triple-balanced panel ($+9.2$ to $+14.5$), reinforcing the main null on within-sector reallocation under the strictest sample.
+
+\section{Test~H: full sector decomposition}\label{app:test_h_sectors}
+
+Sector decomposition of the within-NACE-4d test is reported in the supplementary table file; the headline is that the LPM coefficient on $\text{firm cost share}_{j^*} \times \mathbf{1}[t \geq 2015]$ is dominated by extreme-fcs cells in small NACE 2-digit sectors (NACE 73: $\beta = +3{,}600$; NACE 26: $\beta = -1{,}906$; NACE 22: $\beta = +6{,}121$). These outliers are not interpretable as structural effects without bounding the regressor first. The two sectors with cleaner sample sizes are cement (NACE 23: $\beta = +4.42$, $p = 0.17$) and chemicals (NACE 20: $\beta = +2.74$, $p = 0.06$). Both are wrong-signed for substitution. We do not draw structural conclusions from the sector decomposition without winsorization and report it only for completeness.
+
+\section{Test~I: alternative outcome and quartile zero-mass}\label{app:test_i_alt}
+
+Section~\ref{sec:test_i} notes that the quartile split of Test~I is degenerate because most NACE 4-digit categories have $\text{nace exposure}_n = 0$. The Q4 coefficient (the only one with positive treatment mass) coincides with the all-data continuous-treatment coefficient.
+
+We also report a robustness check using $\log(\text{spend}_{b,n,t} + 1)$ as the outcome rather than the share. The coefficient is $\beta = +154.0$ (s.e.\ $13.4$, $p < 10^{-30}$), wrong-signed and very significant. The wrong sign reflects the same trend issue that affects I.1: high-exposure categories' total spend rose faster than other categories' spend across the entire sample, including before 2015. The outcome share, in contrast, mechanically constrains the buyer's total to one and absorbs scale changes; it is the cleaner outcome for testing reallocation. We use the share-based I.3 specification as the headline.
+
+\section{Variable definitions}\label{app:variables}
+
+\begin{itemize}
+    \item \textbf{firm cost share} (\eqref{eq:fcs}): pre-shock firm-level carbon cost share, time-invariant. Numerator: 2013--2016 average annual allowance shortfall in tCO$_2$ priced at the year-specific EUA. Denominator: 2010--2012 average total operating cost from Annual Accounts. Falls back to the earliest available three-year window for firms without 2010--2012 data.
+    \item \textbf{nace exposure} (\eqref{eq:nace_exposure}): sales-weighted average firm cost share within a NACE 4-digit category, time-invariant; equals zero for categories with no ETS sellers.
+    \item \textbf{share top} (\eqref{eq:share_top}): annual share of the most-exposed ETS supplier $j^*(b,n)$ in cell $(b,n)$'s total spending in that NACE 4-digit category.
+    \item \textbf{share} (\eqref{eq:share_bnt}): annual buyer expenditure share in NACE 4-digit category $n$ as a fraction of buyer's total input bill.
+    \item \textbf{pair exposure pre} (UP4 in Section~\ref{sec:test_h}): $\text{firm cost share}_{j^*(b,n)} \times \bar{s}_{j^*(b,n)}$, where $\bar{s}_{j^*(b,n)} = \overline{\text{spending from } b \text{ to } j^*}_{2010..2014} / \overline{\text{total inputs of } b}_{2010..2014}$. Units: percentage of buyer's total input bill at risk if $j^*$'s carbon shock fully passes through and the buyer does not substitute.
+    \item \textbf{Post}: $\mathbf{1}[t \geq 2015]$.
+    \item \textbf{regulated}: $\mathbf{1}[\text{nace exposure}_n > 0]$.
+\end{itemize}

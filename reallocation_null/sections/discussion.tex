@@ -1,0 +1,51 @@
+This section bounds what the joint null can and cannot say. The headline of the paper is that, on observable substitution at two reallocation margins, we find no statistical evidence of buyer-side reallocation in response to the EU ETS in Belgium. This is an observational null, not a structural identification of the elasticity of substitution. We discuss four issues: power, selection, mechanism, and external validity.
+
+\subsection{Power}
+
+The within-NACE-4d test has the most economically-meaningful magnitude regressor in our setting (the pair-exposure regressor in UP4) and an honest 95\% confidence interval at the right tail of pair-exposure of approximately $[-2.7, +2.8]$ percentage points of share, with the point estimate at $+0.03$. At the 99th percentile of cost-share intensity ($\approx 0.05$), the lower bound of this interval corresponds to a $\sim$13.5 percentage-point share loss for the most-exposed supplier, which we rule out. We do not rule out modest substitution dispersed across the population.
+
+To anchor what ``modest'' would mean, we benchmark against \citet{peter2023}. Peter \& Ruane use Indian intermediate-input tariff cuts of 15--20 percentage points to identify the elasticity of substitution across imported varieties. Under full pass-through such a tariff cut implies a per-supplier price change of $\Delta p \approx -12$\% to $-21$\%. Multiplied by an importer's spending share on the affected variety (assumed $\approx 0.10$ at p90 and $\approx 0.40$ at p99 based on typical importer-product concentration in trade microdata), the implied buyer-total-cost shock is $-1.5$\% to $-2.0$\% at p90 and $-6$\% to $-8$\% at p99.
+
+The Belgian Phase~IV pair-shock-total distribution at the buyer-total-cost level (under full pass-through, $2015 \to 2022$) is $0.0016$\% at p50, $1.16$\% at p90, $\approx 5$--7\% at p95, and $39.1$\% at p99 across the population of treated active pairs. For cement (NACE 23, our highest-signal sector), p90 is $8.8$\% and p99 is $67.2$\%. The right-tail magnitudes in our setting are \emph{comparable to or larger than} the per-HS-product magnitudes that Peter \& Ruane operate with. The mass below p90, however, is much smaller in our setting --- only $\sim$9\% of buyers face any positive ETS exposure at all.
+
+This comparison is informative about where our test is and is not powerful. At the right tail (p99 cells), pair-shock magnitudes match or exceed the published-elasticity literature; we test the right tail directly via the pair-exposure quartile split and the cement-only test, and find no detectable substitution. At typical exposure (p50, near zero), no test could detect substitution because there is no shock to respond to. The null at the right tail is informative; the null in the middle of the distribution is mechanically guaranteed.
+
+We caveat the comparison with two flags. First, our $s$ values for the Peter \& Ruane reconstruction are assumptions calibrated from typical importer-product concentration, not numbers we extracted from their data; the apples-to-apples claim is therefore approximate. Second, the relevant treatment for substitution is the price change \emph{net of buyer-side hedging} (downstream pass-through, contract renegotiation, indexation), and we do not measure that net shock --- we use the gross full-pass-through shock as an upper bound.
+
+\subsection{Selection}
+
+The pre-shock cost-share intensity in equation~\eqref{eq:fcs} is computed from data ending in 2014 or 2016, so the regressor cannot mechanically incorporate post-2015 outcomes. There are two related selection concerns.
+
+First, panel attrition in the GK decomposition: the fixed-base panel shrinks from 162 firms in 2005 to 100 firms in 2022, because Annual Accounts coverage is not perfectly stable. We address this with the year-on-year chained version (which uses the largest balanced subsample at each step) and the six-channel pairwise decomposition (which explicitly accounts for entry and exit). The within-sector reallocation finding survives both.
+
+Second, the Test~H spec\_a sample requires the most-exposed supplier $j^*$ to be active in every year 2005--2022; this drops 31{,}926 of the 32{,}631 cells in spec\_a\_b. Our headline reading uses the larger spec\_a\_b sample to avoid this selection. We treat the spec\_a coefficient ($-293$, $p = 0.03$) as not separately identified from the pre-trend documented in the event study, not as a clean negative result.
+
+Third, the universe of buyers in Test~I excludes buyers with no positive pre-shock spending in the category. This exclusion is needed to define the buyer-category cell, but it means the test has no power against substitution that operates by a buyer adding a new category to its input bill. We do not have a direct test for this margin and flag it as a gap in coverage rather than an estimated null.
+
+\subsection{Mechanism}
+
+The joint null does not point uniquely at a single mechanism. Three explanations are observationally consistent with the pattern we document and we cannot separately identify them with this data:
+
+\begin{itemize}
+    \item \emph{Sticky buyer-supplier relationships.} Belgian B2B exhibits substantial relational persistence: pairs older than five years account for 79\% of total trade in the full RMD universe, and within total-duration cohorts, mean log corrected-sales rises monotonically with pair age. Sticky relationships would make near-term substitution costly, but we do not separately identify the within-pair stickiness from observed substitution costs.
+
+    \item \emph{Low elasticity of substitution at the relevant margin.} If the elasticity of substitution between regulated and unregulated suppliers is small (\eg if the regulated-vs-unregulated distinction does not coincide with a clean varietal distinction in the buyer's production function), reallocation will not occur at any feasible price increment. Our test does not bound the elasticity itself; it bounds observed reallocation conditional on the realized shock.
+
+    \item \emph{Shock too small at the typical buyer.} As discussed above, the population-level pair-shock-total distribution is heavy-tailed; the typical buyer faces near-zero exposure and would not be expected to substitute. Our right-tail tests rule out that the right tail substitutes, but the population-level null is partly a power statement about the right-tail tests, not about the underlying structural elasticity.
+\end{itemize}
+
+A fourth possibility --- that buyers \emph{do} reallocate but at a margin we cannot observe (\eg shifting production location abroad rather than within the Belgian B2B network) --- is outside the scope of this paper. Our complementary analysis of Belgian customs data (not reported here) finds no detectable cross-border substitution toward non-EU imports along the same regulatory dimensions, but reallocation toward EU non-Belgian suppliers is not separately identified in our data.
+
+\subsection{External validity}
+
+Belgium is a small open economy and the Belgian ETS is a small subset of the EU-wide system. Three external validity concerns deserve flagging:
+
+\begin{enumerate}
+    \item \emph{ETS firms in Belgium are large and established.} The 281 EUTL installations are concentrated in established firms (steel, cement, refining, primary chemicals), all of which were operating throughout the sample window. The composition of the regulated set is older and more capital-intensive than the average EU ETS sector. A test in a setting with more entry of new regulated firms --- or more exit of old ones --- might find different reallocation magnitudes.
+
+    \item \emph{The 2017--2022 EUA price path is one realization of one policy.} Our identification leans on the post-2017 MSR-driven price rise. Different prices, different time horizons, or different cap stringencies might produce different reallocation responses. We do not extrapolate.
+
+    \item \emph{Belgium's B2B network is unusually well-measured.} The near-universal NBB B2B records make this a high-power setting for observational substitution tests; settings without similar firm-to-firm coverage may not be able to replicate this specification at all. The applicability of our null to settings without similar data is unclear.
+\end{enumerate}
+
+We do not claim that our null is the universal result. We claim that, for Belgian buyers facing the post-2017 EU ETS price increment, on the two margins we observe, the data reject large reallocation and do not reject the no-reallocation null.
