@@ -117,6 +117,40 @@ The corresponding test on the firm-cost-share regressor in a smaller selected su
     \label{fig:test_h_event_study}
 \end{figure}
 
+\subsection{Is there a non-linear response by shock size?}\label{sec:test_h_heterogeneous}
+
+The headline result above estimates a single buyer-side response across the entire Test~H sample. Section~\ref{sec:shock_magnitude} documented that the shock magnitude is highly heterogeneous across buyer-cells: at the typical pair, the carbon-cost shock is well below the buyer-side input-cost noise floor, while at the right tail (cement-buyer cells, p99 of pair-exposure) it reaches $\sim$10\% of buyer total cost. A natural question for the headline result is whether buyers might respond \emph{non-linearly} to relative-price changes --- ignoring small shocks and reallocating only when the shock is large enough to justify the search and switching cost. If so, the population-level $\widehat{\sigma}$ would smooth over a non-linearity that activates only at large shocks, and the policy-relevant elasticity would be the right-tail value, not the population mean.
+
+We test this directly using the quartile splits on the buyer's pre-shock NACE-4d expenditure share already reported in the bottom panel of Table~\ref{tab:test_h_main}. This split orders cells by the dollar shock the buyer would face at the total-cost level: in Q1 (low expenditure share), the supplier's NACE-4d is a tiny part of the buyer's input bill so even a 100\% supplier-level price increase translates to a negligible dollar shock; in Q4 (high expenditure share), the same supplier-level price change converts to the largest dollar shock at the buyer's total-cost level. If the elasticity rises with shock size, the heavily-affected Q4 buyers should reallocate more aggressively per unit of relative-price change.
+
+Mapping each quartile's $\widehat{\beta}$ to $\widehat{\sigma}$ via the CES denominator $E[s_{j^*}(1 - s_{E_n})]_Q$ computed quartile-by-quartile (\S\ref{sec:bounds} for the full mapping), at $\rho = 1$:
+
+\begin{table}[H]
+    \centering
+    \caption{Implied $\sigma$ by quartile of buyer's pre-shock NACE-4d expenditure share (Test~H, firm-cost-share regressor, $\rho = 1$). Larger $Q$ = heavier shock at the buyer's total-cost level.}
+    \label{tab:sigma_by_shock_quartile}
+    \footnotesize
+    \begin{tabular}{lrrrrr}
+        \toprule
+        Quartile & $\widehat{\beta}$ & s.e. & $E[s_{j^*}(1-s_{E_n})]_Q$ & $\widehat{\sigma}_Q$ & 95\% CI on $\sigma_Q$ \\
+        \midrule
+        Q1 (lightest shock)     & $-16.98$ & $13.50$ & $0.095$ & $\approx 2.79$ & $[+0.0, +5.6]$ \\
+        Q2                      & $+1.55$  & $1.66$  & $0.079$ & $\approx 0.80$ & $[+0.39, +1.22]$ \\
+        Q3                      & $+1.98$  & $1.52$  & $0.061$ & $\approx 0.68$ & $[+0.18, +1.17]$ \\
+        \textbf{Q4 (heaviest)}  & $+0.03$  & $1.39$  & $0.043$ & $\approx 0.99$ & $[+0.34, +1.66]$ \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+Three readings of Table~\ref{tab:sigma_by_shock_quartile}:
+\begin{itemize}
+    \item All three heavier-shock subsamples (Q2, Q3, Q4) place $\sigma$ in a narrow neighborhood of unity, with 95\% CIs that comfortably exclude trade-microdata elasticities. Q4 (the most heavily-affected, where a non-linear-response story should bite hardest) puts $\widehat{\sigma}_{Q4} \approx 0.99$ at the Cobb-Douglas point.
+    \item Lightly-affected Q1 buyers show a wide CI consistent with substitution elasticities anywhere from zero to $\sim$5.6, but the wide CI is driven by the small denominator and the noisy regression coefficient at low exposure, not by genuine substitution at the shock-magnitude tail.
+    \item A non-linear-response story predicts $\widehat{\sigma}_{Q4} > \widehat{\sigma}_{Q1}$. The data show the opposite ordering of point estimates ($0.99$ vs $2.79$).
+\end{itemize}
+
+Formally, we cannot reject the null that the responses for the overall sample and for the Q4 slice are the same per unit of relative-price change. The pooled-vs-Q4 contrast on $\beta$ ($\widehat{\beta}_{\text{pooled}} = +1.34$, $\widehat{\beta}_{Q4} = +0.03$) gives a difference of $-1.31$ with combined SE $\approx \sqrt{0.96^2 + 1.39^2} \approx 1.69$, $z \approx -0.78$, $p \approx 0.44$. The data are consistent with $\sigma$ being constant across shock magnitudes within our identification window, and they do not support the non-linear-response interpretation that would otherwise rationalize a small population-level $\widehat{\sigma}$ as masking a larger right-tail $\sigma$. We cannot rule out a smoother non-linearity that would only become detectable at carbon prices several multiples above the realized 2022 EUA --- those magnitudes are outside our identification window.
+
 \subsection{Cement-only test}
 
 A natural worry is that the pooled null reflects mostly cells where the shock is too small to bite. Our \citet{peter2023} comparison in Section~\ref{sec:discussion} shows that cement (NACE 23) is the only Belgian sector where the typical pair-shock-total signal-to-noise ratio exceeds 0.5 of buyers' input-share standard deviation. Restricting Test~H to buyers in NACE 23 with the pair-exposure regressor, with winsorization at the cement-subsample 99th percentile, yields $\beta = -213$ ($p = 0.41$): right-signed for substitution but not statistically significant. The cement subsample contains $\sim$15 distinct ETS suppliers and the LPM coefficients are heavy-tailed; we treat the cement-only test as not statistically powerful.

@@ -1,0 +1,143 @@
+Before reporting reduced-form leakage tests, we describe the magnitude of the EU ETS cost shock at two levels: from the perspective of the regulated firm itself (how large a fraction of its operating cost is attributable to allowance shortfalls priced at the prevailing EUA?), and from the perspective of the downstream buyer (how large a fraction of the buyer's input bill is supplied by ETS-regulated firms, and what cost-pass-through implies for the buyer's relative-price signal?). Throughout this section, all numbers are computed on the full Belgian panel.
+
+\subsection{The shock to treated firms}\label{sec:shock_firms}
+
+For each ETS-regulated firm-year we compute the same-year carbon-cost-share intensity as
+\[
+    \text{firm cost share}_{j,t} \;=\; \frac{\text{shortage}_{j,t} \cdot \text{EUA}_t}{\text{total cost}_{j,t}}
+\]
+where $\text{shortage}_{j,t} = \max(0, \text{emissions}_{j,t} - \text{free allowances}_{j,t})$, EUA$_t$ is the average annual allowance price, and total cost is from Annual Accounts. This is the descriptive analog of the time-invariant treatment intensity in equation~\eqref{eq:fcs}: it answers ``what fraction of this firm's operating cost would the firm have to pay for unallocated emission allowances at this year's EUA price?'' Distributions by phase are reported in Table~\ref{tab:firm_cost_share_by_phase}.
+
+\begin{table}[H]
+    \centering
+    \caption{Same-year firm-level carbon-cost-share intensity, ETS-firm population (n_{\text{firm-yrs}} = 3{,}101 across 2005--2022).}
+    \label{tab:firm_cost_share_by_phase}
+    \footnotesize
+    \begin{tabular}{lrrrrrrr}
+        \toprule
+        Phase & n & \% pos.\ shortage & p50 & p90 & p99 & mean & sales-wmean \\
+        \midrule
+        I (2005--07)               &   505 & 19.8\% & $0$       & $0.016\%$ & $0.46\%$  & $0.023\%$ & $0.084\%$ \\
+        II (2008--12)              &   849 & 12.5\% & $0$       & $0.009\%$ & $0.46\%$  & $0.18\%$  & $0.078\%$ \\
+        III pre-MSR (2013--17)     &   917 & 62.2\% & $0.011\%$ & $0.30\%$  & $8.67\%$  & $0.56\%$  & $0.091\%$ \\
+        III post-MSR (2018--20)    &   511 & 72.0\% & $0.092\%$ & $1.40\%$  & $24.0\%$  & $1.41\%$  & $0.31\%$ \\
+        \textbf{IV (2021--22)}     &   \textbf{319} & \textbf{83.4\%} & $\mathbf{0.34\%}$ & $\mathbf{2.60\%}$ & $\mathbf{59.9\%}$ & $\mathbf{6.85\%}$ & $\mathbf{0.71\%}$ \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+The Phase-by-Phase pattern is sharp. Phase~I and Phase~II shocks are essentially zero everywhere because free allocation generously covered ETS firms' emissions; the median firm has zero shortage. Phase~III pre-MSR begins to bite in the upper tail (p99 = 8.7\%) but the median firm still has near-zero shortage. The MSR-driven price rise pushes Phase~III post-MSR p90 to $1.40\%$ and Phase~IV p90 to $2.60\%$, with the right tail reaching $\sim$60\% of total cost at the most-exposed installations (cement clinker, refining, primary chemicals).
+
+A complementary metric --- the effective carbon price per tonne emitted --- shows the same pattern at the aggregate level. The effective price, defined as the ratio of total carbon cost paid (shortage $\times$ EUA, summed across firms) to total emissions, rises from $\$1.80$/tCO$_2$ in Phase~I to $\$32.82$/tCO$_2$ in Phase~IV, an 18-fold increase. Phase~IV is the only phase in which the carbon-pricing shock is unambiguously ``real'' at the population level.
+
+\subsection{The shock to treated buyers}\label{sec:shock_buyers}
+
+The magnitude of the shock at the buyer's perspective is what determines whether substitution incentives are operative. We compute three measures, each at a different denominator scale, on the panel of buyer $\times$ ETS-supplier $\times$ year cells.
+
+\paragraph{Pair-shock at the NACE-4d denominator.} Letting $j$ denote an ETS supplier and $b$ a buyer, define
+\[
+    \text{pair-shock}_{j,b,t} \;=\; \text{firm cost share}_{j,t} \;\times\; \frac{\text{corr sales}_{j,b,t}}{\sum_{j' \in \text{NACE 4d}(j)} \text{corr sales}_{j',b,t}}.
+\]
+This is the buyer's share of cell-level spending going to a supplier whose costs are exposed to ETS at intensity $\text{firm cost share}_{j,t}$. It answers: ``within the NACE 4-digit category, how much of the buyer's spending in that category is exposed to the ETS shock through this specific supplier?''
+
+\paragraph{Pair-shock at the total-cost denominator.} The same numerator denominated at the buyer's total-input level:
+\[
+    \text{pair-shock-total}_{j,b,t} \;=\; \text{firm cost share}_{j,t} \;\times\; \frac{\text{corr sales}_{j,b,t}}{\text{total inputs}_{b,t}}.
+\]
+This answers: ``what fraction of the buyer's total input bill is at risk under full pass-through if this specific supplier passes its carbon cost forward?''
+
+\paragraph{Buyer-total-shock.} The sum of pair-shock-total across all the buyer's ETS suppliers in the year:
+\[
+    \text{buyer-total-shock}_{b,t} \;=\; \sum_{j \in \text{ETS}} \text{pair-shock-total}_{j,b,t}.
+\]
+This is the buyer's aggregate exposure --- the total fraction of input cost that would absorb the EUA shock at full pass-through if the buyer reallocated nothing.
+
+Phase IV distributions are reported in Table~\ref{tab:buyer_shock_phase4}.
+
+\begin{table}[H]
+    \centering
+    \caption{Buyer-side shock magnitudes in Phase~IV (2021--22), at three denominator scales.}
+    \label{tab:buyer_shock_phase4}
+    \footnotesize
+    \begin{tabular}{lrrrrrr}
+        \toprule
+        Quantity & p50 & p90 & p95 & p99 & mean & sales-wmean \\
+        \midrule
+        Pair-shock (NACE-4d denom., $n_{\text{pairs}} = 3{,}597$)   & $0.084\%$ & $3.30\%$ & $8.29\%$  & $12.0\%$ & $1.22\%$ & $0.94\%$ \\
+        Pair-shock-total (total-input denom., $n_{\text{pairs}} = 3{,}541$)   & $0.0016\%$ & $1.16\%$ & --- & $\mathbf{39.1\%}$  & $1.56\%$ & $6.74\%$ \\
+        Buyer-total-shock ($n_{\text{buyers}} = 15{,}442$)         & $0$       & $0$      & $0.031\%$ & $6.90\%$ & $0.36\%$ & --- \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+Three readings of Table~\ref{tab:buyer_shock_phase4} are informative.
+
+First, \emph{the typical buyer faces no carbon-cost shock at all.} Buyer-total-shock is exactly zero at p50 and p90: most buyers in the regulated-intensive sample do not have any ETS suppliers in their portfolio. The right tail is non-trivial (p99 = 6.9\%), but it is concentrated in cement-input-heavy buyers.
+
+Second, \emph{at the cell where the substitution test has economic content, the right tail is large but the median is small.} Pair-shock at the NACE-4d denominator has p50 of $0.08\%$, p90 of $3.30\%$, and p99 of $12.0\%$. The p99 cell --- where a 99th-percentile-exposed buyer faces a $\sim$12\% pair-shock at the cell level --- is at the same scale as the per-input tariff cuts (~30 percentage points) that \citet{peter2023} use to identify $\sigma \approx 4$ on Indian intermediates.
+
+Third, \emph{at the buyer's total-cost level, the right tail is concentrated in cement.} Pair-shock-total p99 is $39.1\%$ across the population, and $67\%$ at the cement-buyer p99. These are large shocks at the right tail; they translate to large dollar magnitudes for cement-input-heavy buyers but vanish for the typical regulated buyer.
+
+\subsection{Cross-sector heterogeneity: cement is sui generis}\label{sec:shock_sectors}
+
+Phase~IV pair-shock-total breaks down very unevenly across buyer sectors. Table~\ref{tab:pair_shock_by_buyer_nace2d} reports the breakdown.
+
+\begin{table}[H]
+    \centering
+    \caption{Phase~IV pair-shock-total by buyer NACE 2-digit (2021--22 average).}
+    \label{tab:pair_shock_by_buyer_nace2d}
+    \footnotesize
+    \begin{tabular}{rlrrrr}
+        \toprule
+        Buyer NACE 2d & Sector & $n_{\text{pairs}}$ & p50 & p90 & sales-wmean \\
+        \midrule
+        \textbf{23}   & \textbf{Cement / minerals}      & \textbf{1{,}319} & $\mathbf{0.13\%}$ & $\mathbf{8.80\%}$  & $\mathbf{21.0\%}$ \\
+        32            & Other manufacturing             & 8                & $0.13\%$ & $8.93\%$ & $8.79\%$ \\
+        17            & Paper                           & 54               & $0.0009\%$ & $0.49\%$ & $0.58\%$ \\
+        19            & Refining                        & 15               & $0.005\%$ & $0.38\%$ & $0.13\%$ \\
+        20            & Chemicals                       & 773              & $0.0005\%$ & $0.09\%$ & $0.63\%$ \\
+        24            & Basic metals                    & 87               & $0.00003\%$ & $0.008\%$ & $0.015\%$ \\
+        Other         & 9 sectors                       & --- & --- & $\leq 0.10\%$ & $\leq 0.5\%$ \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+Cement is sui generis. Its buyers --- chiefly construction, civil engineering, ready-mix downstream --- face Phase~IV pair-shock-total of $8.80\%$ at p90 and a sales-weighted mean of $21.0\%$, an order of magnitude larger than any other downstream sector. Refining, chemicals, paper, and basic-metals buyers face Phase~IV pair-shock-total below $0.5\%$ at p90.
+
+\subsection{Comparison to the buyer-side noise floor}\label{sec:shock_signal_to_noise}
+
+The relevant question for the leakage tests is not whether the shock is large in absolute terms, but whether it is large relative to the natural noise in the buyer's input-cost structure --- the cost-share variation that buyers absorb without observable reallocation under non-ETS conditions. We measure this noise floor as
+\[
+    \sigma_{\text{share}} \;=\; \text{within-firm sd of } \Delta \log(\text{inputs}_{b,t}/\text{revenue}_{b,t})
+\]
+on the 2005--2019 (pre-Phase-IV) window, scale-stripped to isolate the price-and-mix component. Population p50 of $\sigma_{\text{share}}$ is $15.0\%$; cement buyers specifically have $\sigma_{\text{share}}^{p50} = 13.0\%$.
+
+The signal-to-noise comparison at the matched scale (pair-shock-total vs $\sigma_{\text{share}}$) is reported in Table~\ref{tab:signal_to_noise}.
+
+\begin{table}[H]
+    \centering
+    \caption{Signal-to-noise: Phase~IV pair-shock-total p90 relative to pre-shock $\sigma_{\text{share}}$ p50.}
+    \label{tab:signal_to_noise}
+    \footnotesize
+    \begin{tabular}{lrrr}
+        \toprule
+        Subset & Pair-shock-total p90 & $\sigma_{\text{share}}$ p50 & Signal-to-noise \\
+        \midrule
+        \textbf{Cement (NACE 23) buyers} & $\mathbf{8.80\%}$ & $\mathbf{13.0\%}$ & $\mathbf{0.68\sigma}$ \\
+        Population (all treated active pairs) & $1.16\%$ & $15.0\%$ & $0.08\sigma$ \\
+        Paper / refining buyers & $0.4$--$0.5\%$ & $10$--$12\%$ & $0.03$--$0.04\sigma$ \\
+        Chemicals / plastics / basic-metals buyers & $< 0.1\%$ & $13$--$18\%$ & $< 0.01\sigma$ \\
+        \midrule
+        \emph{Comparison: \citet{heise2024} 1-$\sigma$ FX shock (annualized, buyer-side)} & $\sim 1.5\%$ & --- & $\sim 0.10\sigma$ \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+Two takeaways:
+
+\begin{itemize}
+    \item \textbf{Cement is the only sector where the pair-level signal-to-noise reaches the threshold of detectability.} At $0.68\sigma$, cement-buyer pair-shock-total in Phase~IV is roughly the threshold above which buyers facing the shock would be expected to plausibly act on it specifically. The Belgian B2B leakage null in cement is therefore an informative null at this threshold.
+
+    \item \textbf{For all non-cement regulated sectors, the typical pair-shock is well below the buyer-side input-cost noise floor.} Population pair-shock-total at $0.08\sigma$ of $\sigma_{\text{share}}$ is below the noise floor by a factor of 12. ``No substitution'' at the typical buyer is what we would expect even in a model with substantial $\sigma$, because the signal is too small for buyers to act on specifically.
+\end{itemize}
+
