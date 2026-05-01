@@ -40,6 +40,7 @@
 \usepackage{xspace}
 \newcommand{\eg}{e.g.,\xspace}
 \newcommand{\ie}{i.e.,\xspace}
+\newcommand{\notrun}[0]{\textit{[Not yet run.]}\xspace}
 
 % ================================================================
 \begin{document}
@@ -50,10 +51,10 @@
 \thanks{\noindent \textsuperscript{*}Jardanovski (corresponding author): Northwestern University. E-mail: \texttt{gabrielj@u.northwestern.edu}.}
 \thanks{\textsuperscript{$\dagger$} Bijnens: National Bank of Belgium. E-mail: \texttt{gert.bijnens@nbb.be}.}
 
-\date{\tiny{\sc this version} of \today. We are grateful to the National Bank of Belgium (NBB) for hosting one of us as a Young Researcher during part of the period when this research was conducted. The views expressed are those of the authors and do not necessarily reflect those of the NBB. This paper should not be reported as representing the views of the NBB.}
+\date{\tiny{\sc this version} of \today.}
 
 \begin{abstract}
-We jointly measure two margins of carbon leakage from the EU Emissions Trading System --- domestic across-firm reallocation in firm-to-firm transactions, and international cross-border reallocation in customs imports --- using the same Belgian micro-data and the same EU ETS regime. The leakage literature has typically measured one margin at a time and treated cross-border evidence as informative about both; we show this conflation is consequential by measuring the two margins side by side. Both are quantitatively small in Belgium. \emph{Within-country across-firm leakage}: on the near-universal Belgian B2B firm-to-firm panel, the elasticity of substitution between regulated and unregulated suppliers within the same NACE 4-digit category is bounded at $\sigma \in [+0.05, +1.17]$ (95\% CI, full-sample) under our preferred conservative pass-through assumption, tightening to $[+0.52, +1.08]$ under full pass-through, with point estimate at the Cobb-Douglas benchmark. \emph{Across-country cross-border leakage}: replicating \citet{CosterMejeanDiGiovanni2024} on the Belgian customs panel 2000--2019 returns Phase~2 and Phase~3 import-share coefficients of $-0.0037$*** and $-0.0024$**, two orders of magnitude smaller than the corresponding French coefficients of $+0.110$*** and $+0.121$***, and pointing in the opposite direction. Pass-through of carbon costs into regulated-supplier prices is real (peak Belgian PPI response of $+4.08$ on the \citet{kanzig2023unequal} structural shock at 12 months); the price signal that would induce reallocation is operative; the two reallocation margins both fail to materialise at quantitatively important levels. The Belgium-vs-France divergence on the cross-border margin --- a roughly 50-fold difference in coefficient magnitude on the same EU ETS regime --- identifies cross-country heterogeneity as a first-order feature of the leakage debate. The joint pattern challenges the empirical premises behind both the free-allocation rationale (which presumes a high within-country across-firm elasticity) and the CBAM rationale (which presumes large cross-border substitution toward non-ETS sources) for protecting unilateral carbon prices from leakage, at least in dense-network small open economies.
+\textit{[To be written.]}
 \end{abstract}
 
 \maketitle
@@ -62,7 +63,8 @@ We jointly measure two margins of carbon leakage from the EU Emissions Trading S
 
 % ================================================================
 \section{Introduction}\label{sec:introduction}
-\input{leakage_within_across/sections/introduction}
+
+\textit{[To be written.]}
 
 % ================================================================
 \section{Setting and Data}\label{sec:data}
@@ -73,32 +75,24 @@ We jointly measure two margins of carbon leakage from the EU Emissions Trading S
 \input{leakage_within_across/sections/shock_magnitude}
 
 % ================================================================
-\section{Pass-Through of Carbon Costs to Regulated-Supplier Prices}\label{sec:passthrough}
+\section{Price Pass-Through}\label{sec:passthrough}
 \input{leakage_within_across/sections/passthrough}
 
 % ================================================================
-\section{Within-Country Leakage: Across-Supplier Reallocation Within NACE 4-digit}\label{sec:test_h}
-\input{leakage_within_across/sections/within_supplier}
+\section{Leakage}\label{sec:leakage}
 
-% ================================================================
-\section{Within-Country Leakage: Across-Category Reallocation}\label{sec:test_i}
-\input{leakage_within_across/sections/within_category}
+We test two margins of leakage. Section~\ref{sec:domestic} estimates buyer-side reallocation across domestic ETS-regulated and unregulated suppliers on the Belgian B2B firm-to-firm panel; Section~\ref{sec:international} estimates buyer-side reallocation across EU and non-EU sources of regulated goods on the Belgian customs panel. Both sections share the same identifying event (the 2015 MSR reform, with a Phase~II 2008 alternative for the domestic test), the same definition of regulated products and suppliers, and the same approach to pre-trend and clustering concerns. Their substantive question is the same and their data are complementary: B2B records the within-Belgium share of the leakage channel; customs records the cross-border share.
 
-% ================================================================
-\section{Across-Country Leakage: Customs Evidence}\label{sec:across}
-\input{leakage_within_across/sections/across_country}
+\subsection{Across domestic suppliers}\label{sec:domestic}
+\input{leakage_within_across/sections/leakage_domestic}
 
-% ================================================================
-\section{Discussion}\label{sec:discussion}
-\input{leakage_within_across/sections/discussion}
-
-% ================================================================
-\section{Policy Implications}\label{sec:policy}
-\input{leakage_within_across/sections/policy}
+\subsection{Across international suppliers}\label{sec:international}
+\input{leakage_within_across/sections/leakage_international}
 
 % ================================================================
 \section{Conclusion}\label{sec:conclusion}
-\input{leakage_within_across/sections/conclusion}
+
+\textit{[To be written.]}
 
 % ================================================================
 \newpage

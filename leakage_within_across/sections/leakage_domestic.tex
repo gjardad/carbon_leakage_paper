@@ -1,0 +1,101 @@
+% Subsection of §5 Leakage. Begins at \subsubsection level.
+
+We test buyer-side reallocation across regulated and unregulated domestic suppliers at two margins: across suppliers within the same NACE 4-digit (\S\ref{sec:domestic_within}), and across NACE 4-digit input categories within the same buyer-year (\S\ref{sec:domestic_across}). For each margin we present an MSR-based event-study as the headline, then heterogeneous-treatment-effect tests by time horizon and by shock magnitude. We close with an alternative Phase~II event-study using 2008 as the cutoff.
+
+\subsubsection{Headline: across-supplier substitution within NACE 4-digit}\label{sec:domestic_within}
+
+For each (buyer $b$, supplier-NACE-4d $n$) cell with at least one ETS supplier and at least two suppliers in some year, we identify $j^*(b,n)$ as the most-exposed ETS supplier (the supplier with the largest firm cost share among ETS sellers active in the cell at any point in 2005--2014). The outcome is $j^*$'s share of cell-level annual spending,
+\[
+    \text{share top}_{b,n,t} \;=\; \frac{\text{spending from } b \text{ to } j^*(b,n) \text{ in } t}{\sum_{j \in \mathcal{J}_{b,n,t}} \text{spending from } b \text{ to } j \text{ in } t}.
+\]
+The headline regressor is pair exposure:
+\[
+    \text{pair exposure}_{b,n} \;=\; \text{firm cost share}_{j^*(b,n)} \;\times\; \overline{s}_{j^*,b}^{\text{pre}},
+    \qquad
+    \overline{s}_{j^*,b}^{\text{pre}} \;=\; \overline{\frac{\text{spending}_{b \to j^*,t}}{\text{total inputs}_{b,t}}}_{\,t \in 2010..2014},
+\]
+the pre-shock fraction of buyer $b$'s total input bill at risk under full pass-through if $j^*$ absorbed the carbon shock and $b$ did not substitute. The regression is
+\begin{equation}
+    \text{share top}_{b,n,t} \;=\; \beta\,\text{pair exposure}_{b,n} \times \mathbf{1}[t \geq 2015] \;+\; \alpha_{b,n} \;+\; \delta_{n,t} \;+\; \varepsilon_{b,n,t},
+    \label{eq:domestic_within}
+\end{equation}
+with buyer-cell fixed effects $\alpha_{b,n}$ and supplier-NACE-4d $\times$ year fixed effects $\delta_{n,t}$. Standard errors are two-way clustered on buyer and on supplier-NACE 4-digit. The sample is 14{,}450 cells / 78{,}220 cell-years.
+
+\paragraph{Pre-trend.} The augmented specification adds $\text{pair exposure}_{b,n} \times \text{year}$ as a continuous control over 2005--2014 to test for a linear pre-trend on the headline regressor. The trend coefficient is $-3.12$ per year (s.e.\ $3.90$, $p = 0.42$); we cannot reject parallel trends.
+
+\paragraph{Headline result.} Pooled $\widehat{\beta} = -16.7$ (s.e.\ $17.4$, $p = 0.34$); the linear-trend-controlled specification gives $\widehat{\beta} = +5.4$ (s.e.\ $20.4$, $p = 0.79$). Both are statistically indistinguishable from zero. On the larger 32{,}631-cell sample using the firm-cost-share regressor directly (units: percentage points of share per unit cost-share intensity), pooled $\widehat{\beta} = +1.34$ (s.e.\ $0.96$, $p = 0.16$).
+
+\paragraph{Mapping to $\sigma$.} Under a CES nest where buyer $b$ allocates expenditure across suppliers $j$ in NACE 4-digit $n$ with elasticity $\sigma$, and assuming all ETS suppliers in cell $n$ pass through the EUA shock proportionally to their cost-share at rate $\rho$,
+\[
+    \mathrm{d}\log s_{j^*} \;\approx\; (1-\sigma)(1 - s_{E_n})\,\rho\,\text{firm cost share}_{j^*},
+\]
+where $s_{E_n}$ is the total within-cell ETS spending share. The firm-cost-share-regressor coefficient $\beta$ then satisfies
+\begin{equation}
+    \sigma \;=\; 1 \;-\; \frac{\beta}{100\,\rho\,E[s_{j^*}(1-s_{E_n})]}.
+    \label{eq:sigma_within}
+\end{equation}
+The denominator scaling $E[s_{j^*}(1-s_{E_n})]$ is computed empirically on the Test~H sample: $0.068$ unweighted full-sample, $0.043$ unweighted on the Q4 subset of buyer's pre-shock NACE-4d expenditure share. The empirical fact that drives the small denominator is that ETS coverage within Test~H cells is highly concentrated: the sales-weighted within-cell ETS share is $0.91$, so the ``unregulated alternative'' to $j^*$ within the same NACE 4-digit is itself usually ETS-regulated.
+
+Substituting the headline full-sample $\widehat{\beta} = +1.34$ (s.e.\ $0.96$):
+\[
+    \widehat{\sigma}_{\rho=0.5} \;=\; 0.61, \quad \text{95\% CI } [0.05,\, 1.17];
+    \qquad
+    \widehat{\sigma}_{\rho=1.0} \;=\; 0.80, \quad \text{95\% CI } [0.52,\, 1.08].
+\]
+The point estimate sits below Cobb--Douglas; the 95\% CI excludes import-substitution magnitudes ($\sigma \approx 4$) under both pass-through assumptions.
+
+\subsubsection{Heterogeneous treatment effects by time horizon}\label{sec:domestic_within_horizon}
+
+\notrun{} The plan is a horizon-$h$ local-projection specification analogous to \citet{peter2023} and \citet{boehmlevchenkopandalainayar} (BLP), with the share-top outcome at $t + h$ regressed on the same pair-exposure interaction at $t$, including buyer-cell and supplier-NACE-4d $\times$ year fixed effects. The horizon-by-horizon coefficients trace the impulse response of within-cell reallocation to the carbon-cost shock and would let us discriminate short-run from long-run elasticities under the post-2015 regime. \citet{peter2023} report $\theta_{\text{LR}} \approx 2.5$ versus $\theta_{\text{SR}} \approx 0.5$ on Indian intermediate inputs over a 7-year horizon; the analog horizon for our setting is 2015--2022.
+
+\subsubsection{Heterogeneous treatment effects by shock magnitude}\label{sec:domestic_within_hte}
+
+Section~\ref{sec:shock_magnitude} documented that exposure to the EU ETS shock is highly heterogeneous across buyer-cells. A natural concern with the headline result is whether buyers respond \emph{non-linearly} to relative-price changes --- ignoring small shocks and reallocating only when the shock is large enough. We test this directly using quartile splits of the firm-cost-share regression by buyer's pre-shock NACE-4d expenditure share. This split orders cells by the dollar shock at the buyer's total-cost level: in Q1 (low expenditure share) the shock is negligible at the total-cost level; in Q4 (high expenditure share) the same supplier-level price change converts to the largest dollar shock. A non-linear-by-shock-size response predicts $\widehat{\sigma}_{Q4} > \widehat{\sigma}_{Q1}$.
+
+\begin{table}[H]
+    \centering
+    \caption{Implied $\sigma$ by quartile of buyer's pre-shock NACE-4d expenditure share (firm-cost-share regressor, $\rho = 1$).}
+    \label{tab:sigma_by_shock_quartile}
+    \footnotesize
+    \begin{tabular}{lrrrrr}
+        \toprule
+        Quartile & $\widehat{\beta}$ & s.e. & $E[s_{j^*}(1-s_{E_n})]_Q$ & $\widehat{\sigma}_Q$ & 95\% CI \\
+        \midrule
+        Q1 (lightest)     & $-16.98$ & $13.50$ & $0.095$ & $\approx 2.79$ & $[0.0, 5.6]$ \\
+        Q2                & $+1.55$  & $1.66$  & $0.079$ & $\approx 0.80$ & $[0.39, 1.22]$ \\
+        Q3                & $+1.98$  & $1.52$  & $0.061$ & $\approx 0.68$ & $[0.18, 1.17]$ \\
+        Q4 (heaviest)     & $+0.03$  & $1.39$  & $0.043$ & $\approx 0.99$ & $[0.34, 1.66]$ \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+The data show the opposite ordering of point estimates from the non-linear-response prediction (Q4 = $0.99$ vs Q1 = $2.79$). The Q1 CI is wide due to noise at low exposure but does not deliver a sharper rejection. Formally, the pooled-vs-Q4 contrast on $\beta$ gives a difference of $-1.31$ (combined SE $\approx 1.69$, $z \approx -0.78$, $p \approx 0.44$): we cannot reject equality of response per unit price across shock magnitudes. The data are consistent with $\sigma$ constant across shock sizes within the post-2015 EU ETS price range.
+
+\subsubsection{Headline: across-category substitution}\label{sec:domestic_across}
+
+A second reallocation margin operates across NACE 4-digit input categories within a buyer-year: when carbon pricing raises the average price of inputs in some category $n$ relative to others, buyers may shift expenditure from $n$ toward less-exposed alternatives. The outcome is the buyer's expenditure share in category $n$,
+\[
+    \text{share}_{b,n,t} \;=\; \frac{\sum_{j: \text{ NACE-4d}_j = n} \text{spending from } b \text{ to } j \text{ in } t}{\sum_{j} \text{spending from } b \text{ to } j \text{ in } t}.
+\]
+The headline specification follows \citet{colmeretal2023}'s regulated/unregulated event-study logic at the input-mix margin. Defining $\text{regulated}_n = \mathbf{1}[n \in \mathcal{N}_{\text{ETS}}]$ where $\mathcal{N}_{\text{ETS}}$ is the set of NACE 4-digit categories with at least one ETS seller,
+\begin{equation}
+    \text{share}_{b,n,t} \;=\; \beta\,\text{regulated}_n \times \mathbf{1}[t \geq 2015] \;+\; \alpha_{b,n} \;+\; \delta_{b,t} \;+\; \varepsilon_{b,n,t},
+    \label{eq:domestic_across}
+\end{equation}
+with buyer-category fixed effects $\alpha_{b,n}$ and buyer-year fixed effects $\delta_{b,t}$. Standard errors are two-way clustered on buyer and on NACE 4-digit. The sample is 5.7M buyer $\times$ NACE 4-digit cells over 18 years (71.7M observations). The binary treatment is robust to within-category trend heterogeneity: $\alpha_{b,n}$ absorbs persistent buyer-specific category preferences and $\delta_{b,t}$ absorbs buyer-specific scale changes, so $\beta$ is identified from a level shift in the regulated-vs-unregulated share gap within the same buyer-year.
+
+\paragraph{Headline result.} $\widehat{\beta} = -0.003$ (s.e.\ $0.009$, $p = 0.76$). Implied effect: a 0.26 percentage-point shift in within-buyer expenditure share away from regulated categories post-2015, statistically indistinguishable from zero. The continuous-treatment event study (with $\text{nace exposure}_n \times \mathbf{1}[\text{year}=t]$) shows uniformly \emph{positive} year coefficients in every clean post-2015 year (2015--2019, 2021), pointing in the opposite direction from substitution.
+
+\paragraph{Mapping to $\sigma$.} Across categories, $\sigma_{\text{cat}}$ in the analogous CES nest with average regulated-category pre-shock share $s_{\text{reg}} \approx 0.05$ and average post-2015 regulated-vs-unregulated log-price differential $\Delta \log p \approx 0.10$ (from the CMdG-tight Phase~2 and Phase~4 pass-through coefficients with sector trends, \S\ref{sec:passthrough}) returns $\widehat{\sigma}_{\text{cat}} \approx 1.05$ with 95\% CI $[0.5, 5.0]$. The bound is consistent with macro production-network calibrations \citep[\eg][]{baqaee2019}.
+
+\subsubsection{Heterogeneous treatment effects on the across-category margin}\label{sec:domestic_across_hte}
+
+\notrun{} The plan is the horizon-$h$ analog for the across-category margin and quartile splits by the buyer's exposure to regulated categories aggregated within their pre-shock input bill. A non-trivial complication noted in earlier work: the continuous-treatment regressor's quartiles are degenerate (most NACE 4-digit categories have $\text{nace exposure}_n = 0$, so Q1--Q3 collapse to zero treatment intensity). The HTE design will need to use buyer-level rather than category-level exposure quartiles.
+
+\subsubsection{Phase~II event-study (2008 cutoff, 2005--2008 exposure)}\label{sec:domestic_phase2}
+
+\notrun{} The plan is a parallel event-study using 2008 as the cutoff and re-constructing equation~\eqref{eq:fcs} on the 2005--2008 numerator window. Phase~II began in 2008 with auctioning and tighter cap stringency; the resulting cost shock is small at the population level (\S\ref{sec:shock_magnitude}, p99 firm cost share $\approx 0.46\%$) but the longer post-period (2008--2019) supports horizon-by-horizon estimation in a way the post-2015 sample does not. The Phase~II version is best read not as a stronger test of the same parameter but as a complementary identification window with a larger time horizon for testing long-run elasticities.
+
+\subsubsection{Short-run vs long-run effects in the Phase~II version}\label{sec:domestic_phase2_horizon}
+
+\notrun{} The plan is the \citet{peter2023}/BLP horizon-by-horizon impulse response on the Phase~II event-study, with horizons $h \in \{0, 1, 2, \ldots, 11\}$ years. Under the BLP/P\&R logic, long-run elasticities are an order of magnitude larger than short-run elasticities, and identification requires a permanent shock with a 7+ year horizon. The Phase~II $\to$ Phase~III $\to$ Phase~IV regime is plausibly permanent under EU institutional commitment.
