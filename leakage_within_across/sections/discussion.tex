@@ -10,29 +10,40 @@ The regression coefficients in Sections~\ref{sec:test_h} and~\ref{sec:test_i} ca
     \qquad
     \mathrm{d}\log P_n \;=\; \sum_{k} s_k\,\mathrm{d}\log p_k.
 \]
-If only supplier $j^*$'s price changes, $\mathrm{d}\log p_{j^*} - \mathrm{d}\log P_n = (1 - s_{j^*})\,\mathrm{d}\log p_{j^*}$, and
+The relevant assumption is which suppliers in cell $(b, n)$ see a price change from the EU ETS shock. The natural assumption in our setting is that \emph{all ETS-regulated suppliers} in the cell pass through the EUA shock proportionally to their cost-share intensity, while non-ETS suppliers do not. Letting $E_n$ denote the set of ETS suppliers in cell $n$ and $s_{E_n} = \sum_{k \in E_n} s_k$ their total pre-shock spending share, and assuming pass-through $\rho$ acts on each ETS supplier's cost-share $c_k$,
 \[
-    \mathrm{d} s_{j^*} \;\approx\; s_{j^*}\,(1 - \sigma)\,(1 - s_{j^*})\,\mathrm{d}\log p_{j^*}.
+    \mathrm{d}\log P_n \;\approx\; \rho \cdot \sum_{k \in E_n} s_k\,c_k \;\approx\; \rho \cdot s_{E_n} \cdot \overline{c}_{E_n},
 \]
-Under full pass-through, $\mathrm{d}\log p_{j^*} \approx \text{firm cost share}_{j^*}$. The Test~H regression coefficient on $\text{firm cost share}_{j^*} \times \mathbf{1}[\text{Post}]$, with $\text{share top}$ in percentage points, satisfies
+where $\overline{c}_{E_n}$ is the share-weighted average ETS cost-share within the cell. If $c_{j^*} \approx \overline{c}_{E_n}$ (the most-exposed ETS supplier has roughly average ETS cost-share within the cell),
+\[
+    \mathrm{d}\log p_{j^*} - \mathrm{d}\log P_n \;\approx\; \rho \cdot c_{j^*} \cdot (1 - s_{E_n}),
+\]
+\[
+    \mathrm{d} s_{j^*} \;\approx\; s_{j^*}\,(1 - \sigma) \cdot \rho \cdot c_{j^*} \cdot (1 - s_{E_n}).
+\]
+The Test~H regression coefficient on $\text{firm cost share}_{j^*} \times \mathbf{1}[\text{Post}]$, with $\text{share top}$ in percentage points, satisfies
 \begin{equation}
-    \beta \;\approx\; 100 \cdot \rho \cdot s_{j^*}\,(1 - \sigma)\,(1 - s_{j^*}),
+    \beta \;\approx\; 100 \cdot \rho \cdot s_{j^*}\,(1 - \sigma)\,(1 - s_{E_n}),
     \qquad
-    \sigma \;=\; 1 \;-\; \frac{\beta}{100\,\rho\,s_{j^*}\,(1 - s_{j^*})},
+    \sigma \;=\; 1 \;-\; \frac{\beta}{100\,\rho\,s_{j^*}\,(1 - s_{E_n})},
     \label{eq:sigma_within}
 \end{equation}
-where $\rho \in [0, 1]$ is the pass-through coefficient from supplier marginal cost to invoice price.
+where $\rho \in [0, 1]$ is the pass-through coefficient from supplier marginal cost to invoice price. The denominator $s_{j^*}(1 - s_{E_n})$ replaces the $(1 - s_{j^*})$ that would arise if we assumed only $j^*$ saw a price change, and is the empirically appropriate scaling when other ETS firms in the cell also pass through the EUA shock.
 
-\paragraph{Within-NACE-4d bound.} Plugging in the most-favorable subset of Test~H (Q4 of the buyer's pre-shock NACE-4d expenditure share, where the supplier-level price change converts to the largest dollar shock at the buyer's total-cost level): $\widehat{\beta} = +0.03$, 95\% CI $\approx [-2.7, +2.8]$ percentage points per unit of cost-share intensity. With $s_{j^*} = 0.30$ (a representative pre-shock share for the most-exposed ETS supplier in cells with $\geq 2$ suppliers), the implied $\sigma$ depends on the assumed pass-through coefficient $\rho$ from supplier marginal cost to invoice price.
+\paragraph{Empirical $s_{E_n}$ on the Test~H sample.} We compute $s_{E_n}$ as the pre-shock (2010--2014) average within-cell ETS spending share, on the 2{,}143 Test~H cells. The unweighted population mean is $0.67$; sales-weighted, it is $0.91$. Within the headline subset (Q4 of the buyer's pre-shock NACE 4-digit expenditure share, the most-favorable subset under the dollar-shock interpretation), the unweighted mean is $0.79$ and sales-weighted is $0.94$. Equivalently, the relevant denominator $E[s_{j^*}(1 - s_{E_n})]$ is $0.068$ unweighted full-sample and $0.043$ unweighted on the Q4 subset, versus the $0.21$ that the naïve $s_{j^*}(1 - s_{j^*})$ at $s_{j^*} = 0.30$ would imply --- a roughly 5$\times$ widening of the CI relative to the naïve calculation. The empirical fact that drives the widening is that, in the cells where the test has economic content (heavy NACE 4-digit categories like NACE 19, 23, 24), the ``alternative'' to $j^*$ within the same NACE 4-digit is itself usually ETS-regulated, and most pre-shock spending in the cell goes to ETS suppliers.
+
+\paragraph{Within-NACE-4d bound.} Plugging in the most-favorable subset of Test~H (Q4 of the buyer's pre-shock NACE-4d expenditure share, where the supplier-level price change converts to the largest dollar shock at the buyer's total-cost level): $\widehat{\beta} = +0.03$, 95\% CI $\approx [-2.7, +2.8]$ percentage points per unit of cost-share intensity. Using the unweighted Q4 denominator $E[s_{j^*}(1 - s_{E_n})] = 0.043$ from the Test~H sample, the bound depends on the assumed pass-through coefficient $\rho$.
 
 Our preferred bound uses $\rho = 0.5$, which we view as the conservative reading: it is consistent with our own OLS pass-through estimate (S6 with sector trends, $+0.07$ insignificant) and serves as a lower bound on the CMdG-tight Phase~2 coefficient after sector trends ($+0.094$). This gives
 \[
-    \sigma \;\in\; [0.74,\; 1.26]\quad(95\%\text{ CI}),\qquad
+    \sigma \;\in\; [-0.3,\; 2.3]\quad(95\%\text{ CI}),\qquad
     \widehat{\sigma}\;\approx\;1.0.
 \]
-Under full pass-through $\rho = 1$ --- the maximum-precision case, but harder to defend given our own OLS pass-through evidence --- the bound tightens to $\sigma \in [0.87, 1.13]$. We report the latter as an upper-bound-on-precision benchmark, not as the headline. The full sample ($\widehat{\beta} = +1.34$, s.e.\ $0.96$ on the firm-cost-share regressor) gives $\sigma \in [0.69, 1.06]$ at $\rho = 0.5$ and $\sigma \in [0.85, 1.03]$ at $\rho = 1$.
+Under full pass-through $\rho = 1$ --- the maximum-precision case, but harder to defend given our own OLS pass-through evidence --- the bound tightens to $\sigma \in [0.34, 1.66]$. We report the latter as an upper-bound-on-precision benchmark, not as the headline. The full sample ($\widehat{\beta} = +1.34$, s.e.\ $0.96$ on the firm-cost-share regressor) is empirically tighter because both $\widehat{\beta}$ and the standard error are smaller: under the unweighted full-sample denominator $0.068$, it gives $\sigma \in [+0.05, +1.17]$ at $\rho = 0.5$ and $\sigma \in [+0.52, +1.08]$ at $\rho = 1$.
 
-The implication is sharp under either pass-through assumption. We rule out, at conventional confidence levels, elasticities of substitution between regulated and unregulated suppliers within the same NACE 4-digit \emph{above $\sim$1.3} under our preferred conservative pass-through and \emph{above $\sim$1.1} under full pass-through. The point estimates cluster around $\sigma = 1$, the Cobb--Douglas benchmark, in which buyers' relative quantity demand still moves one-for-one with relative prices but expenditure shares do not. The bounds are consistent with $\sigma$ in a narrow neighborhood of unity. Trade-elasticity magnitudes commonly identified in import-substitution work \citep[e.g.,][with $\sigma \approx 4$]{peter2023} are outside our 95\% confidence interval under both pass-through assumptions.
+The bounds are wider than what the naïve $(1 - s_{j^*})$ scaling would suggest --- the previous version of this paper, using the assumption that only $j^*$ sees a price change, reported the corresponding bound as $\sigma \in [0.74, 1.26]$ at $\rho = 0.5$. Once we account for the fact that other ETS firms in the cell also pass through the EUA shock (and that ETS coverage within Test~H cells is highly concentrated, with sales-weighted within-cell ETS share $\approx 0.91$), the relevant CES denominator is roughly five times smaller, and the CI widens accordingly. The point estimate is unchanged: at $\widehat{\beta} \approx 0$, the implied $\sigma$ is at the Cobb--Douglas benchmark regardless of the denominator scaling.
+
+The implication for the headline. Under both pass-through assumptions, the corrected bound is centered tightly at the Cobb--Douglas benchmark $\sigma = 1$, in which buyers' relative quantity demand moves one-for-one with relative prices but expenditure shares do not. Trade-elasticity magnitudes commonly identified in import-substitution work \citep[e.g.,][with $\sigma \approx 4$]{peter2023} sit outside the 95\% CI under full pass-through and at the upper edge of the CI under conservative pass-through; the corrected bound rules out $\sigma \approx 4$ at full pass-through but does not rule it out cleanly at $\rho = 0.5$ on the Q4 subset alone. The full-sample bound, which is empirically tighter, rules out $\sigma \approx 4$ under both pass-through assumptions.
 
 \paragraph{Across-NACE-4d bound.} The Test~I.3 binary regulated $\times$ \textit{Post} coefficient is $\widehat{\beta} = -0.003$ (s.e.\ $0.009$, p = 0.76), with the outcome a buyer-category expenditure share. Under the across-category CES analog of \eqref{eq:sigma_within} with $\sigma_{\text{cat}}$ as the across-category elasticity, an average regulated-category pre-shock share $s_{\text{reg}} \approx 0.05$, and an average post-2015 regulated-vs-unregulated log-price differential of $\Delta \log p \approx 0.10$ (the average of CMdG-tight Phase~2 and Phase~4 coefficients with sector trends, \S\ref{sec:passthrough}),
 \[
@@ -41,7 +52,7 @@ The implication is sharp under either pass-through assumption. We rule out, at c
 \]
 This is a wider bound than the within-NACE-4d bound because the price increment is more dispersed and the average within-buyer regulated-category share is smaller. The point estimate is again near $\sigma = 1$. The bound is consistent with sector-input elasticities typically estimated in macro production-network work \citep[e.g.,][]{baqaee2019} and rules out only large elasticities.
 
-\paragraph{Joint reading.} Our two reallocation margins jointly identify an elasticity of substitution centered close to 1.0, with the within-NACE-4d bound the tighter of the two. Under our preferred pass-through assumption ($\rho = 0.5$), elasticities between roughly $0.74$ and $1.26$ are within the within-NACE-4d 95\% CI; under full pass-through, the CI tightens to $[0.87, 1.13]$. Across categories, elasticities up to $\sim$5 are within the 95\% CI. We cannot separate elasticities below 1 (\ie complementarity) from elasticities exactly at 1; we can rule out elasticities at the magnitudes typically estimated in import-substitution work for differentiated intermediates.
+\paragraph{Joint reading.} Our two reallocation margins jointly identify an elasticity of substitution centered close to 1.0, with the within-NACE-4d bound the tighter of the two when measured on the full sample. Under our preferred pass-through assumption ($\rho = 0.5$) and the corrected $(1 - s_{E_n})$ denominator, the within-NACE-4d full-sample 95\% CI is $\sigma \in [+0.05, +1.17]$, tightening to $[+0.52, +1.08]$ under full pass-through. The Q4 most-favorable-subset bound is wider in absolute terms but consistent with the full-sample reading. Across categories, elasticities up to $\sim$5 are within the 95\% CI. We cannot rule out complementarity ($\sigma < 1$) on the within-country test; we can rule out elasticities at the magnitudes typically estimated in import-substitution work for differentiated intermediates ($\sigma \approx 4$) on the full sample, and we read the data as centered tightly on the Cobb--Douglas benchmark.
 
 \subsection{Mechanisms for the within-country null}\label{sec:within_mechanisms}
 
