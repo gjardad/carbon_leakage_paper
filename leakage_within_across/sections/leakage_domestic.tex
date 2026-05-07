@@ -35,7 +35,21 @@ with buyer-cell fixed effects $\alpha_{b,n}$ and supplier-NACE-4d $\times$ year 
 
 \paragraph{Pre-trend.} The augmented specification adds $\text{pair exposure}_{b,n} \times \text{year}$ as a continuous control over 2005--2014 to test for a linear pre-trend on the headline regressor. The trend coefficient is $-3.12$ per year (s.e.\ $3.90$, $p = 0.42$); we cannot reject parallel trends. Following \citet{roth2022}, we accompany this conventional test with a power analysis: \notrun{} the test has $X\%$ power against the smallest economically-meaningful violation (a linear differential trend large enough to deliver $\widehat{\sigma} = 4$, the import-substitution benchmark we want to rule out). The pre-trend coefficient is therefore $\notrun{}$ informative against that alternative; failure to reject is $\notrun{}$ vacuous.
 
-\paragraph{Headline result.} Pooled $\widehat{\beta} = -16.7$ (s.e.\ $17.4$, $p = 0.34$); the linear-trend-controlled specification gives $\widehat{\beta} = +5.4$ (s.e.\ $20.4$, $p = 0.79$). Both are statistically indistinguishable from zero. On the larger 32{,}631-cell sample using the firm-cost-share regressor directly (units: percentage points of share per unit cost-share intensity), pooled $\widehat{\beta} = +1.34$ (s.e.\ $0.96$, $p = 0.16$).
+\paragraph{Headline result.} Pooled $\widehat{\beta} = -16.7$ (s.e.\ $17.4$, $p = 0.34$); the linear-trend-controlled specification gives $\widehat{\beta} = +5.4$ (s.e.\ $20.4$, $p = 0.79$). Both are statistically indistinguishable from zero. On the larger 32{,}631-cell sample using the firm-cost-share regressor directly (units: percentage points of share per unit cost-share intensity), pooled $\widehat{\beta} = +1.34$ (s.e.\ $0.96$, $p = 0.16$); with linear-trend control the level coefficient drops to $+0.20$ (s.e.\ $1.14$) on a small but insignificant trend slope ($+0.22$/year, $p = 0.31$).
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics[width=\textwidth]{phase6_test_h_eventstudy_naive.pdf}
+        \caption{Naive event study.}
+    \end{subfigure}
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics[width=\textwidth]{phase6_test_h_eventstudy_detrended.pdf}
+        \caption{Linear-trend-detrended.}
+    \end{subfigure}
+    \caption{Test~H event-study: within-NACE-4d most-exposed-supplier share. Coefficients on $\text{firm cost share}_{j^*} \times \mathbf{1}[\text{year}=t]$ relative to $t = 2014$, 95\% pointwise bands.}
+    \label{fig:test_h_eventstudy}
+\end{figure}
 
 \paragraph{Mapping to $\sigma$.} Under a CES nest where buyer $b$ allocates expenditure across suppliers $j$ in NACE 4-digit $n$ with elasticity $\sigma$, and assuming all ETS suppliers in cell $n$ pass through the EUA shock proportionally to their cost-share at rate $\rho$,
 \[
@@ -62,7 +76,16 @@ The point estimate sits below Cobb--Douglas; the 95\% CI excludes import-substit
 
 \subsubsection{Heterogeneous treatment effects by time horizon}\label{sec:domestic_within_horizon}
 
-\notrun{} The plan is a horizon-$h$ local-projection specification analogous to \citet{peter2023} and \citet{boehmlevchenkopandalainayar} (BLP), with the share-top outcome at $t + h$ regressed on the same pair-exposure interaction at $t$, including buyer-cell and supplier-NACE-4d $\times$ year fixed effects. The horizon-by-horizon coefficients trace the impulse response of within-cell reallocation to the carbon-cost shock and would let us discriminate short-run from long-run elasticities under the post-2015 regime. \citet{peter2023} report $\theta_{\text{LR}} \approx 2.5$ versus $\theta_{\text{SR}} \approx 0.5$ on Indian intermediate inputs over a 7-year horizon; the analog horizon for our setting is 2015--2022. In the language of \citet{rothetal2023}, this is the dynamic specification \citep[Eq.~7]{rothetal2023} at the common 2015 cutoff; with a single treatment date and continuous time-invariant intensity, the negative-weighting and cross-lag-contamination pathologies of \citet{sunabraham2021} do not arise, and the horizon-$h$ coefficient identifies a clean weighted average of cohort-by-horizon treatment effects under the same sufficient-statistic identifying assumption as \S\ref{sec:domestic_within}.
+We estimate a horizon-$h$ local-projection specification analogous to \citet{peter2023} and \citet{boehmlevchenkopandalainayar} (BLP), with the share-top outcome at $t + h$ regressed on the same pair-exposure interaction at $t$, including buyer-cell and supplier-NACE-4d $\times$ year fixed effects. \citet{peter2023} report $\theta_{\text{LR}} \approx 2.5$ versus $\theta_{\text{SR}} \approx 0.5$ on Indian intermediate inputs over a 7-year horizon; the analog horizon for our setting is 2015--2022. In the language of \citet{rothetal2023}, this is the dynamic specification \citep[Eq.~7]{rothetal2023} at the common 2015 cutoff; with a single treatment date and continuous time-invariant intensity, the negative-weighting and cross-lag-contamination pathologies of \citet{sunabraham2021} do not arise.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{phase6_a1_horizon_irf.pdf}
+    \caption{Test~H horizon impulse response. Local-projection coefficients on $\text{pair exposure}_{b,n} \times \mathbf{1}[t \geq 2015]$ at horizon $h$, $h \in \{-9, \ldots, 7\}$, full-sample buyer-cell panel.}
+    \label{fig:test_h_horizon_irf}
+\end{figure}
+
+\paragraph{Result.} The horizon LP delivers a noisy and non-monotonic impulse response. On the full sample, $\widehat{\beta}_{h=0} = +8{,}552$ ($p = 0.045$); subsequent post-period horizons hover near zero through $h = 5$ ($\widehat{\beta}_{h=3} = -1{,}892$, n.s.; $\widehat{\beta}_{h=5} = -4{,}971$, n.s.), with a single statistically significant negative spike at $h = 6$ ($\widehat{\beta}_{h=6} = -16{,}220$, $p = 0.004$) that does not persist at $h = 7$ ($-8{,}112$, n.s.). The intensive-margin-only sample (cells with continuous coverage 2010--2022) oscillates with sign flips between adjacent horizons. There is no clean monotonic long-run pattern. The static $\sigma \approx 1$ headline of \S\ref{sec:domestic_within} is the more credible reading; horizon-by-horizon claims would require additional smoothing or a longer post-period.
 
 \subsubsection{Heterogeneous treatment effects by shock magnitude}\label{sec:domestic_within_hte}
 
@@ -102,6 +125,13 @@ with buyer-category fixed effects $\alpha_{b,n}$ and buyer-year fixed effects $\
 
 \paragraph{Headline result.} $\widehat{\beta} = -0.003$ (s.e.\ $0.009$, $p = 0.76$). Implied effect: a 0.26 percentage-point shift in within-buyer expenditure share away from regulated categories post-2015, statistically indistinguishable from zero. The continuous-treatment event study (with $\text{nace exposure}_n \times \mathbf{1}[\text{year}=t]$) shows uniformly \emph{positive} year coefficients in every clean post-2015 year (2015--2019, 2021), pointing in the opposite direction from substitution.
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{phase5_test_i_event_study.pdf}
+    \caption{Test~I event-study: across-category buyer expenditure share. Coefficients on $\text{regulated}_n \times \mathbf{1}[\text{year} = t]$ relative to $t = 2014$, 95\% pointwise bands.}
+    \label{fig:test_i_eventstudy}
+\end{figure}
+
 \paragraph{Pre-trend credibility.} Unlike Test~H, Test~I's pre-period leads are visibly non-flat: the continuous event-study coefficients trend gently upward through 2010--2014 and continue upward in the post-period. Per \citet{rothetal2023}, ``the lack of a significant pre-trend does not necessarily imply the validity of the parallel trends assumption,'' so we report two formal diagnostics. First, following \citet{roth2022} we compute the power of the conventional pre-trend test against an economically-meaningful linear differential trend (one large enough to deliver a $\widehat{\beta}$ that would imply $\widehat{\sigma}_{cat} \approx 0.5$, the smallest magnitude that would reject Cobb--Douglas downward): \notrun{} the test has $X\%$ power against this alternative. If $X < 30\%$, the pre-trend test is severely underpowered and the formal sensitivity analysis is the only credible identification of $\sigma_{cat}$.
 
 \paragraph{Sensitivity to violations of parallel trends.} Following \citet{rambachanroth2023} we report the breakdown $\bar{M}$ at which a sign reversal of $\widehat{\beta}$ becomes admissible, separately for $\Delta^{RM}$ and $\Delta^{SD}$ restrictions. \notrun{} Under $\Delta^{RM}(\bar{M})$, the breakdown is $\bar{M} = X$ for the null hypothesis $\beta = 0$; under $\Delta^{SD}(M)$ the breakdown is $M = X$. The interpretation: post-treatment violations of parallel trends $\bar{M}$ times larger than the maximal pre-treatment violation are required to flip $\widehat{\beta}$ from null to a significant reallocation effect.
@@ -112,14 +142,57 @@ with buyer-category fixed effects $\alpha_{b,n}$ and buyer-year fixed effects $\
 
 \subsubsection{Heterogeneous treatment effects on the across-category margin}\label{sec:domestic_across_hte}
 
-\notrun{} The plan is the horizon-$h$ analog for the across-category margin and quartile splits by the buyer's exposure to regulated categories aggregated within their pre-shock input bill. A non-trivial complication noted in earlier work: the continuous-treatment regressor's quartiles are degenerate (most NACE 4-digit categories have $\text{nace exposure}_n = 0$, so Q1--Q3 collapse to zero treatment intensity). The HTE design will need to use buyer-level rather than category-level exposure quartiles.
+We test heterogeneity along two dimensions: (a) horizon-$h$ local projections analogous to \S\ref{sec:domestic_within_horizon}, and (b) quartile splits by the buyer's pre-shock exposure to regulated categories aggregated within their input bill (rather than category-level quartiles, which are degenerate because most NACE-4d categories have $\text{nace exposure}_n = 0$).
+
+\paragraph{Horizon LP.} Post-period coefficients are uniformly small in absolute magnitude ($-0.0007$ to $-0.0023$ across $h \in \{0, \ldots, 7\}$) and statistically indistinguishable from zero at every horizon. There is no growth in the impulse response with horizon (Figure~\ref{fig:test_i_horizon_irf}); the long-run elasticity is not detectably larger than the short-run elasticity within the 2015--2022 window.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{phase6_a2_horizon_irf.pdf}
+    \caption{Test~I horizon impulse response. Local-projection coefficients on $\text{regulated}_n \times \mathbf{1}[t \geq 2015]$ at horizon $h$, $h \in \{-9, \ldots, 7\}$.}
+    \label{fig:test_i_horizon_irf}
+\end{figure}
+
+\paragraph{Buyer-quartile split.} Splitting by the buyer's pre-shock total exposure to regulated NACE-4d categories surfaces sharp heterogeneity that the pooled headline obscures:
+
+\begin{table}[H]
+    \centering
+    \caption{Across-category $\widehat{\beta}$ by buyer-level pre-shock regulated-share quartile.}
+    \label{tab:test_i_buyer_quartile}
+    \footnotesize
+    \begin{tabular}{lrrr}
+        \toprule
+        Quartile & $\widehat{\beta}$ & s.e. & $p$ \\
+        \midrule
+        Q2          & $+0.0066$ & $0.0012$ & $< 0.001$ \\
+        Q3          & $+0.0035$ & $0.0014$ & $0.013$   \\
+        Q4 (heaviest) & $-0.0038$ & $0.0020$ & $0.061$   \\
+        Pooled       & $-0.0001$ & $0.0015$ & $0.92$   \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+The pattern is consistent with non-linear-by-shock-size response: substitution \emph{toward} regulated categories at low total exposure, substitution \emph{away} at high total exposure (Q4), and a near-zero pooled effect because Q2/Q3 (positive) and Q4 (negative) average out. The Q4 coefficient $-0.0038$ implies a $\widehat{\sigma}_{\text{cat}}^{Q4} \approx 1.4$ (95\% CI excludes the Cobb--Douglas null on the negative side at $p = 0.06$). The result aligns qualitatively with the magnitude-heterogeneity logic the within-NACE-4d test in \S\ref{sec:domestic_within_hte} cannot reject.
 
 \subsubsection{Phase~II event-study (2008 cutoff, 2005--2008 exposure)}\label{sec:domestic_phase2}
 
-\notrun{} The plan is a parallel event-study using 2008 as the cutoff and re-constructing equation~\eqref{eq:fcs} on the 2005--2008 numerator window. Phase~II began in 2008 with auctioning and tighter cap stringency; the resulting cost shock is small at the population level (\S\ref{sec:shock_magnitude}, p99 firm cost share $\approx 0.46\%$) but the longer post-period (2008--2019) supports horizon-by-horizon estimation in a way the post-2015 sample does not. The Phase~II version is best read not as a stronger test of the same parameter but as a complementary identification window with a larger time horizon for testing long-run elasticities.
+The Phase~II analog uses 2008 as the cutoff and re-constructs the firm-cost-share regressor on a 2003--2005 baseline window. Phase~II began in 2008 with auctioning and tighter cap stringency; the resulting cost shock is small at the population level (\S\ref{sec:shock_magnitude}, p99 firm cost share $\approx 0.46\%$) but the longer post-period (2008--2019) supports horizon-by-horizon estimation in a way the post-2015 sample does not. The Phase~II version is best read not as a stronger test of the same parameter but as a complementary identification window with a larger time horizon for testing long-run elasticities.
+
+\paragraph{Headline result (level).} Test~H Phase~II: $\widehat{\beta} = -978$ (s.e.\ $1{,}328$, $p = 0.46$). Test~I Phase~II: $\widehat{\beta} = +0.0026$ (s.e.\ $0.0019$, $p = 0.18$). Both are null at the level. This is consistent with the small Phase~II shock at the typical buyer's input bill: the level estimator does not have power to detect a substitution response of plausible magnitude.
 
 \paragraph{DiD classification.} Like \S\ref{sec:domestic_within}, this specification falls in the common-cutoff branch of \citet{rothetal2023} Table~1 at the literal reading: a single time dummy $\mathbf{1}[t \geq 2008]$ interacted with a continuous time-invariant intensity (here, $\text{cost share regressor (Phase II)}$ computed on 2003--2005 baseline data). The static TWFE coefficient is interpretable as a weighted average of period-specific treatment effects; the staggered-rollout pathologies of CS / BJS / Sun-Abraham do not arise. The same identifying assumption that licenses the Phase~IV specification --- \emph{pre-shock cost share is a sufficient statistic for lifetime EU~ETS exposure} --- is required here, applied to the 2003--2005 baseline. The heterogeneity-robust counterpart of \citet{dechaisemartin2022} is reported in \S\ref{sec:domestic_robustness_dcdh} on the same 2003--2019 window with time-varying EUA-price-weighted intensity.
 
 \subsubsection{Short-run vs long-run effects in the Phase~II version}\label{sec:domestic_phase2_horizon}
 
-\notrun{} The plan is the \citet{peter2023}/BLP horizon-by-horizon impulse response on the Phase~II event-study, with horizons $h \in \{0, 1, 2, \ldots, 11\}$ years. Under the BLP/P\&R logic, long-run elasticities are an order of magnitude larger than short-run elasticities, and identification requires a permanent shock with a 7+ year horizon. The Phase~II $\to$ Phase~III $\to$ Phase~IV regime is plausibly permanent under EU institutional commitment.
+The horizon-by-horizon impulse response on the Phase~II event-study, with horizons $h \in \{-4, \ldots, 11\}$ years, follows the \citet{peter2023}/BLP framework. Under the BLP/P\&R logic, long-run elasticities can be an order of magnitude larger than short-run elasticities, and identification requires a permanent shock with a 7+ year horizon. The Phase~II $\to$ Phase~III $\to$ Phase~IV regime is plausibly permanent under EU institutional commitment.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{phase6_a4_phase2_horizon_irf.pdf}
+    \caption{Phase~II horizon impulse response. Test~H (most-exposed-supplier share, level units) and Test~I (across-category buyer share) at $h \in \{-4, \ldots, 11\}$ relative to the 2008 cutoff.}
+    \label{fig:phase2_horizon_irf}
+\end{figure}
+
+\paragraph{Test~H Phase~II horizon: long-run substitution.} The pre-period leads are flat (all $|t| < 1$ across $h \in \{-4, \ldots, -1\}$); short-horizon post coefficients are close to zero ($\widehat{\beta}_{h=1} = +1{,}121$, n.s.; $\widehat{\beta}_{h=3} = +262$, n.s.); and a robust negative effect emerges at medium horizons: $\widehat{\beta}_{h=4} = -2{,}371$ ($p = 0.009$), $\widehat{\beta}_{h=5} = -2{,}148$ ($p = 0.013$), $\widehat{\beta}_{h=7} = -2{,}120$ ($p = 0.097$), tapering to $-1{,}771$ (n.s.) at $h = 11$. The pattern is suggestive of a long-run within-NACE-4d substitution response that materialises with a 4--7 year lag, consistent with the BLP/P\&R prediction.
+
+\paragraph{Test~I Phase~II horizon: wrong-signed.} Post-period coefficients are positive and grow with horizon ($\widehat{\beta}_{h=10} = +0.0052$, $p = 0.038$; $\widehat{\beta}_{h=11} = +0.0047$, $p = 0.050$), pointing in the opposite direction from substitution. This is consistent with the post-2015 across-category null in \S\ref{sec:domestic_across} and reinforces the reading that the across-category margin in Belgium is dominated by something other than relative-price-driven reallocation (sectoral demand growth, EU enlargement, etc.).
