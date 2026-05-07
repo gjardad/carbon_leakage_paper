@@ -5,7 +5,16 @@ A precondition for either margin of leakage is that carbon costs reach buyers as
     \log \text{PPI}_{s,m+h} - \log \text{PPI}_{s,m-1} \;=\; \gamma_h \cdot \big(\text{CPShock}_m \times \text{intensity}_s^{\text{base}}\big) \;+\; \alpha_s \;+\; \delta_m \;+\; \varepsilon_{s,m,h}
     \label{eq:passthrough_strategy1}
 \end{equation}
-separately at each horizon $h \in \{0, 1, \ldots, 36\}$ months. $\text{CPShock}_m$ is the \citet{kanzig2023unequal} carbon-policy structural shock; $\text{intensity}_s^{\text{base}}$ is the sector's pre-shock cost-share intensity (2013--2016 mean of $\text{exposure}^{\text{alt}}$); $\alpha_s$ and $\delta_m$ are sector and year-month fixed effects; standard errors are clustered on NACE 4-digit.
+separately at each horizon $h \in \{0, 1, \ldots, 36\}$ months. $\text{CPShock}_m$ is the \citet{kanzig2023unequal} carbon-policy structural shock (VAR-identified surprise, monthly), $\alpha_s$ and $\delta_m$ are sector and year-month fixed effects, and standard errors are clustered on NACE 4-digit.
+
+The treatment intensity $\text{intensity}_s^{\text{base}}$ is the sector's pre-shock cost-share exposure to ETS costs, defined as
+\begin{equation}
+    \text{intensity}_s^{\text{base}} \;=\; \frac{1}{4}\sum_{t = 2013}^{2016} \frac{\sum_{j \in \mathcal{E}_s} \text{shortage}_{j,t} \cdot \text{EUA}_t}{\overline{\sum_{j \in \mathcal{E}_s} \text{total cost}_{j,t}}_{\,t \in 2010..2012}},
+    \label{eq:intensity_base}
+\end{equation}
+where $\mathcal{E}_s$ is the set of ETS firms in sector $s$, the numerator is the sector's average annual realized carbon cost over 2013--2016 (Phase~III, post-auctioning), and the denominator is the sector's total operating cost averaged over 2010--2012 (a pre-shock baseline). The ratio answers: ``what fraction of sector $s$'s pre-shock operating cost was paid as ETS allowance cost on average over 2013--2016?'' It is dimensionless, predetermined relative to the 2015 MSR cutoff, and varies cross-sectionally from zero (sectors with no ETS bite) to roughly two percent in the most-exposed Belgian sectors (basic chemicals, cement, metals).
+
+\paragraph{Interpretation of $\widehat{\gamma}_h$.} For sector $s$ with intensity $\text{intensity}_s^{\text{base}} = x$, and a unit positive CPShock at month $m$, equation~(\ref{eq:passthrough_strategy1}) implies the cumulative log-PPI response over the $h+1$ months from $m-1$ to $m+h$ is approximately $\widehat{\gamma}_h \cdot x$. To translate to a percentage-point PPI response, multiply $\widehat{\gamma}_h$ by the intensity in question. For example, at $\widehat{\gamma}_{12} \approx 1.22$ and a sector with $\text{intensity}_s^{\text{base}} = 0.01$ (a top-decile-exposed Belgian sector), a unit CPShock at month $m$ raises the sector's PPI by about $1.22 \times 0.01 = 1.2$\% at horizon $h = 12$ months. $\widehat{\gamma}_h$ should be read as the heterogeneous treatment-effect slope of pass-through with respect to sector cost-share exposure: it is large at sectors where the shock bites hard.
 
 Figure~\ref{fig:ppi_lp_kanzig_style} reports $\widehat{\gamma}_h$. The IRF builds gradually from $\widehat{\gamma}_0 \approx 0.17$ on impact, crosses unity around $h = 12$ months ($\widehat{\gamma}_{12} = 1.22$, s.e.\ $0.22$), and peaks at $\widehat{\gamma}_{18} \approx 1.76$ before fading slowly through $h = 36$. The shape (modest on impact, peak around $h = 15$--$18$, slow fade) is the Belgian-PPI analog of the aggregate-HICP IRF in \citet{kanzig2023unequal}.
 
