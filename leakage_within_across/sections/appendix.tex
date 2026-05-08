@@ -9,6 +9,33 @@
     \item \textbf{regulated}: $\mathbf{1}[\text{nace exposure}_n > 0]$.
 \end{itemize}
 
+\section{Pass-through: CMdG-style regulated-vs-unregulated event study}\label{app:passthrough_cmdj}
+
+We complement the headline panel-LP elasticity in \S\ref{sec:passthrough} with an event-study replication of \citet[eq.~1]{CosterMejeanDiGiovanni2024} on Belgian monthly NACE 4-digit PPI data. The specification is exactly CMdG's:
+\begin{equation}
+    \log \text{PPI}_{s,t} \;=\; \sum_{\tau \neq 2004} \beta_\tau \,\mathbf{1}[s \in \text{regulated}]\,\mathbf{1}[\text{year}(t) = \tau] \;+\; \alpha_{s, \,\text{month}(t)} \;+\; \delta_{\text{year}(t)} \;+\; \varepsilon_{s,t}
+    \label{eq:passthrough_cmdj}
+\end{equation}
+estimated on the 2000m1--2022m12 monthly panel with sector $\times$ calendar-month fixed effects $\alpha_{s, \text{month}(t)}$ (controlling for sector-specific seasonality, as in CMdG) and year fixed effects $\delta_{\text{year}(t)}$. Standard errors are clustered on NACE 4-digit. ``Regulated'' is CMdG's tight definition (seven NACE 2-digit codes \{17, 19, 20, 23, 24, 25, 35\}, per their Table~A.5 col~(1)/(4)). The reference year is 2004, the last pre-ETS year.
+
+This specification differs from the headline panel-LP in \S\ref{sec:passthrough} in two ways. First, identification is binary (regulated vs unregulated NACE 2-digit) rather than continuous in $\omega$. Second, no carbon-policy shock is used: the variation comes from the relative time-series of regulated vs unregulated PPI, not from regulatory news events. The CMdG specification is thus less structural — it documents that prices in regulated sectors rose faster than in unregulated sectors over Phase~II and beyond, but it does not isolate the EU ETS as the cause. We report it because it is the standard reference in the literature \citep{CosterMejeanDiGiovanni2024}, and because it provides a sanity check on the panel-LP result at a different identifying margin.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{phase1_figure1_cmdj_style.png}
+    \caption{Belgian replication of \citet{CosterMejeanDiGiovanni2024} Figure~1: year-by-year coefficients $\widehat{\beta}_\tau$ from equation~(\ref{eq:passthrough_cmdj}). Sample: 2000m1--2022m12 Belgian NACE 4-digit monthly PPI panel; reference year 2004. Vertical bars are 95\% pointwise confidence intervals (clustered on NACE 4-digit). Shaded bands denote ETS Phases~1 and~3.}
+    \label{fig:cmdj_ppi_eventstudy}
+\end{figure}
+
+\paragraph{Result.} The year-by-year coefficients show a clear structural break around 2005 (Phase~I start), with regulated PPI rising 2--4 log-points relative to unregulated by 2005--2007, then 7--10 log-points through Phase~II, and 9--14 log-points by Phase~IV. Phase-aggregated coefficients (relative to the 2000--2004 pre-ETS reference period):
+\[
+    \widehat{\beta}_{\text{Phase 1}} = +0.088^{***}, \quad
+    \widehat{\beta}_{\text{Phase 2}} = +0.138^{***}, \quad
+    \widehat{\beta}_{\text{Phase 3}} = +0.098^{**}, \quad
+    \widehat{\beta}_{\text{Phase 4}} = +0.193^{***}.
+\]
+A pre-trend is visible: pre-ETS coefficients drift from $-0.077$ in 2000 toward zero at the 2004 reference, suggesting the regulated-vs-unregulated PPI gap was already closing before the EU~ETS began. Linear extrapolation of the pre-trend forward predicts $\widehat{\beta}_h \approx +0.08$ at $h = 2008$ from the trend alone; the actual Phase~II average ($+0.138$) is meaningfully above that extrapolation, but the pre-trend leaves the design less than a pristine parallel-trends test. The CMdG specification on Belgian data is therefore consistent with positive and economically large pass-through, but with a parallel-trends caveat that motivates the headline reliance on the Käenzig-shock identification of \S\ref{sec:passthrough} as the cleaner identifying source.
+
 \section{Pass-through: LP-IV invertibility-robust robustness}\label{app:passthrough_lp_iv}
 
 The headline pass-through specification (\eqref{eq:passthrough_strategy1}) uses Käenzig's VAR-identified Shock as the regressor in a panel local projection. Identification of the Shock from \citet{kanzig2023unequal}'s external-instruments SVAR rests on (partial) invertibility. We follow \citet[Appendix C.5]{kanzig2023unequal} in supplementing the headline with a local-projection instrumental-variables (LP-IV) exercise that does not require invertibility, using the raw refined Surprise series as the instrument:
