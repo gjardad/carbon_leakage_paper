@@ -9,61 +9,151 @@
     \item \textbf{regulated}: $\mathbf{1}[\text{nace exposure}_n > 0]$.
 \end{itemize}
 
-\section{Pass-through: CMdG-style regulated-vs-unregulated event study}\label{app:passthrough_cmdj}
+% ================================================================
+% PASS-THROUGH: SUPPLEMENTARY RESULTS
+% ================================================================
+%
+% Five pieces, all supporting §\ref{sec:passthrough}:
+%   (a) PPI on EUA via local-projection IV, surprise as instrument
+%   (b) Two-column R_h table: EUA on shock vs EUA on surprise
+%   (c) Monthly sectoral PPI on (CPShock × ω^sh_{s, year-1})
+%   (d) DiD with 2008 cutoff, ω built on 2006-07, sample 2000-2019
+%   (e) Rambachan-Roth sensitivity for the column-(C) headline event-study
+%
+% ----------------------------------------------------------------
 
-We complement the headline panel-LP elasticity in \S\ref{sec:passthrough} with an event-study replication of \citet[eq.~1]{CosterMejeanDiGiovanni2024} on Belgian monthly NACE 4-digit PPI data. The specification is exactly CMdG's:
-\begin{equation}
-    \log \text{PPI}_{s,t} \;=\; \sum_{\tau \neq 2004} \beta_\tau \,\mathbf{1}[s \in \text{regulated}]\,\mathbf{1}[\text{year}(t) = \tau] \;+\; \alpha_{s, \,\text{month}(t)} \;+\; \delta_{\text{year}(t)} \;+\; \varepsilon_{s,t}
-    \label{eq:passthrough_cmdj}
-\end{equation}
-estimated on the 2000m1--2022m12 monthly panel with sector $\times$ calendar-month fixed effects $\alpha_{s, \text{month}(t)}$ (controlling for sector-specific seasonality, as in CMdG) and year fixed effects $\delta_{\text{year}(t)}$. Standard errors are clustered on NACE 4-digit. ``Regulated'' is CMdG's tight definition (seven NACE 2-digit codes \{17, 19, 20, 23, 24, 25, 35\}, per their Table~A.5 col~(1)/(4)). The reference year is 2004, the last pre-ETS year.
+\section{Pass-Through: Supplementary Results}\label{app:passthrough}
 
-This specification differs from the headline panel-LP in \S\ref{sec:passthrough} in two ways. First, identification is binary (regulated vs unregulated NACE 2-digit) rather than continuous in $\omega$. Second, no carbon-policy shock is used: the variation comes from the relative time-series of regulated vs unregulated PPI, not from regulatory news events. The CMdG specification is thus less structural — it documents that prices in regulated sectors rose faster than in unregulated sectors over Phase~II and beyond, but it does not isolate the EU ETS as the cause. We report it because it is the standard reference in the literature \citep{CosterMejeanDiGiovanni2024}, and because it provides a sanity check on the panel-LP result at a different identifying margin.
+This appendix collects five robustness exercises for §\ref{sec:passthrough}: an instrumental-variables version of the aggregate response (a), a comparison of the two Känzig instruments (b), a rolling-exposure variant of the heterogeneous response (c), a placebo using the 2008 onset of Phase II (d), and Rambachan-Roth sensitivity bounds on the year-by-year coefficients of column (C) (e).
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.85\textwidth]{phase1_figure1_cmdj_style.png}
-    \caption{Belgian replication of \citet{CosterMejeanDiGiovanni2024} Figure~1: year-by-year coefficients $\widehat{\beta}_\tau$ from equation~(\ref{eq:passthrough_cmdj}). Sample: 2000m1--2022m12 Belgian NACE 4-digit monthly PPI panel; reference year 2004. Vertical bars are 95\% pointwise confidence intervals (clustered on NACE 4-digit). Shaded bands denote ETS Phases~1 and~3.}
-    \label{fig:cmdj_ppi_eventstudy}
-\end{figure}
+% ----------------------------------------------------------------
+\subsection{LP-IV: PPI on EUA, surprise as instrument}\label{app:passthrough_iv}
+% ----------------------------------------------------------------
 
-\paragraph{Result.} The year-by-year coefficients show a clear structural break around 2005 (Phase~I start), with regulated PPI rising 2--4 log-points relative to unregulated by 2005--2007, then 7--10 log-points through Phase~II, and 9--14 log-points by Phase~IV. Phase-aggregated coefficients (relative to the 2000--2004 pre-ETS reference period):
-\[
-    \widehat{\beta}_{\text{Phase 1}} = +0.088^{***}, \quad
-    \widehat{\beta}_{\text{Phase 2}} = +0.138^{***}, \quad
-    \widehat{\beta}_{\text{Phase 3}} = +0.098^{**}, \quad
-    \widehat{\beta}_{\text{Phase 4}} = +0.193^{***}.
-\]
-A pre-trend is visible: pre-ETS coefficients drift from $-0.077$ in 2000 toward zero at the 2004 reference, suggesting the regulated-vs-unregulated PPI gap was already closing before the EU~ETS began. Linear extrapolation of the pre-trend forward predicts $\widehat{\beta}_h \approx +0.08$ at $h = 2008$ from the trend alone; the actual Phase~II average ($+0.138$) is meaningfully above that extrapolation, but the pre-trend leaves the design less than a pristine parallel-trends test. The CMdG specification on Belgian data is therefore consistent with positive and economically large pass-through, but with a parallel-trends caveat that motivates the headline reliance on the Käenzig-shock identification of \S\ref{sec:passthrough} as the cleaner identifying source.
-
-\section{Pass-through: aggregate-PPI sample-window robustness}\label{app:passthrough_aggregate_robust}
-
-We re-estimate the aggregate local-projection of equation~(\ref{eq:passthrough_aggregate}) on two alternative sample windows: the full Käenzig window 2005m1--2019m12 (including Phase~I), and the Phase-III-only window 2013m1--2019m12. Both produce IRFs of the same hump shape and similar peak magnitude as the headline 2008m1--2019m12 estimate, with wider confidence bands reflecting the smaller (Phase III only) or noisier (Phase~I included) samples. In both robustness samples the point estimate is positive at the majority of horizons (32 of 37 in 2005--2019, 31 of 37 in 2013--2019), with several horizons significant at 68\% and none significant at 68\% in the negative direction except at the long-horizon tail (consistent with mean-reversion of a temporary shock).
+The aggregate exercise in §\ref{sec:passthrough_aggregate} regresses cumulative log-PPI changes directly on the carbon-policy shock. A natural alternative is to instrument log-EUA-price changes with the Känzig surprise series and read off pass-through as the second-stage coefficient. We implement the Käenzig (2023) panel-LP-IV with sectoral exposure built on rolling pre-period EUTL records, separately on the 2008m1--2019m12 (post-Phase-I) and 2013m1--2019m12 (Phase III only) windows.
 
 \begin{figure}[H]
     \centering
     \begin{subfigure}{0.49\textwidth}
-        \includegraphics[width=\textwidth]{phase3_aggregate_ppi_lp.pdf}
-        \caption{2005m1--2019m12.}
-        \label{fig:passthrough_agg_2005}
+        \centering
+        \includegraphics[width=\textwidth]{phase3_passthrough_iv_phase2plus.pdf}
+        \caption{2008m1--2019m12 (Phase II onward).}
     \end{subfigure}\hfill
     \begin{subfigure}{0.49\textwidth}
-        \includegraphics[width=\textwidth]{phase3_aggregate_ppi_lp_phase3plus.pdf}
-        \caption{2013m1--2019m12 (Phase~III only).}
-        \label{fig:passthrough_agg_2013}
+        \centering
+        \includegraphics[width=\textwidth]{phase3_passthrough_iv_phase3plus.pdf}
+        \caption{2013m1--2019m12 (Phase III only).}
     \end{subfigure}
-    \caption{Aggregate Belgian PPI response to a unit Käenzig CPShock (equation~\ref{eq:passthrough_aggregate}) on alternative sample windows. Solid line: point estimate. Shaded bands: 68\% (dark) and 90\% (light) confidence intervals from Newey--West standard errors with lag $h+1$. Headline (2008m1--2019m12) is in Figure~\ref{fig:passthrough_aggregate}.}
-    \label{fig:passthrough_aggregate_robust}
+    \caption{LP-IV pass-through elasticity $\hat\beta_h$ on the (Käenzig 2023) carbon-policy shock, normalised by the aggregate first-stage reference $\bar R_{\text{ref}}$ estimated on 2013m1--2019m12. Sectoral exposure $\omega_s$ is the rolling pre-period emissions/cost ratio (lagged one year). Bands: 90\% confidence intervals, clustered at the NACE 4-digit level. Source: \texttt{phase3\_passthrough\_iv.R}.}
+    \label{fig:app_iv}
 \end{figure}
 
-\section{Pass-through: sectoral $\widehat{\gamma}_h$ on Phase~III only}\label{app:passthrough_gamma_phase3}
+% ----------------------------------------------------------------
+\subsection{EUA price response: shock vs surprise}\label{app:passthrough_rh}
+% ----------------------------------------------------------------
 
-Figure~\ref{fig:passthrough_gamma_phase3} re-estimates the sectoral panel-LP of equation~(\ref{eq:passthrough_panel}) on 2013m1--2019m12 (Phase~III only). The IRF is positive at 25 of 37 horizons with a peak of $\widehat{\gamma}_h \approx 1.76$ at $h = 22$ — closely tracking the headline 2008m1--2019m12 IRF in shape and peak location — but with materially wider confidence bands. A direct comparison of the two windows' point estimates yields $|z| < 1.96$ at 36 of 37 horizons (mean $|z| = 0.54$), so the two windows are estimating statistically the same $\gamma_h$. The shorter sample reduces identifying variation (479 vs 821 sector-year cells with $\omega > 0$, 84 vs 144 months) and thereby inflates standard errors by approximately a factor of 1.7 — enough that the negative point estimates at some horizons fall well within sampling noise around the headline path.
+We compare the dynamic regression of the cumulative log-EUA price change on the Känzig Shock with the same regression run on the Känzig Surprise. The exercise is the time-series first stage that sits behind the LP-IV in §\ref{app:passthrough_iv}; we report it on its own to make the relative tightness of the two instruments visible.
+
+For each instrument $z \in \{\text{Shock}_m, \text{Surprise}_m\}$ and horizon $h$ we run
+\begin{equation}
+    \log \text{EUA}_{m+h} - \log \text{EUA}_{m-1} \;=\; R_h \cdot z_m + \sum_{j=1}^{6} \phi_j \log \text{EUA}_{m-j} + u_{m, h},
+\end{equation}
+on the 2005m1--2019m12 sample with heteroskedasticity-robust standard errors.
+
+\begin{table}[H]
+    \centering
+    \caption{Dynamic LP coefficient $\hat R_h$ from regressing cumulative log-EUA monthly price changes on the \citet{kanzig2023unequal} Shock and Surprise series respectively. Heteroskedasticity-robust standard errors in parentheses. Sample: 2005m1--2019m12. Stars: $^{*}\,p<0.10$, $^{**}\,p<0.05$, $^{***}\,p<0.01$. Source: \texttt{phase4\_eua\_on\_shock\_vs\_surprise\_lp.R}.}
+    \label{tab:app_rh}
+    \begin{tabular}{lcc}
+        \toprule
+        Horizon $h$ (months) & EUA on Shock $\hat R_h$ & EUA on Surprise $\hat R_h$ \\
+        \midrule
+        $h = 0$  & $-0.027$            & $\phantom{-}0.073$  \\
+                 & $(0.040)$           & $(0.084)$           \\
+        $h = 1$  & $\phantom{-}0.106$  & $\phantom{-}0.256$  \\
+                 & $(0.115)$           & $(0.222)$           \\
+        $h = 3$  & $\phantom{-}0.235^{**}$ & $\phantom{-}0.391$  \\
+                 & $(0.112)$           & $(0.334)$           \\
+        $h = 6$  & $\phantom{-}0.143$  & $\phantom{-}0.378$  \\
+                 & $(0.105)$           & $(0.550)$           \\
+        $h = 12$ & $\phantom{-}0.098$  & $\phantom{-}0.214$  \\
+                 & $(0.126)$           & $(0.392)$           \\
+        $h = 18$ & $\phantom{-}0.034$  & $-0.099$            \\
+                 & $(0.111)$           & $(0.310)$           \\
+        $h = 24$ & $-0.037$            & $\phantom{-}0.275$  \\
+                 & $(0.119)$           & $(0.247)$           \\
+        \midrule
+        Observations (avg) & $162$               & $162$               \\
+        EUA price lags     & 6                   & 6                   \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+The Shock series produces tighter point estimates and a single statistically distinguishable coefficient at $h = 3$. The Surprise series carries roughly two-to-three times wider standard errors at every horizon. We use the Shock as the headline instrument throughout the paper.
+
+% ----------------------------------------------------------------
+\subsection{Sectoral PPI on (CPShock $\times$ rolling $\omega^{sh}$)}\label{app:passthrough_rolling}
+% ----------------------------------------------------------------
+
+Specification (C) in the main text fixes the exposure measure $\omega^{sh}_s$ on 2015--2016. As a robustness check we let exposure vary year by year, using \emph{previous-year} shortage-over-cost as the predetermined sector weight, and run the panel local projection
+\begin{equation}
+    \log \text{PPI}_{s, m+h} - \log \text{PPI}_{s, m-1} \;=\; \gamma_h \cdot \big( \text{CPShock}_m \cdot \omega^{sh}_{s, \text{year}(m) - 1} \big) + \alpha_s + \delta_m + \varepsilon_{s, m, h}
+\end{equation}
+on the 2006m1--2019m12 monthly NACE 4-digit panel, with sector and year-month fixed effects and standard errors clustered at the NACE 4-digit level.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.7\textwidth]{phase3_passthrough_iv_gamma_phase3plus.pdf}
-    \caption{Sectoral panel-LP coefficient $\widehat{\gamma}_h$ on $(\omega_{s,t(m)} \times \text{CPShock}_m)$ from equation~(\ref{eq:passthrough_panel}), restricted to 2013m1--2019m12 (Phase~III only). Solid line: point estimate. Shaded bands: 68\% (dark) and 90\% (light) confidence intervals (cluster-robust at NACE 4-digit). Compare to the headline 2008m1--2019m12 estimate in Figure~\ref{fig:passthrough_gamma}.}
-    \label{fig:passthrough_gamma_phase3}
+    \includegraphics[width=0.85\textwidth]{phase4_ppi_lp_omega_lagged.pdf}
+    \caption{Panel-LP coefficient $\hat\gamma_h$ on the interaction of the Känzig (2023) carbon-policy shock with rolling previous-year sector shortage-over-cost. Bands: 90\% confidence intervals, clustered at the NACE 4-digit level. Sample: 2006m1--2019m12. Source: \texttt{phase4\_ppi\_lp\_omega\_lagged.R}.}
+    \label{fig:app_rolling}
 \end{figure}
 
+The pattern matches column (C) in Table~\ref{tab:passthrough_did}: a positive contemporaneous response, dampening through the first six months, and statistically distinguishable positive responses at horizons of one year and beyond. The cross-sectional shape that drives the headline result is not an artefact of the 2015--2016 exposure window.
+
+% ----------------------------------------------------------------
+\subsection{Phase II onset: DiD with 2008 cutoff and $\omega$ from 2006--07}\label{app:passthrough_p2}
+% ----------------------------------------------------------------
+
+The main-text DiD uses 2017 as the cutoff. The 2008 onset of Phase II is the natural placebo: it marks the first regulatory tightening (small-scale auctioning, more stringent caps) and a clear EUA-price reset, but it follows two years (2006--07) of Phase-I overallocation that left most regulated installations with very small allowance shortages. Repeating the exercise of \eqref{eq:did_2017} with $X_s$ built on 2006--07 and the post-indicator switched to $\mathbf{1}\{\text{year}(m) \geq 2008\}$, on the 2000m1--2019m12 sample, gives:
+
+\begin{table}[H]
+    \centering
+    \caption{Phase II onset: differential post-2008 producer-price response by pre-Phase-II ETS exposure measure. Coefficient $\hat\beta$ from $\log P_{s,m} = \beta \cdot X_s \cdot \mathbf{1}\{\text{year}(m) \geq 2008\} + \alpha_s + \delta_m + \varepsilon_{s,m}$ on a monthly panel of Belgian NACE 4-digit producer prices, with NACE 4-digit and year-month fixed effects. Standard errors clustered at the NACE 4-digit level in parentheses. The pre-2010 portion of the panel is the 2-digit Eurostat PPI series broadcast to 4-digit children; from 2010m1 onward the series is the chained Statbel 4-digit PPI. Stars: $^{*}\,p<0.10$, $^{**}\,p<0.05$, $^{***}\,p<0.01$. Source: \texttt{phase4\_ppi\_did\_2008.R}.}
+    \label{tab:app_did_2008}
+    \begin{tabular}{lccc}
+        \toprule
+                                & (A)              & (B)              & (C)              \\
+        Exposure measure $X_s$  & Treated$_s$      & $\omega^{em}_s$  & $\omega^{sh}_s$  \\
+        $\omega$ window         & ---              & 2006--07         & 2006--07         \\
+        Sample window           & 2000m1--2019m12  & 2000m1--2019m12  & 2000m1--2019m12  \\
+        \midrule
+        $\hat\beta$ \,($X_s \times \text{Post(2008)}$)
+                                & $0.082^{***}$    & $-1.72$          & $142.59$         \\
+                                & $(0.024)$        & $(5.94)$         & $(502.15)$       \\
+        \midrule
+        Observations            & $32{,}133$       & $32{,}133$       & $32{,}133$       \\
+        NACE 4d sectors         & 134              & 134              & 134              \\
+        Sector FE               & \checkmark       & \checkmark       & \checkmark       \\
+        Year-month FE           & \checkmark       & \checkmark       & \checkmark       \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+The treated-vs-untreated level shift in column (A) reproduces the qualitative finding of \citet{colmeretal2023} for France: Phase II onset coincides with a producer-price gap between regulated and unregulated NACE 2-digit sectors. The cost-exposure measures in columns (B) and (C) deliver nulls. This is consistent with the reading in §\ref{sec:passthrough_het}: in 2006--07, generous Phase-I free allocation kept most sectors' shortage close to zero, so the cross-sectional cost-exposure variation that identifies the 2017 result is not present in the 2008 cross-section.
+
+% ----------------------------------------------------------------
+\subsection{Rambachan--Roth sensitivity for column (C)}\label{app:passthrough_rr}
+% ----------------------------------------------------------------
+
+The headline event-study figure \ref{fig:passthrough_eventstudy} reports $\hat\beta_\tau$ for $X_s = \omega^{sh}_s$ year by year, with 2016 as the omitted reference. The differential turns on at 2017 and rises through 2022. We test how robust the first post-treatment coefficient $\hat\beta_{2017}$ is to a relaxation of the parallel-trends assumption, following \citet{rambachanroth2023}.
+
+We report two sets of bounds. The relative-magnitudes restriction $\Delta^{RM}(\bar M)$ asks: if the post-treatment violation of parallel trends is at most $\bar M$ times the largest pre-treatment violation, what is the bias-robust confidence set for $\hat\beta_{2017}$? The smoothness restriction $\Delta^{SD}(M)$ asks: if the second differences of the post-treatment trend are bounded by $M$, what is the FLCI?
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{phase4_ppi_eventstudy_omega_sh_honestdid.pdf}
+    \caption{Rambachan-Roth (2023) relative-magnitudes sensitivity bounds for $\hat\beta_{2017}$ from the event-study form of column (C) (Figure~\ref{fig:passthrough_eventstudy}). The leftmost interval is the original 95\% confidence interval; subsequent intervals impose increasingly large bounds $\bar M$ on post-treatment parallel-trends violations relative to the maximum pre-treatment violation. Source: \texttt{phase4\_ppi\_did\_2017\_eventstudy.R}; tabular RM and SD bounds in \texttt{phase4\_ppi\_eventstudy\_omega\_sh\_RM.csv} and \texttt{\_SD.csv}.}
+    \label{fig:app_honestdid}
+\end{figure}
+
+The original interval excludes zero. Under a relative-magnitudes restriction with $\bar M = 0.5$ (post-treatment violation up to half of the worst pre-treatment violation), the coefficient is no longer statistically distinguishable from zero. We report the result without claiming robustness to large violations of parallel trends; the RM bounds quantify exactly how strong the parallel-trends assumption needs to be for the column-(C) result to survive.
