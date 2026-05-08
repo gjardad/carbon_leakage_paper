@@ -1,0 +1,83 @@
+% ================================================================
+% PASS-THROUGH OF CARBON COSTS TO PRODUCER PRICES
+% ================================================================
+%
+% Three findings, kept deliberately qualitative. We do not claim a
+% magnitude for pass-through; we document only:
+%   (1) shocks of the same kind as the carbon-policy shock raise overall
+%       Belgian manufacturing prices, persistently;
+%   (2) the price increase is larger for sectors that, before 2017, had
+%       higher allowance shortage relative to total cost (DiD column C);
+%   (3) we cannot reject the null of no differential price increase when
+%       sector exposure is measured by emissions-over-cost rather than by
+%       shortage-over-cost (DiD column B).
+%
+% Two figures + one four-column table. Nothing else.
+% ----------------------------------------------------------------
+
+This section asks two simple questions about Belgian producer prices and the EU ETS. First, when EUA prices move because of an identifiable carbon-policy shock, do manufacturing prices move with them, and does the response persist? Second, are the price increases concentrated in the sectors that one would expect, ex ante, to be most exposed? We do not attempt to pin down the size of pass-through; we only ask whether the qualitative patterns are present.
+
+% ----------------------------------------------------------------
+\subsection{The aggregate price response}\label{sec:passthrough:agg}
+% ----------------------------------------------------------------
+
+We use the monthly carbon-policy shock series of \citet{kanzig2023unequal} to study how aggregate Belgian manufacturing prices respond to identifiable innovations in EUA prices. The series is constructed to isolate the surprise component of EUA-price moves around regulatory announcements; it is the workhorse instrument in the recent literature on aggregate carbon-pricing pass-through.
+
+We estimate, at monthly horizons $h = 0, \dots, 36$,
+\begin{equation}
+    \log P^{\text{agg}}_{m+h} - \log P^{\text{agg}}_{m-1} \;=\; \alpha_h + \gamma_h \cdot \text{CPShock}_m + \varepsilon_{m, h},
+    \label{eq:agg_lp}
+\end{equation}
+where $P^{\text{agg}}_m$ is the equally-weighted geometric mean of NACE 4-digit Belgian PPI in month $m$, on the sample 2005m1--2019m12. Standard errors are Newey--West with lag $h+1$.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{phase3_aggregate_ppi_lp.pdf}
+    \caption{Local-projection impulse response of aggregate Belgian manufacturing log-PPI to the \citet{kanzig2023unequal} carbon-policy shock. Coefficients $\hat\gamma_h$ from \eqref{eq:agg_lp} at monthly horizons $h = 0, \dots, 36$. Shaded bands: 90\% Newey--West confidence intervals (lag $h+1$). Sample: 2005m1--2019m12.}
+    \label{fig:agg_irf}
+\end{figure}
+
+The point estimate is positive at every horizon, rises through the second year, and remains elevated three years out. Manufacturing prices go up after a carbon-policy shock, and they do not snap back over the horizons we look at. We treat this as one qualitative fact: the aggregate response is positive and persistent.
+
+% ----------------------------------------------------------------
+\subsection{Heterogeneity in the response}\label{sec:passthrough:het}
+% ----------------------------------------------------------------
+
+We next ask whether sectors that were more exposed ex ante saw larger price increases. We use 2017 --- the year EUA prices began their sustained rise after the October 2015 Market Stability Reserve decision --- as the cutoff, and build pre-2017 sector-level exposure measures from EUTL records joined to firm accounts.
+
+For each NACE 4-digit sector $s$ we construct, on 2015--2016, the ratios
+\begin{align}
+    \omega^{em}_s   &= \frac{\sum_{i \in s, \, t \in 2015\text{--}16} \text{emissions}_{i,t} \cdot \text{EUA}_t}{\sum_{i \in s, \, t \in 2015\text{--}16} \text{total\_cost}_{i,t}}, \\
+    \omega^{sh}_s   &= \frac{\sum_{i \in s, \, t \in 2015\text{--}16} \text{shortage}_{i,t} \cdot \text{EUA}_t}{\sum_{i \in s, \, t \in 2015\text{--}16} \text{total\_cost}_{i,t}},
+\end{align}
+where $\text{shortage}_{i,t} = \max(\text{emissions}_{i,t} - \text{free\_allocation}_{i,t}, \, 0)$ and the inner sum runs over ETS firms $i$ in $s$. We also use a binary regulated-vs-unregulated treatment indicator $\text{Treated}_s$ that flags 4-digit sectors whose 2-digit parent contains regulated installations.
+
+For each exposure measure $X_s \in \{\text{Treated}_s, \omega^{em}_s, \omega^{sh}_s\}$ we estimate
+\begin{equation}
+    \log P_{s,m} \;=\; \beta \cdot X_s \cdot \mathbf{1}\{\text{year}(m) \geq 2017\} + \alpha_s + \delta_m + \varepsilon_{s,m}
+    \label{eq:did_2017}
+\end{equation}
+on the monthly NACE 4-digit panel of Belgian PPI from 2010m1, with sector and year-month fixed effects and standard errors clustered at the NACE 4-digit level. Specifications (A), (B), and (C) substitute the binary, the emissions, and the shortage measures respectively. We report (C) on two windows: ending 2019m12 and ending 2022m12.
+
+\input{passthrough_leakage/tables/passthrough_did}
+
+Table~\ref{tab:passthrough_did} reports the coefficient $\hat\beta$ in each column. Two observations carry the section.
+
+First, in column (C), sectors with higher pre-2017 \emph{shortage} exposure show a higher price level from 2017 onward, on both windows. The differential is statistically distinguishable from zero on the 2010--2019 window --- before the 2021--22 EUA price spike, before the COVID disruption, and before the energy crisis. We read this as our second qualitative finding: \emph{when we sort sectors by how much of their cost base went into buying allowances on the market, the more-exposed sectors see larger price increases after 2017}.
+
+Second, column (B) cannot reject the null. When we sort sectors instead by emissions-over-cost --- a measure that includes emissions covered by free allocation --- the post-2017 differential is indistinguishable from zero. Because shortage and emissions are correlated across sectors, but a sector can have large emissions and very little shortage when its free allocation is generous, the two measures are not interchangeable. The contrast between columns (B) and (C) is consistent with this: the empirically relevant margin of cross-sector variation is the shortage that the sector had to absorb on the market, not the gross emissions count.
+
+Figure~\ref{fig:eventstudy_C} traces the same exercise year by year. We replace the post-2017 indicator in \eqref{eq:did_2017} with a full set of year-specific interactions $\sum_{\tau \neq 2016} X_s \cdot \mathbf{1}\{\text{year}(m) = \tau\}$, dropping 2016 as the reference. The figure plots $\hat\beta_\tau$ for column (C) on the 2010m1--2022m12 sample. Pre-2017 coefficients are noisy and centered on zero; coefficients from 2017 onward are positive and rise through the sample. The pattern matches the table: the differential is a post-2017 phenomenon, not a pre-existing trend.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{phase4_ppi_eventstudy_omega_sh.pdf}
+    \caption{Year-by-year coefficients $\hat\beta_\tau$ from the event-study form of column (C) of Table~\ref{tab:passthrough_did}. The post-2017 indicator in \eqref{eq:did_2017} is replaced by a full set of year-specific interactions $\omega^{sh}_s \cdot \mathbf{1}\{\text{year}=\tau\}$, dropping 2016 (reference, omitted, $\hat\beta = 0$). Bars: 95\% confidence intervals clustered at the NACE 4-digit level. Vertical dotted line marks the 2017 cutoff. Sample: 2010m1--2022m12.}
+    \label{fig:eventstudy_C}
+\end{figure}
+
+% ----------------------------------------------------------------
+\subsection{Summary}\label{sec:passthrough:summary}
+% ----------------------------------------------------------------
+
+We document three qualitative facts. Aggregate Belgian manufacturing prices respond positively and persistently to identifiable carbon-policy shocks. Sectors that, prior to 2017, were buying a larger fraction of their cost base in allowances on the market saw larger price increases from 2017 onward. Sorting sectors by gross emissions exposure delivers a null. We make no claim about the magnitude of pass-through, and we do not interpret these patterns beyond what they say: when EUA prices rise, manufacturing prices rise too, and they rise more in the sectors with greater allowance-deficit exposure. Robustness exercises around alternative shock measures, alternative treatment dates, and post-treatment trend sensitivity are reported in Appendix~\ref{app:passthrough}.

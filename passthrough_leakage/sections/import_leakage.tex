@@ -1,0 +1,90 @@
+% ================================================================
+% CROSS-BORDER CARBON LEAKAGE: CUSTOMS EVIDENCE
+% ================================================================
+%
+% Source: IMPORT_LEAKAGE.md (full document) + CMdG_REPLICATION.md Phase 2.
+%
+% This section replicates Coster, di Giovanni & Méjean (FRBNY SR #1136, 2024)
+% Section 3 on the Belgian customs panel (2000–2019). CMdG document large
+% cross-border leakage for France; we ask whether the same identification on
+% Belgian micro-data delivers the same headline.
+%
+% ----------------------------------------------------------------
+
+% ----------------------------------------------------------------
+% 4.1  HEADLINE
+% ----------------------------------------------------------------
+\subsection{Headline}\label{sec:import_leakage:headline}
+
+% TODO: Belgium-vs-France comparison table (verbatim from IMPORT_LEAKAGE.md):
+%
+%                          Belgium (col 5)        France (CMdG col 5)
+%   ----------------------------------------------------------------
+%   Phase 3 share          -0.0024 **             +0.121 ***
+%   Phase 3 probability    +0.0041 (n.s.)         +0.071 ***
+%   Phase 2 share          -0.0037 ***            +0.110 ***
+%   Phase 2 probability    -0.0128 (n.s.)         (positive)
+%   Pre-trend (prob.)      non-zero, ≈ -0.012     flat
+%
+% Belgium's coefficients are two orders of magnitude smaller than CMdG
+% France's, and where significant, point the wrong way.
+
+% ----------------------------------------------------------------
+% 4.2  SPECIFICATION
+% ----------------------------------------------------------------
+\subsection{Specification}\label{sec:import_leakage:spec}
+
+% TODO: CMdG's Eq. 1, phase-aggregated:
+%
+%   y_{f,p,i,t} = β_1 · 1(regulated)_p × 1(t ∈ 2005–08)
+%               + β_2 · 1(regulated)_p × 1(t ∈ 2009–12)
+%               + β_3 · 1(regulated)_p × 1(t ∈ 2013–19)
+%               + α_{f,p,i} + δ_{i,t} + δ_{s,t} + ε.
+%
+% Outcomes:
+%   Panel A — share:        value_{f,p,i,t} / Σ_{p,i ∈ non-ETS}value_{f,p,i,t}.
+%   Panel B — probability:  1(value > 0).
+% Cluster-robust SE: two-way (firm + country).
+% Sample: imports from non-ETS source countries only (per CMdG p. 12–13).
+% Six FE columns matching CMdG Table 1 (col 5 = preferred):
+%   firm × product × country  +  country × year  +  sector × year.
+
+% ----------------------------------------------------------------
+% 4.3  RESULTS
+% ----------------------------------------------------------------
+\subsection{Results}\label{sec:import_leakage:results}
+
+% TODO:
+%   - Table 1 (analog of CMdG Table 1): six FE columns × Phase 1/2/3 ×
+%     share / probability. Lift from output/tables/.
+%   - Figure 3 (event study, analog of CMdG Figure 3): leads and lags.
+%     Pre-trend non-zero on the probability margin.
+%   - Robustness across four control-group choices (Specs A/B/C/D from
+%     CMdG_REPLICATION.md Phase 2).
+
+% ----------------------------------------------------------------
+% 4.4  WHAT WE DID NOT RUN AND WHY
+% ----------------------------------------------------------------
+\subsection{Robustness Not Pursued}\label{sec:import_leakage:notpursued}
+
+% TODO: We do not run Phase 2's planned Figure 4 / Appendix B robustness
+% (heterogeneity by carbon-cost intensity, instrument variants) because the
+% headline is null/negative — those exercises only sharpen positive results.
+% Not running them is a defensible call but should be flagged here so a
+% reader does not infer omission. (Note for Gabriel: cite IMPORT_LEAKAGE.md
+% verbatim on this.)
+
+% ----------------------------------------------------------------
+% 4.5  DISCUSSION
+% ----------------------------------------------------------------
+\subsection{Discussion}\label{sec:import_leakage:discussion}
+
+% TODO: candidate explanations for the Belgium ≠ France divergence.
+% Save the full version for §\ref{sec:discussion}; here, brief notes only:
+%   - Belgium has tighter intra-EU integration (smaller economy, more
+%     intra-ETS sourcing baseline) → less marginal substitution available.
+%   - Pass-through is higher in Belgium (§\ref{sec:passthrough}), so the
+%     buyer price differential between ETS and non-ETS sources is partly
+%     offset by reciprocal pass-through abroad.
+%   - Pre-trend on probability margin warns against literal interpretation
+%     of the level coefficients on probability.

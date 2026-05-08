@@ -1,0 +1,133 @@
+% ================================================================
+% DOMESTIC CARBON LEAKAGE: FIRM-TO-FIRM EVIDENCE
+% ================================================================
+%
+% Source: B2B_LEAKAGE.md (full document) + CMdG_REPLICATION.md Phase 3.
+%
+% This section asks the domestic analog of §\ref{sec:import_leakage}: did
+% Belgian buyers shift away from regulated-NACE ETS-Belgian sellers
+% post-2005 toward unregulated domestic suppliers? This is the novel piece
+% — France lacks firm-to-firm transaction data and so cannot run it.
+%
+% Headline: no identifiable B2B leakage. The binary spec delivers an
+% apparent positive of +0.358 ***, but this reflects market structure
+% (large regulated-NACE ETS sellers are the dominant Belgian suppliers in
+% their NACE regardless of treatment intensity), not behavioural response.
+% The continuous-intensity spec — which exploits cross-firm cost-share
+% variation among ETS sellers — produces nothing identifiable, and the
+% pre-2005 leads test fails parallel trends.
+%
+% ----------------------------------------------------------------
+
+% ----------------------------------------------------------------
+% 5.1  HEADLINE
+% ----------------------------------------------------------------
+\subsection{Headline}\label{sec:b2b_leakage:headline}
+
+% TODO: lift the headline-summary table from B2B_LEAKAGE.md as a LaTeX tabular:
+%
+%   Specification                            Phase 3 share, β   Phase 3 prob, β
+%   -------------------------------------------------------------------------
+%   Binary, col(5) FE                        +0.358 ***         +0.829 ***
+%   Binary robustness Specs A/C/D            all positive ***   all positive ***
+%   Continuous, col(5) FE                    -76 (SE 348)       n/a
+%   Continuous, col(1) FE                    -0.5 (SE 1.6)      n/a
+%   Continuous, col(1) — pre-trend           β_pre = +32,       n/a
+%                                            β_p1 = +29
+%   Event-study leads (continuous, col 5)    +4.5 in 2003 (pre) n/a
+%
+% Reading: the binary headline is an artifact. The continuous spec — which
+% uses firm-level cost-share intensity, the variable that should pick up
+% actual ETS exposure — produces nothing identifiable.
+
+% ----------------------------------------------------------------
+% 5.2  SPECIFICATION
+% ----------------------------------------------------------------
+\subsection{Specifications}\label{sec:b2b_leakage:spec}
+
+% TODO: two specs, run on the same (seller × buyer × year) panel.
+%
+% Binary spec (Spec C — full sample, double diff):
+%
+%   y_{j,b,t} = β_1 · TREAT_j × 1(t ∈ 2005–08)
+%             + β_2 · TREAT_j × 1(t ∈ 2009–12)
+%             + β_3 · TREAT_j × 1(t ∈ 2013–19)
+%             + α_{j,b} + δ_{sn4d, t} + δ_{bn4d, t} + ε,
+%
+%   TREAT_j = 1(seller_is_ets) × 1(seller_is_regulated_NACE).
+%
+% Continuous spec:
+%
+%   y_{j,b,t} = β_pre · firm_cost_share_j × 1(t ∈ 2002–04)
+%             + β_1   · firm_cost_share_j × 1(t ∈ 2005–08)
+%             + β_2   · firm_cost_share_j × 1(t ∈ 2009–12)
+%             + β_3   · firm_cost_share_j × 1(t ∈ 2013–19)
+%             + α_{j,b} + δ_{sn4d, t} + δ_{bn4d, t} + ε.
+%
+%   firm_cost_share_j = mean_{2013-15}(shortage × EUA) / mean_{2010-12}(total_cost),
+%                       0 for non-ETS sellers.
+%   Sample: active pairs only (no balance/zero-fill). 2002–04 leads via raw
+%   B2B_ANO.dta (b2b_selected_sample is restricted to 2005+).
+%
+% Two outcomes for each: share (within-buyer-NACE) and probability (1{pair active}).
+% Six FE columns paralleling §\ref{sec:import_leakage} Table 1.
+
+% ----------------------------------------------------------------
+% 5.3  RESULTS — BINARY SPEC
+% ----------------------------------------------------------------
+\subsection{Binary Treatment}\label{sec:b2b_leakage:binary}
+
+% TODO:
+%   - Table 2 (analog of CMdG Table 1): six FE columns × Phase 1/2/3 ×
+%     share / probability. Apparent +0.358 *** Phase 3 share, +0.829 ***
+%     Phase 3 probability — looks like consolidation toward ETS-regulated
+%     sellers post-2005.
+%   - Robustness across four control-group choices (Specs A/B/C/D):
+%     all positive, all *** — apparent robustness.
+%   - Event study: pre-period also positive (the warning sign).
+
+% ----------------------------------------------------------------
+% 5.4  RESULTS — CONTINUOUS SPEC AND WHY THE BINARY IS AN ARTIFACT
+% ----------------------------------------------------------------
+\subsection{Continuous Treatment Reverses the Headline}\label{sec:b2b_leakage:continuous}
+
+% TODO: the central diagnostic of this section.
+%
+%   - Continuous Phase 3 share = −76 (SE 348) at col(5) — VCOV near-singular.
+%     At col(1) FE: −0.5 (SE 1.6) — null.
+%   - Pre-period continuous lead β_pre = +32 (col 1) is indistinguishable
+%     from Phase 1 β_p1 = +29. No kink at 2005.
+%   - Event-study with continuous treatment shows ~+4.5 in 2003 (pre-period),
+%     no break.
+%   - INTERPRETATION: in the binary spec, treatment loads on
+%     "is-this-the-dominant-Belgian-supplier-in-its-NACE", which is
+%     correlated with ETS regulation but is a fixed market-structure fact,
+%     not a treatment response. The continuous spec exploits the within-ETS
+%     cost-share heterogeneity that should pick up actual behavioural
+%     response, and it finds nothing.
+%   - Implication: the binary +0.358 *** is not evidence of leakage.
+%     It is evidence that ETS-regulated sellers have larger market share
+%     for reasons unrelated to the post-2005 ETS regime.
+
+% ----------------------------------------------------------------
+% 5.5  EXTENSIVE-MARGIN RESULTS
+% ----------------------------------------------------------------
+\subsection{Extensive Margin}\label{sec:b2b_leakage:extensive}
+
+% TODO: LPM on relationship continuation — do buyers DROP high-carbon-cost-share
+% suppliers? B2B_LEAKAGE.md continuous spec extensive-margin results go here.
+% (Brief: same null pattern as intensive margin.)
+
+% ----------------------------------------------------------------
+% 5.6  IDENTIFICATION CAVEATS
+% ----------------------------------------------------------------
+\subsection{Caveats}\label{sec:b2b_leakage:caveats}
+
+% TODO:
+%   - Local-1 sample is downsampled. Final tables must be RMD-run; flag in
+%     replication appendix.
+%   - Pair FE collapses on the downsampled panel — local results are for
+%     code correctness only.
+%   - Sample restricted to "ever-active" pairs avoids zero-inflation but
+%     biases against extensive-margin leakage; we report both balanced and
+%     active-only.
