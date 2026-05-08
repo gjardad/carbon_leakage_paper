@@ -13,7 +13,7 @@
 
 \section{Pass-Through: Supplementary Results}\label{app:passthrough}
 
-This appendix collects five robustness exercises for §\ref{sec:passthrough}: an instrumental-variables version of the aggregate response (a), a comparison of the two Känzig instruments (b), a rolling-exposure variant of the heterogeneous response (c), a placebo using the 2008 onset of Phase II (d), and Rambachan-Roth sensitivity bounds on the year-by-year coefficients of column (C) (e).
+This appendix collects five robustness exercises for §\ref{sec:passthrough}: an instrumental-variables version of the aggregate response (a), a comparison of the two Känzig instruments (b), a rolling-exposure variant of the heterogeneous response (c), a placebo using the 2008 onset of Phase II (d), and Rambachan-Roth sensitivity bounds on the year-by-year coefficients of column 4 (e).
 
 % ----------------------------------------------------------------
 \subsection{LP-IV: PPI on EUA, surprise as instrument}\label{app:passthrough:iv}
@@ -97,7 +97,7 @@ on the 2006m1--2019m12 monthly NACE 4-digit panel, with sector and year-month fi
     \label{fig:app_rolling}
 \end{figure}
 
-The pattern matches column (C) in Table~\ref{tab:passthrough_did}: a positive contemporaneous response, dampening through the first six months, and statistically distinguishable positive responses at horizons of one year and beyond. The cross-sectional shape that drives the headline result is not an artefact of the 2015--2016 exposure window.
+The pattern matches columns 3 and 4 of Table~\ref{tab:passthrough_did}: a positive contemporaneous response, dampening through the first six months, and statistically distinguishable positive responses at horizons of one year and beyond. The cross-sectional shape that drives the headline result is not an artefact of the 2015--2016 exposure window.
 
 % ----------------------------------------------------------------
 \subsection{Phase II onset: DiD with 2008 cutoff and $\omega$ from 2006--07}\label{app:passthrough:p2}
@@ -131,7 +131,7 @@ The main-text DiD uses 2017 as the cutoff. The 2008 onset of Phase II is the nat
 The treated-vs-untreated level shift in column (A) reproduces the qualitative finding of \citet{colmeretal2023} for France: Phase II onset coincides with a producer-price gap between regulated and unregulated NACE 2-digit sectors. The cost-exposure measures in columns (B) and (C) deliver nulls. This is consistent with the reading in §\ref{sec:passthrough:het}: in 2006--07, generous Phase-I free allocation kept most sectors' shortage close to zero, so the cross-sectional cost-exposure variation that identifies the 2017 result is not present in the 2008 cross-section.
 
 % ----------------------------------------------------------------
-\subsection{Rambachan--Roth sensitivity for column (C)}\label{app:passthrough:rr}
+\subsection{Rambachan--Roth sensitivity for column 4}\label{app:passthrough:rr}
 % ----------------------------------------------------------------
 
 The headline event-study figure \ref{fig:eventstudy_C} reports $\hat\beta_\tau$ for $X_s = \omega^{sh}_s$ year by year, with 2016 as the omitted reference. The differential turns on at 2017 and rises through 2022. We test how robust the first post-treatment coefficient $\hat\beta_{2017}$ is to a relaxation of the parallel-trends assumption, following \citet{rambachanroth2023}.
@@ -141,8 +141,8 @@ We report two sets of bounds. The relative-magnitudes restriction $\Delta^{RM}(\
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.85\textwidth]{phase4_ppi_eventstudy_omega_sh_honestdid.pdf}
-    \caption{Rambachan-Roth (2023) relative-magnitudes sensitivity bounds for $\hat\beta_{2017}$ from the event-study form of column (C) (Figure~\ref{fig:eventstudy_C}). The leftmost interval is the original 95\% confidence interval; subsequent intervals impose increasingly large bounds $\bar M$ on post-treatment parallel-trends violations relative to the maximum pre-treatment violation. Source: \texttt{phase4\_ppi\_did\_2017\_eventstudy.R}; tabular RM and SD bounds in \texttt{phase4\_ppi\_eventstudy\_omega\_sh\_RM.csv} and \texttt{\_SD.csv}.}
+    \caption{Rambachan-Roth (2023) relative-magnitudes sensitivity bounds for $\hat\beta_{2017}$ from the event-study form of column 4 of Table~\ref{tab:passthrough_did} (Figure~\ref{fig:eventstudy_C}). The leftmost interval is the original 95\% confidence interval; subsequent intervals impose increasingly large bounds $\bar M$ on post-treatment parallel-trends violations relative to the maximum pre-treatment violation. Source: \texttt{phase4\_ppi\_did\_2017\_eventstudy.R}; tabular RM and SD bounds in \texttt{phase4\_ppi\_eventstudy\_omega\_sh\_RM.csv} and \texttt{\_SD.csv}.}
     \label{fig:app_honestdid}
 \end{figure}
 
-The original interval excludes zero. Under a relative-magnitudes restriction with $\bar M = 0.5$ (post-treatment violation up to half of the worst pre-treatment violation), the coefficient is no longer statistically distinguishable from zero. We report the result without claiming robustness to large violations of parallel trends; the RM bounds quantify exactly how strong the parallel-trends assumption needs to be for the column-(C) result to survive.
+The original interval excludes zero. Under a relative-magnitudes restriction with $\bar M = 0.5$ (post-treatment violation up to half of the worst pre-treatment violation), the coefficient is no longer statistically distinguishable from zero. We report the result without claiming robustness to large violations of parallel trends; the RM bounds quantify exactly how strong the parallel-trends assumption needs to be for the column-4 result to survive.

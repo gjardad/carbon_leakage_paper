@@ -43,36 +43,29 @@ The point estimate is positive at every horizon. It rises through the first six 
 \subsection{Heterogeneity in the response}\label{sec:passthrough:het}
 % ----------------------------------------------------------------
 
-We next ask whether sectors that were more exposed ex ante saw larger price increases. We use 2017 --- the year EUA prices began their sustained rise after the October 2015 Market Stability Reserve decision --- as the cutoff, and build pre-2017 sector-level exposure measures from EUTL records joined to firm accounts.
-
-For each NACE 4-digit sector $s$ we construct, on 2015--2016, the ratios
-\begin{align}
-    \omega^{em}_s   &= \frac{\sum_{i \in s, \, t \in 2015\text{--}16} \text{emissions}_{i,t}}{\sum_{i \in s, \, t \in 2015\text{--}16} \text{total\_cost}_{i,t}}, \\
-    \omega^{sh}_s   &= \frac{\sum_{i \in s, \, t \in 2015\text{--}16} \text{shortage}_{i,t}}{\sum_{i \in s, \, t \in 2015\text{--}16} \text{total\_cost}_{i,t}},
-\end{align}
-where $\text{shortage}_{i,t} = \max(\text{emissions}_{i,t} - \text{free\_allocation}_{i,t}, \, 0)$ and the inner sum runs over ETS firms $i$ in $s$. Both measures are physical intensities (tCO\textsubscript{2} per EUR of operating cost); the EUA price enters the regressions only through the post-2017 indicator interaction in \eqref{eq:did_2017}, not through $\omega$. We also use a binary regulated-vs-unregulated treatment indicator $\text{Treated}_s$ that flags 4-digit sectors whose 2-digit parent contains regulated installations.
-
-For each exposure measure $X_s \in \{\text{Treated}_s, \omega^{em}_s, \omega^{sh}_s\}$ we estimate
+We next ask whether sectors that were more exposed ex ante saw larger price increases. We use 2017 --- the year EUA prices began their sustained rise after the October 2015 Market Stability Reserve decision --- as the cutoff. For each NACE 4-digit sector $s$ we build a time-invariant pre-2017 exposure measure $X_s$ and estimate, on the monthly Belgian PPI panel from 2010m1,
 \begin{equation}
-    \log P_{s,m} \;=\; \beta \cdot X_s \cdot \mathbf{1}\{\text{year}(m) \geq 2017\} + \alpha_s + \delta_m + \varepsilon_{s,m}
+    \log P_{s,m} \;=\; \beta \cdot X_s \cdot \mathbf{1}\{\text{year}(m) \geq 2017\} \;+\; \alpha_s \;+\; \delta_m \;+\; \varepsilon_{s,m},
     \label{eq:did_2017}
 \end{equation}
-on the monthly NACE 4-digit panel of Belgian PPI from 2010m1, with sector and year-month fixed effects and standard errors clustered at the NACE 4-digit level. Specifications (A), (B), and (C) substitute the binary, the emissions, and the shortage measures respectively. We report (C) on two windows: ending 2019m12 and ending 2022m12.
+with sector and year-month fixed effects and standard errors clustered at the NACE 4-digit level. We use three exposure measures: a binary indicator $\text{Treated}_s$ that flags 4-digit sectors whose 2-digit parent contains regulated installations; sector emissions per EUR of operating cost, $\omega^{em}_s$; and sector \emph{unallocated} emissions per EUR of cost, $\omega^{sh}_s$ (where the numerator nets out free allocation). Both $\omega$ measures are built from EUTL records joined to firm accounts on 2015--2016. Full definitions and sample windows are in the notes to Table~\ref{tab:passthrough_did}.
+
+Because the three exposure measures live on completely different scales --- a binary indicator versus physical intensities in tCO\textsubscript{2}/EUR --- the raw $\hat\beta$ values are not comparable across columns. We therefore report $\hat\beta \times \text{SD}(X_s)$, where $\text{SD}(X_s)$ is the cross-sectional standard deviation of $X_s$ across the 134 NACE 4-digit sectors in the panel. The reported quantity is the \emph{implied post-2017 differential in log-PPI for a one-standard-deviation increase in cross-sectional exposure}. The statistical content is unchanged --- the $t$-statistic is invariant to the rescaling --- but magnitudes can now be read across columns on a common scale.
 
 \input{passthrough_leakage/tables/passthrough_did}
 
-Table~\ref{tab:passthrough_did} reports the coefficient $\hat\beta$ in each column. Two observations carry the section.
+Two observations carry the section.
 
-First, in column (C), sectors with higher pre-2017 \emph{shortage} exposure show a higher price level from 2017 onward, on both windows. The differential is statistically distinguishable from zero on the 2010--2019 window --- before the 2021--22 EUA price spike, before the COVID disruption, and before the energy crisis. We read this as our second qualitative finding: \emph{when we sort sectors by how much of their cost base went into buying allowances on the market, the more-exposed sectors see larger price increases after 2017}.
+First, sorting sectors by allowance-shortage exposure (columns 3 and 4) delivers a positive and statistically distinguishable post-2017 differential on both sample windows. A sector one cross-sectional standard deviation higher in pre-2017 $\omega^{sh}$ has log-PPI roughly $0.012$ higher on the 2010m1--2019m12 window and $0.023$ higher on the 2010m1--2022m12 window --- between one and two percentage points higher prices per standard-deviation increase in shortage exposure. The differential is detectable on the pre-COVID, pre-2021-22 window and roughly doubles when we extend to 2022m12. We read this as our second qualitative finding: \emph{sectors that bought a larger fraction of their cost base in allowances on the market see larger price increases after 2017}.
 
-Second, column (B) cannot reject the null. When we sort sectors instead by emissions-over-cost --- a measure that includes emissions covered by free allocation --- the post-2017 differential is indistinguishable from zero. Because shortage and emissions are correlated across sectors, but a sector can have large emissions and very little shortage when its free allocation is generous, the two measures are not interchangeable. The contrast between columns (B) and (C) is consistent with this: the empirically relevant margin of cross-sector variation is the shortage that the sector had to absorb on the market, not the gross emissions count.
+Second, sorting sectors by gross emissions exposure (column 2) delivers a null. The point estimate is positive but indistinguishable from zero. Because $\omega^{em}_s$ and $\omega^{sh}_s$ are correlated across sectors but not identical --- a sector can have large emissions and very little shortage when its free allocation is generous --- the contrast between column 2 and columns 3--4 is informative: the empirically relevant margin of cross-sector variation is the shortage that the sector had to absorb on the market, not the gross emissions count.
 
-Figure~\ref{fig:eventstudy_C} traces the same exercise year by year. We replace the post-2017 indicator in \eqref{eq:did_2017} with a full set of year-specific interactions $\sum_{\tau \neq 2016} X_s \cdot \mathbf{1}\{\text{year}(m) = \tau\}$, dropping 2016 as the reference. The figure plots $\hat\beta_\tau$ for column (C) on the 2010m1--2022m12 sample. Pre-2017 coefficients are noisy and centered on zero; coefficients from 2017 onward are positive and rise through the sample. The pattern matches the table: the differential is a post-2017 phenomenon, not a pre-existing trend.
+Figure~\ref{fig:eventstudy_C} traces the same exercise year by year. We replace the post-2017 indicator in \eqref{eq:did_2017} with a full set of year-specific interactions $\sum_{\tau \neq 2016} X_s \cdot \mathbf{1}\{\text{year}(m) = \tau\}$, dropping 2016 as the reference. The figure plots $\hat\beta_\tau$ for $X_s = \omega^{sh}_s$ on the 2010m1--2022m12 sample (column 4 of Table~\ref{tab:passthrough_did}). Pre-2017 coefficients are noisy and centered on zero; coefficients from 2017 onward are positive and rise through the sample. The pattern matches the table: the differential is a post-2017 phenomenon, not a pre-existing trend.
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.85\textwidth]{phase4_ppi_eventstudy_omega_sh.pdf}
-    \caption{Year-by-year coefficients $\hat\beta_\tau$ from the event-study form of column (C) of Table~\ref{tab:passthrough_did}. The post-2017 indicator in \eqref{eq:did_2017} is replaced by a full set of year-specific interactions $\omega^{sh}_s \cdot \mathbf{1}\{\text{year}=\tau\}$, dropping 2016 (reference, omitted, $\hat\beta = 0$). Bars: 95\% confidence intervals clustered at the NACE 4-digit level. Vertical dotted line marks the 2017 cutoff. Sample: 2010m1--2022m12.}
+    \caption{Year-by-year coefficients $\hat\beta_\tau$ from the event-study form of column 4 of Table~\ref{tab:passthrough_did}. The post-2017 indicator in \eqref{eq:did_2017} is replaced by a full set of year-specific interactions $\omega^{sh}_s \cdot \mathbf{1}\{\text{year}=\tau\}$, dropping 2016 (reference, omitted, $\hat\beta = 0$). Bars: 95\% confidence intervals clustered at the NACE 4-digit level. Vertical dotted line marks the 2017 cutoff. Sample: 2010m1--2022m12.}
     \label{fig:eventstudy_C}
 \end{figure}
 
