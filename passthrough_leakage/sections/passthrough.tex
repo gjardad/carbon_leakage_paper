@@ -47,10 +47,10 @@ We next ask whether sectors that were more exposed ex ante saw larger price incr
 
 For each NACE 4-digit sector $s$ we construct, on 2015--2016, the ratios
 \begin{align}
-    \omega^{em}_s   &= \frac{\sum_{i \in s, \, t \in 2015\text{--}16} \text{emissions}_{i,t} \cdot \text{EUA}_t}{\sum_{i \in s, \, t \in 2015\text{--}16} \text{total\_cost}_{i,t}}, \\
-    \omega^{sh}_s   &= \frac{\sum_{i \in s, \, t \in 2015\text{--}16} \text{shortage}_{i,t} \cdot \text{EUA}_t}{\sum_{i \in s, \, t \in 2015\text{--}16} \text{total\_cost}_{i,t}},
+    \omega^{em}_s   &= \frac{\sum_{i \in s, \, t \in 2015\text{--}16} \text{emissions}_{i,t}}{\sum_{i \in s, \, t \in 2015\text{--}16} \text{total\_cost}_{i,t}}, \\
+    \omega^{sh}_s   &= \frac{\sum_{i \in s, \, t \in 2015\text{--}16} \text{shortage}_{i,t}}{\sum_{i \in s, \, t \in 2015\text{--}16} \text{total\_cost}_{i,t}},
 \end{align}
-where $\text{shortage}_{i,t} = \max(\text{emissions}_{i,t} - \text{free\_allocation}_{i,t}, \, 0)$ and the inner sum runs over ETS firms $i$ in $s$. We also use a binary regulated-vs-unregulated treatment indicator $\text{Treated}_s$ that flags 4-digit sectors whose 2-digit parent contains regulated installations.
+where $\text{shortage}_{i,t} = \max(\text{emissions}_{i,t} - \text{free\_allocation}_{i,t}, \, 0)$ and the inner sum runs over ETS firms $i$ in $s$. Both measures are physical intensities (tCO\textsubscript{2} per EUR of operating cost); the EUA price enters the regressions only through the post-2017 indicator interaction in \eqref{eq:did_2017}, not through $\omega$. We also use a binary regulated-vs-unregulated treatment indicator $\text{Treated}_s$ that flags 4-digit sectors whose 2-digit parent contains regulated installations.
 
 For each exposure measure $X_s \in \{\text{Treated}_s, \omega^{em}_s, \omega^{sh}_s\}$ we estimate
 \begin{equation}
