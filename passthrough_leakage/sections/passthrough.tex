@@ -23,21 +23,21 @@ This section asks two simple questions about Belgian producer prices and the EU 
 
 We use the monthly carbon-policy shock series of \citet{kanzig2023unequal} to study how aggregate Belgian manufacturing prices respond to identifiable innovations in EUA prices. The series is constructed to isolate the surprise component of EUA-price moves around regulatory announcements; it is the workhorse instrument in the recent literature on aggregate carbon-pricing pass-through.
 
-We estimate, at monthly horizons $h = 0, \dots, 36$,
+We estimate, at monthly horizons $h = 0, \dots, 24$,
 \begin{equation}
-    \log P^{\text{agg}}_{m+h} - \log P^{\text{agg}}_{m-1} \;=\; \alpha_h + \gamma_h \cdot \text{CPShock}_m + \varepsilon_{m, h},
+    \log P^{\text{agg}}_{m+h} - \log P^{\text{agg}}_{m-1} \;=\; \alpha_h + \gamma_h \cdot \text{CPShock}_m + \sum_{j=1}^{6} \phi_{h,j} \cdot \log P^{\text{agg}}_{m-j} + \varepsilon_{m, h},
     \label{eq:agg_lp}
 \end{equation}
-where $P^{\text{agg}}_m$ is the equally-weighted geometric mean of NACE 4-digit Belgian PPI in month $m$, on the sample 2005m1--2019m12. Standard errors are Newey--West with lag $h+1$.
+where $P^{\text{agg}}_m$ is the equally-weighted geometric mean of NACE 4-digit Belgian PPI in month $m$, on the sample 2005m1--2019m12. The six lags of aggregate log-PPI on the right-hand side soak up LHS persistence in the local projection without affecting identification of $\gamma_h$ \citep[][Plagborg-M\o ller--Wolf augmentation]{oleaplagborgmoller2019}. Standard errors are Newey--West with lag $h+1$.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.85\textwidth]{phase3_aggregate_ppi_lp.pdf}
-    \caption{Local-projection impulse response of aggregate Belgian manufacturing log-PPI to the \citet{kanzig2023unequal} carbon-policy shock. Coefficients $\hat\gamma_h$ from \eqref{eq:agg_lp} at monthly horizons $h = 0, \dots, 36$. Shaded bands: 90\% Newey--West confidence intervals (lag $h+1$). Sample: 2005m1--2019m12.}
+    \includegraphics[width=0.85\textwidth]{phase4_aggregate_ppi_lp_lagaug.pdf}
+    \caption{Local-projection impulse response of aggregate Belgian manufacturing log-PPI to the \citet{kanzig2023unequal} carbon-policy shock. Coefficients $\hat\gamma_h$ from \eqref{eq:agg_lp} at monthly horizons $h = 0, \dots, 24$. Solid line: point estimate. Shaded bands: 68\% (dark) and 90\% (light) Newey--West confidence intervals (lag $h+1$). Sample: 2005m1--2019m12.}
     \label{fig:agg_irf}
 \end{figure}
 
-The point estimate is positive at every horizon, rises through the second year, and remains elevated three years out. Manufacturing prices go up after a carbon-policy shock, and they do not snap back over the horizons we look at. We treat this as one qualitative fact: the aggregate response is positive and persistent.
+The point estimate is positive at every horizon. It rises through the first six months, dips slightly through the end of the first year, and rises again into the second year. The 90\% confidence band excludes zero at horizons $h = 5, 6, 7$ and again at $h = 10$. Manufacturing prices go up after a carbon-policy shock, and they remain elevated through two years. We treat this as one qualitative fact: the aggregate response is positive and persistent.
 
 % ----------------------------------------------------------------
 \subsection{Heterogeneity in the response}\label{sec:passthrough:het}
