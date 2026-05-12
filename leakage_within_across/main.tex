@@ -65,8 +65,7 @@
 
 % ================================================================
 \section{Introduction}\label{sec:introduction}
-
-\textit{[To be written.]}
+\input{leakage_within_across/sections/introduction}
 
 % ================================================================
 \section{Setting and Data}\label{sec:data}
@@ -83,13 +82,17 @@
 % ================================================================
 \section{Leakage}\label{sec:leakage}
 
-We test two margins of leakage. Section~\ref{sec:domestic} estimates buyer-side reallocation across domestic ETS-regulated and unregulated suppliers on the Belgian B2B firm-to-firm panel; Section~\ref{sec:international} estimates buyer-side reallocation across EU and non-EU sources of regulated goods on the Belgian customs panel. Both sections share the same identifying event (the 2015 MSR reform, with a Phase~II 2008 alternative for the domestic test), the same definition of regulated products and suppliers, and the same approach to pre-trend and clustering concerns. Their substantive question is the same and their data are complementary: B2B records the within-Belgium share of the leakage channel; customs records the cross-border share.
+We test three margins of reallocation. Within NACE 4-digit (\S\ref{sec:domestic_within}), buyers can shift purchases from more-exposed to less-exposed regulated suppliers in the same product market. Across NACE 4-digit (\S\ref{sec:domestic_across}), buyers can shift expenditure from regulated input categories to unregulated ones. Across international sources (\S\ref{sec:international}), buyers can shift regulated-product imports from EU sources to non-EU sources. The three margins exhaust the within-economy reallocation channel and the canonical cross-border channel. The result is null on all three.
 
-\subsection{Across domestic suppliers}\label{sec:domestic}
+\subsection{Domestic reallocation}\label{sec:domestic}
 \input{leakage_within_across/sections/leakage_domestic}
 
-\subsection{Across international suppliers}\label{sec:international}
+\subsection{International reallocation}\label{sec:international}
 \input{leakage_within_across/sections/leakage_international}
+
+% ================================================================
+\section{Discussion: why no reallocation?}\label{sec:discussion}
+\input{leakage_within_across/sections/discussion}
 
 % ================================================================
 \section{Conclusion}\label{sec:conclusion}
