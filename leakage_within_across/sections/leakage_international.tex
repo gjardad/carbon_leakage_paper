@@ -1,13 +1,13 @@
 % Subsection of §5 Leakage. Begins at \subsubsection level.
 
-\subsubsection{CMdG replication on the Belgian customs panel}\label{sec:international_cmdg}
+\subsubsection{CdGM replication on the Belgian customs panel}\label{sec:international_cmdg}
 
 We replicate \citet{CosterMejeanDiGiovanni2024}'s Equation~(1) on the Belgian customs panel 2000--2019. The estimating equation is
 \begin{equation}
     y_{f,p,i,t} \;=\; \sum_{\phi \in \{1,2,3\}} \beta_\phi\,\mathbf{1}[\text{regulated}]_p \times \mathbf{1}[t \in \text{Phase } \phi] \;+\; \alpha_{f,p,i} \;+\; \delta_{i,t} \;+\; \delta_{s,t} \;+\; \varepsilon_{f,p,i,t}
     \label{eq:cmdg_spec}
 \end{equation}
-on the balanced panel of (firm $f$, HS6 product $p$, source country $i$, year $t$) cells, restricted to imports from non-ETS source countries (per CMdG, who restrict to avoid contamination from intra-EU Intrastat threshold changes). $\mathbf{1}[\text{regulated}]_p$ flags HS6 codes that map to NACE 4-digit categories containing at least one ETS installation. Fixed effects: firm $\times$ product $\times$ country, country $\times$ year, sector $\times$ year (column~(5) in CMdG Table 1). Standard errors are two-way clustered on firm and country.
+on the balanced panel of (firm $f$, HS6 product $p$, source country $i$, year $t$) cells, restricted to imports from non-ETS source countries (per CdGM, who restrict to avoid contamination from intra-EU Intrastat threshold changes). $\mathbf{1}[\text{regulated}]_p$ flags HS6 codes that map to NACE 4-digit categories containing at least one ETS installation. Fixed effects: firm $\times$ product $\times$ country, country $\times$ year, sector $\times$ year (column~(5) in CdGM Table 1). Standard errors are two-way clustered on firm and country.
 
 Outcomes: Panel A is the share of imports going to (regulated, non-ETS) cells (intensive margin); Panel B is the indicator $\mathbf{1}[\text{value} > 0]$ (extensive margin). Sample after balancing and zero-fill: 8.6M observations on 3{,}000--5{,}000 distinct buyer firms.
 
@@ -17,7 +17,7 @@ Outcomes: Panel A is the share of imports going to (regulated, non-ETS) cells (i
 
 \begin{table}[H]
     \centering
-    \caption{Belgium vs. France on the CMdG specification, column~(5) preferred FE.}
+    \caption{Belgium vs. France on the CdGM specification, column~(5) preferred FE.}
     \label{tab:cmdg_belgium}
     \footnotesize
     \begin{tabular}{lcccc}
@@ -36,7 +36,7 @@ Outcomes: Panel A is the share of imports going to (regulated, non-ETS) cells (i
     \end{tabular}
 \end{table}
 
-The Belgian Phase~3 share coefficient is $-0.0024$, two orders of magnitude smaller than France's $+0.121$ and pointing in the opposite direction. Phase~2 is also wrong-signed ($-0.0037$***). The result is robust across four control-group specifications (Specs A/C/D from \texttt{IMPORT\_LEAKAGE.md}; Spec B's VCOV is not positive definite due to the thin regulated $\times$ ETS-country subsample) and across all six fixed-effect column structures: no specification recovers CMdG-style positive coefficients of magnitude approaching $+0.1$.
+The Belgian Phase~3 share coefficient is $-0.0024$, two orders of magnitude smaller than France's $+0.121$ and pointing in the opposite direction. Phase~2 is also wrong-signed ($-0.0037$***). The result is robust across four control-group specifications (Specs A/C/D from \texttt{IMPORT\_LEAKAGE.md}; Spec B's VCOV is not positive definite due to the thin regulated $\times$ ETS-country subsample) and across all six fixed-effect column structures: no specification recovers CdGM-style positive coefficients of magnitude approaching $+0.1$.
 
 \paragraph{Cross-country interpretation.} Three working hypotheses, in plausibility order: (i) intra-EU substitution as the reaction margin --- Belgian buyers consolidate to EU-domestic ETS suppliers (cheaper to reach, no currency or customs friction) rather than pivoting to non-ETS countries, and France's lower intra-EU integration leaves more room for non-EU substitution; (ii) Antwerp chemicals saturation --- Belgian buyers were already heavily integrated with non-ETS chemical exporters before 2005, leaving limited headroom for further substitution; (iii) sample-size attenuation in column~(5) --- with 3--5k Belgian firms vs.\ France's 27k, the firm $\times$ product $\times$ country FE block is sparser, and the country $\times$ year FE absorbs more identifying variation. Cross-column comparison shows columns without country $\times$ year FE deliver share coefficients closer to $\pm 0.005$, still small but at least directionally consistent with France in some cells. Distinguishing (i)--(iii) requires either pooling Belgium with other small EU economies or a within-firm dose-response design on PRODCOM unit-value data; we leave this to future work.
 
@@ -49,7 +49,7 @@ This is a customs analog of equation~\eqref{eq:domestic_within} on the customs p
 \end{equation}
 where the $\gamma$ term partials out a pre-existing linear trend in the EU-share that, on the unconditioned specification, generates a wrong-signed positive coefficient on the level-shift dummy (see \S\ref{sec:international_eu_share_pretrends} for the parallel-trends investigation that motivates the trend control). Standard errors clustered on firm and HS6. The trend-corrected $\beta$ identifies the level shift at 2015 net of any linear trend that was already in motion --- this is the same correction Test~H used in the within-country setting (\S\ref{sec:domestic_within}, where the analogous trend was insignificant; on the customs panel it is large).
 
-This design extends the customs sample window to 2022 (the headline CMdG replication in \S\ref{sec:international_cmdg} stops at 2019 to match CMdG's window, but the underlying NBB data are available through 2022 and beyond) and treats the cross-border substitution margin in a way directly comparable to the domestic across-supplier test in \S\ref{sec:domestic_within}. It complements the CMdG aggregate-share specification by using firm $\times$ product $\times$ year variation, and by capturing the Phase~IV EUA price spike (2021--22, EUA above €80) that the 2019-truncated window misses.
+This design extends the customs sample window to 2022 (the headline CdGM replication in \S\ref{sec:international_cmdg} stops at 2019 to match CdGM's window, but the underlying NBB data are available through 2022 and beyond) and treats the cross-border substitution margin in a way directly comparable to the domestic across-supplier test in \S\ref{sec:domestic_within}. It complements the CdGM aggregate-share specification by using firm $\times$ product $\times$ year variation, and by capturing the Phase~IV EUA price spike (2021--22, EUA above €80) that the 2019-truncated window misses.
 
 \begin{figure}[H]
     \centering
@@ -67,7 +67,7 @@ This design extends the customs sample window to 2022 (the headline CMdG replica
 
 \paragraph{Headline result.} The naive specification gives $\widehat{\beta} = -0.016$ (s.e.\ $0.030$, $p = 0.58$), null. Adding the linear-trend control flips the picture: $\widehat{\beta} = -0.560$ (s.e.\ $0.029$, $p < 0.001$), with the underlying trend coefficient $\widehat{\gamma} = +0.058$/year ($p < 0.001$). The level shift is large: a one-standard-deviation increase in pre-shock EU dependence is associated with a $\approx 56$ percentage-point relative drop in the EU import share at 2015, net of the pre-existing trend toward EU consolidation. The robustness restriction to 2010--2022 (dropping the pre-2010 EU-enlargement window) yields $\widehat{\beta} = -0.097$ (s.e.\ $0.035$, $p = 0.006$) with trend control --- still negative and significant, with magnitude attenuated to about one-fifth the headline.
 
-\paragraph{Interpretation vs.\ CMdG.} The B1 trend-corrected estimate is the opposite sign from the naive headline and from the original \S\ref{sec:international_cmdg} interpretation. Belgian importers with high pre-shock EU dependence \emph{reduced} their EU share post-2015 relative to importers with low pre-shock EU dependence: the substitution toward non-EU sources that the aggregate CMdG specification could not detect is recovered at the firm-product-year level once the upward pre-trend is partialled out. The headline magnitude is sensitive to the precise pre-period window (the 2010+ robustness shrinks $|\widehat{\beta}|$ by 5$\times$), so the order of magnitude rather than the precise level is the headline result.
+\paragraph{Interpretation vs.\ CdGM.} The B1 trend-corrected estimate is the opposite sign from the naive headline and from the original \S\ref{sec:international_cmdg} interpretation. Belgian importers with high pre-shock EU dependence \emph{reduced} their EU share post-2015 relative to importers with low pre-shock EU dependence: the substitution toward non-EU sources that the aggregate CdGM specification could not detect is recovered at the firm-product-year level once the upward pre-trend is partialled out. The headline magnitude is sensitive to the precise pre-period window (the 2010+ robustness shrinks $|\widehat{\beta}|$ by 5$\times$), so the order of magnitude rather than the precise level is the headline result.
 
 \subsubsection{Heterogeneous treatment effects on the buyer-supplier customs analysis}\label{sec:international_hte}
 
@@ -86,7 +86,7 @@ We test heterogeneity along two dimensions parallel to the domestic side: (a) ho
 
 \subsubsection{Non-EU supplier price response}\label{sec:international_price_response}
 
-A first-order question about international leakage that the CMdG specification cannot answer is whether non-EU exporters of regulated products adjust their pricing in response to the EU ETS. If non-EU exporters absorb part of the EU price differential by raising their FOB prices (so EU buyers face less of a price advantage from sourcing offshore), the small Belgian Phase~3 reallocation we recover need not imply that the underlying buyer-side $\sigma$ is small --- it could be that the relative-price gap is small. Conversely, if non-EU exporters lower their prices to capture share, that should amplify the EU-vs-non-EU price differential and any non-zero $\sigma$ would translate to detectable substitution. We estimate the price-response of non-EU exporters by regressing log unit-values of regulated HS6 imports from non-ETS source countries on the post-2015 indicator interacted with the regulated dummy, with HS6 $\times$ source-country and year fixed effects.
+A first-order question about international leakage that the CdGM specification cannot answer is whether non-EU exporters of regulated products adjust their pricing in response to the EU ETS. If non-EU exporters absorb part of the EU price differential by raising their FOB prices (so EU buyers face less of a price advantage from sourcing offshore), the small Belgian Phase~3 reallocation we recover need not imply that the underlying buyer-side $\sigma$ is small --- it could be that the relative-price gap is small. Conversely, if non-EU exporters lower their prices to capture share, that should amplify the EU-vs-non-EU price differential and any non-zero $\sigma$ would translate to detectable substitution. We estimate the price-response of non-EU exporters by regressing log unit-values of regulated HS6 imports from non-ETS source countries on the post-2015 indicator interacted with the regulated dummy, with HS6 $\times$ source-country and year fixed effects.
 
 \paragraph{Result: null.} $\widehat{\beta} = +0.069$ (s.e.\ $0.054$, $p = 0.20$). Non-EU exporters did not systematically adjust unit-value prices in response to the EU ETS at the regulated-vs-unregulated margin. The year-by-year event study has a single notable spike at 2017 ($+0.21$, $p = 0.017$), with all other post-2015 years statistically null. The implication: the cross-border substitution recovered in \S\ref{sec:international_buyer_supplier} reflects real reallocation away from EU sources, \emph{not} a pricing offset by non-EU exporters that would mechanically suppress relative-price-driven substitution. The B1/B2 result is therefore not contaminated by a strategic non-EU pricing channel.
 
@@ -96,7 +96,7 @@ A first-order question about international leakage that the CMdG specification c
 
 \subsubsection{Imports vs.\ domestic substitution}\label{sec:international_imports_vs_domestic}
 
-\notrun{} The buyer-supplier and CMdG specifications above test substitution \emph{within} the import margin. The complementary question --- do Belgian buyers substitute \emph{between} imports and domestic suppliers as carbon prices rise? --- is testable on the linked B2B + customs panel. For each (Belgian buyer $b$, upstream NACE 4-digit $n$, year $t$) cell with positive pre-shock spending in both channels, the outcome is the import share
+\notrun{} The buyer-supplier and CdGM specifications above test substitution \emph{within} the import margin. The complementary question --- do Belgian buyers substitute \emph{between} imports and domestic suppliers as carbon prices rise? --- is testable on the linked B2B + customs panel. For each (Belgian buyer $b$, upstream NACE 4-digit $n$, year $t$) cell with positive pre-shock spending in both channels, the outcome is the import share
 \[
     \text{import share}_{b,n,t} \;=\; \frac{\text{imports}_{b,n,t}}{\text{imports}_{b,n,t} + \text{domestic B2B}_{b,n,t}},
 \]
@@ -108,7 +108,7 @@ where imports are aggregated from the customs panel via the CN8~$\to$~NACE 4-dig
 
 \subsubsection{Within-EU substitution toward less emission-intensive sources}\label{sec:international_within_eu}
 
-\notrun{} The CMdG and buyer-supplier specifications collapse the EU bloc into a single arm. The complementary question --- do Belgian buyers, conditional on sourcing within the EU, shift toward EU member states where regulated-product production is less carbon-intensive? --- requires country-specific emission intensity at the product level. We construct $\text{emission intensity}_{p,c}$ for HS6 product $p$ and EU source country $c$ from Eurostat's air emissions accounts (ENV\_AC\_AINAH\_R2) divided by gross value added (NAMA\_10\_A64) at the NACE 2-digit level, mapping HS6 products to NACE 2-digit via the existing concordance. Specification on the importer $\times$ HS6 $\times$ EU-country $\times$ year panel (regulated products only, EU sources only):
+\notrun{} The CdGM and buyer-supplier specifications collapse the EU bloc into a single arm. The complementary question --- do Belgian buyers, conditional on sourcing within the EU, shift toward EU member states where regulated-product production is less carbon-intensive? --- requires country-specific emission intensity at the product level. We construct $\text{emission intensity}_{p,c}$ for HS6 product $p$ and EU source country $c$ from Eurostat's air emissions accounts (ENV\_AC\_AINAH\_R2) divided by gross value added (NAMA\_10\_A64) at the NACE 2-digit level, mapping HS6 products to NACE 2-digit via the existing concordance. Specification on the importer $\times$ HS6 $\times$ EU-country $\times$ year panel (regulated products only, EU sources only):
 \[
     \text{share}_{f,p,c,t}^{\text{within-EU}} \;=\; \beta\,\text{low intensity}_{p,c} \times \mathbf{1}[t \geq 2015] \;+\; \alpha_{f,p,c} \;+\; \delta_{c,t} \;+\; \varepsilon_{f,p,c,t},
 \]

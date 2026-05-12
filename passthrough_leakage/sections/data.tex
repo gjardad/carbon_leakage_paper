@@ -7,7 +7,7 @@
 %     measures" + "Treatment definition" + "Shock-size diagnostics".
 %   - IMPORT_LEAKAGE.md "Sample" section (filter cascade for customs).
 %   - B2B_LEAKAGE.md "Sample" section (filter cascade for the b2b panel).
-%   - CMdG_REPLICATION.md Phase 0 (regulated CN8 list, NACE bridge).
+%   - CdGM_REPLICATION.md Phase 0 (regulated CN8 list, NACE bridge).
 %
 % ----------------------------------------------------------------
 
@@ -46,7 +46,7 @@
 %   NBB B2B (downsampled)   b2b_selected_sample.RData        supplier-buyer × year
 %   NBB Customs             import_export_ANO.dta            51M raw rows (RMD)
 %   Känzig CPShock          carbonPolicyShocks.xlsx          monthly 2005m1–2019m12
-%   CMdG Table A.5          cmdj_table_a5_ri_naf.csv         NAF-138 ETS / R-I / CBAM
+%   CdGM Table A.5          cdgm_table_a5_ri_naf.csv         NAF-138 ETS / R-I / CBAM
 %   BLM 2018 raw CN         Website_nc8corresp/              EU CN 1995–2018
 %   GRANTPA xlsx            product_id_pc8plus_pc8_cn8_*.csv 1995–2018, 3,124 prods
 %   Eurostat BE Use         naio_10_cp1610_*.csv             2010–2022, A*64 × CPA
@@ -79,7 +79,7 @@
 %       firm_cost_share_j
 %         = mean_{2013-15}(shortage × EUA) / mean_{2010-12}(total_cost).
 %
-% (b) BINARY / regulated-NACE treatment (used in CMdG-style event-study
+% (b) BINARY / regulated-NACE treatment (used in CdGM-style event-study
 %     §\ref{sec:passthrough} Section C, and §\ref{sec:b2b_leakage} binary
 %     spec):
 %
@@ -88,9 +88,9 @@
 %       Broad (our list, 14 NACE 2d):
 %         {05,06,07,08,17,19,20,21,23,24,25,27,28,35}
 %         derived from the regulated CN8 list × CN→NACE bridge.
-%       CMdG-tight (7 NACE 2d):
+%       CdGM-tight (7 NACE 2d):
 %         {17,19,20,23,24,25,35}
-%         from CMdG Table A.5 col (1)/(4) ETS sectors.
+%         from CdGM Table A.5 col (1)/(4) ETS sectors.
 %
 %     A NACE 4d sector inherits its 2d parent's status. Goods-section panel
 %     contains 139 NACE 4d sectors total; 66 (broad) / 33 (tight) treated.
@@ -98,7 +98,7 @@
 % (c) PRODUCT-LEVEL regulated-CN8 treatment (used in customs
 %     §\ref{sec:import_leakage}): the CN8 list is built from the Eurostat
 %     Use-table mapping of the regulated NACE 2d sectors back to CPA codes,
-%     then bridged via GRANTPA / BLM concordances. CMdG Phase 0 pipeline.
+%     then bridged via GRANTPA / BLM concordances. CdGM Phase 0 pipeline.
 
 % ----------------------------------------------------------------
 % 2.4  SAMPLE CONSTRUCTION
@@ -109,7 +109,7 @@
 %
 % PPI / pass-through panel:
 %   139 NACE 4d × 18 years = 2,502 obs (annual, 2005–2022); 23,986 obs at
-%   h = 0 in the 2005m1–2019m12 monthly panel. CMdG-style spec extends to
+%   h = 0 in the 2005m1–2019m12 monthly panel. CdGM-style spec extends to
 %   3,058 obs (2001–2022).
 %
 % Customs / import-leakage panel (RMD full data):
@@ -118,7 +118,7 @@
 %          → 9.0M regulated-intensive buyer
 %          → 2.5M after core-input filter
 %          → 2.3M after BEC capital-goods drop.
-%   Sample: imports from non-ETS source countries (per CMdG p. 12–13;
+%   Sample: imports from non-ETS source countries (per CdGM p. 12–13;
 %   2011 French Intrastat threshold change motivates non-ETS restriction).
 %
 % B2B / domestic-leakage panel:
@@ -138,5 +138,5 @@
 %   - EUA price time series with phase shading.
 %   - Effective €/tCO2 by phase (top-firm concentration: 99% Phase I–II → 70% Phase IV).
 %   - Belgian regulated-NACE share of manufacturing GVA / emissions.
-%   - Customs sourcing aggregate (CMdG Figure 2 analog).
+%   - Customs sourcing aggregate (CdGM Figure 2 analog).
 %   - B2B regulated-seller share of buyer purchases over time.

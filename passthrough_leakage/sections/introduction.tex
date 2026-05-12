@@ -6,7 +6,7 @@
 %   - PASSTHROUGH.md       — pass-through findings (Sections A/B/C)
 %   - IMPORT_LEAKAGE.md    — customs / cross-border null
 %   - B2B_LEAKAGE.md       — domestic firm-to-firm null (continuous)
-%   - CMdG_REPLICATION.md  — CMdG (2024 / FRBNY SR 1136) replication frame
+%   - CdGM_REPLICATION.md  — CdGM (2024 / FRBNY SR 1136) replication frame
 %
 % Argument arc:
 %   1. Carbon pricing's first-order effect on regulated firms is to raise their
@@ -16,7 +16,7 @@
 %      switching to unregulated sources (leakage).
 %   2. Existing micro-evidence on pass-through is sector- or product-specific
 %      and rarely uses panel-LP / SVAR identification of the carbon-policy
-%      shock; existing leakage evidence (CMdG 2024 for France) finds large
+%      shock; existing leakage evidence (CdGM 2024 for France) finds large
 %      cross-border substitution but cannot speak to *domestic* leakage
 %      because France lacks firm-to-firm transaction data.
 %   3. Belgium is uniquely instrumented: full EUTL × Annual Accounts × B2B
@@ -48,7 +48,7 @@
 %     France; Aichele & Felbermayr; Naegele & Zaklan; Dechezleprêtre et al.
 %     (firm-level mobility evidence); Martin et al. (free allocation).
 %   - Belgian production-network literature: Bernard et al.; Magerman et al.
-%   - Position our paper: same identification frame as CMdG for the customs
+%   - Position our paper: same identification frame as CdGM for the customs
 %     piece; new B2B margin only Belgium can do; pass-through layered in via
 %     three independent identifications.
 
@@ -59,12 +59,12 @@
 %
 % (i)  Pass-through.  We estimate pass-through three ways: OLS (S1–S6) on
 %      the sector-year panel; Känzig CPShock × intensity panel-LP at monthly
-%      frequency (S12, β = +4.08 at h = 12, t = 6.39); CMdG-style
+%      frequency (S12, β = +4.08 at h = 12, t = 6.39); CdGM-style
 %      regulated-vs-unregulated event study with NACE 4d trends
 %      (Phase 2 +0.094**, Phase 4 +0.113**, Phase 3 null after trends).
 %      The three converge qualitatively despite different units.
 %
-% (ii) Cross-border leakage.  Replicating CMdG (2024) Section 3 on Belgian
+% (ii) Cross-border leakage.  Replicating CdGM (2024) Section 3 on Belgian
 %      customs delivers Phase 3 share = -0.002** — two orders of magnitude
 %      below France's +0.121*** and pointing the wrong way.
 %      Robust across four control-group definitions and six FE columns.

@@ -83,7 +83,7 @@ Because the three exposure measures live on completely different scales --- a bi
         \vspace{0.5em}
         Column specifications: $X_s$ and the sample window are
         \begin{itemize}
-            \item[(1)] $X_s = \text{Treated}_s$, an indicator equal to $1$ for NACE 4-digit sectors whose 2-digit parent contains regulated installations (CMdG-tight set: \{17, 19, 20, 23, 24, 25, 35\}). Sample: 2010m1--2022m12.
+            \item[(1)] $X_s = \text{Treated}_s$, an indicator equal to $1$ for NACE 4-digit sectors whose 2-digit parent contains regulated installations (CdGM-tight set: \{17, 19, 20, 23, 24, 25, 35\}). Sample: 2010m1--2022m12.
             \item[(2)] $X_s = \omega^{em}_s = \big(\sum_{i \in s, t \in 2015\text{--}16} \text{emissions}_{i,t}\big) / \big(\sum_{i \in s, t \in 2015\text{--}16} \text{total\_cost}_{i,t}\big)$, the sector's pre-2017 emissions per EUR of operating cost (tCO\textsubscript{2}/EUR), with $i$ ranging over ETS firms in $s$. Sample: 2010m1--2022m12.
             \item[(3)] $X_s = \omega^{sh}_s = \big(\sum_{i \in s, t \in 2015\text{--}16} \text{shortage}_{i,t}\big) / \big(\sum_{i \in s, t \in 2015\text{--}16} \text{total\_cost}_{i,t}\big)$, with $\text{shortage}_{i,t} = \max(\text{emissions}_{i,t} - \text{free\_allocation}_{i,t}, \, 0)$: the sector's pre-2017 unallocated emissions per EUR of operating cost (tCO\textsubscript{2}/EUR). Sample: 2010m1--2019m12.
             \item[(4)] Same as (3), with sample 2010m1--2022m12.

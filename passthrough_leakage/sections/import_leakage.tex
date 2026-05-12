@@ -2,10 +2,10 @@
 % CROSS-BORDER CARBON LEAKAGE: CUSTOMS EVIDENCE
 % ================================================================
 %
-% Source: IMPORT_LEAKAGE.md (full document) + CMdG_REPLICATION.md Phase 2.
+% Source: IMPORT_LEAKAGE.md (full document) + CdGM_REPLICATION.md Phase 2.
 %
 % This section replicates Coster, di Giovanni & Méjean (FRBNY SR #1136, 2024)
-% Section 3 on the Belgian customs panel (2000–2019). CMdG document large
+% Section 3 on the Belgian customs panel (2000–2019). CdGM document large
 % cross-border leakage for France; we ask whether the same identification on
 % Belgian micro-data delivers the same headline.
 %
@@ -18,7 +18,7 @@
 
 % TODO: Belgium-vs-France comparison table (verbatim from IMPORT_LEAKAGE.md):
 %
-%                          Belgium (col 5)        France (CMdG col 5)
+%                          Belgium (col 5)        France (CdGM col 5)
 %   ----------------------------------------------------------------
 %   Phase 3 share          -0.0024 **             +0.121 ***
 %   Phase 3 probability    +0.0041 (n.s.)         +0.071 ***
@@ -26,7 +26,7 @@
 %   Phase 2 probability    -0.0128 (n.s.)         (positive)
 %   Pre-trend (prob.)      non-zero, ≈ -0.012     flat
 %
-% Belgium's coefficients are two orders of magnitude smaller than CMdG
+% Belgium's coefficients are two orders of magnitude smaller than CdGM
 % France's, and where significant, point the wrong way.
 
 % ----------------------------------------------------------------
@@ -34,7 +34,7 @@
 % ----------------------------------------------------------------
 \subsection{Specification}\label{sec:import_leakage:spec}
 
-% TODO: CMdG's Eq. 1, phase-aggregated:
+% TODO: CdGM's Eq. 1, phase-aggregated:
 %
 %   y_{f,p,i,t} = β_1 · 1(regulated)_p × 1(t ∈ 2005–08)
 %               + β_2 · 1(regulated)_p × 1(t ∈ 2009–12)
@@ -45,8 +45,8 @@
 %   Panel A — share:        value_{f,p,i,t} / Σ_{p,i ∈ non-ETS}value_{f,p,i,t}.
 %   Panel B — probability:  1(value > 0).
 % Cluster-robust SE: two-way (firm + country).
-% Sample: imports from non-ETS source countries only (per CMdG p. 12–13).
-% Six FE columns matching CMdG Table 1 (col 5 = preferred):
+% Sample: imports from non-ETS source countries only (per CdGM p. 12–13).
+% Six FE columns matching CdGM Table 1 (col 5 = preferred):
 %   firm × product × country  +  country × year  +  sector × year.
 
 % ----------------------------------------------------------------
@@ -55,12 +55,12 @@
 \subsection{Results}\label{sec:import_leakage:results}
 
 % TODO:
-%   - Table 1 (analog of CMdG Table 1): six FE columns × Phase 1/2/3 ×
+%   - Table 1 (analog of CdGM Table 1): six FE columns × Phase 1/2/3 ×
 %     share / probability. Lift from output/tables/.
-%   - Figure 3 (event study, analog of CMdG Figure 3): leads and lags.
+%   - Figure 3 (event study, analog of CdGM Figure 3): leads and lags.
 %     Pre-trend non-zero on the probability margin.
 %   - Robustness across four control-group choices (Specs A/B/C/D from
-%     CMdG_REPLICATION.md Phase 2).
+%     CdGM_REPLICATION.md Phase 2).
 
 % ----------------------------------------------------------------
 % 4.4  WHAT WE DID NOT RUN AND WHY
