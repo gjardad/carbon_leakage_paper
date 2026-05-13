@@ -1,12 +1,10 @@
 \section{Variable definitions}\label{app:variables}
 
 \begin{itemize}
-    \item \textbf{firm cost share} (\eqref{eq:fcs}): pre-shock firm-level carbon cost share, time-invariant. Numerator: 2013--2016 average annual allowance shortfall in tCO$_2$ priced at the year-specific EUA. Denominator: 2010--2012 average total operating cost from Annual Accounts. Falls back to the earliest available three-year window for firms without 2010--2012 data.
-    \item \textbf{nace exposure} (\eqref{eq:nace_exposure}): sales-weighted average firm cost share within a NACE 4-digit category, time-invariant; equals zero for categories with no ETS sellers.
-    \item \textbf{share top}: annual share of the most-exposed ETS supplier $j^*(b,n)$ in cell $(b,n)$'s total spending in that NACE 4-digit category.
-    \item \textbf{pair exposure}: $\text{firm cost share}_{j^*(b,n)} \times \bar{s}_{j^*(b,n)}$, where $\bar{s}_{j^*(b,n)} = \overline{\text{spending from } b \text{ to } j^*}_{2010..2014} / \overline{\text{total inputs of } b}_{2010..2014}$. Units: percentage of buyer's total input bill at risk if $j^*$'s carbon shock fully passes through and the buyer does not substitute.
-    \item \textbf{Post}: $\mathbf{1}[t \geq 2015]$.
-    \item \textbf{regulated}: $\mathbf{1}[\text{nace exposure}_n > 0]$.
+    \item \textbf{shortage} (\eqref{eq:shortage}): firm-year allowance shortfall in tCO\textsubscript{2}, $\max(0, \text{emissions}_{j,t} - \text{free allowances}_{j,t})$.
+    \item \textbf{carbon cost share} $\omega_{j,t}$: shortage times EUA price, divided by the firm's total operating cost in year $t$. Reported by phase in Table~\ref{tab:firm_cost_share_by_phase}.
+    \item \textbf{Post}: indicator for years on or after the relevant ETS event year ($\tau \in \{2008, 2013, 2017\}$ in the within-NACE-4d specification; $\tau = 2015$ in others).
+    \item \textbf{regulated}: indicator that the NACE 4-digit category contains at least one ETS-regulated installation.
 \end{itemize}
 
 % ================================================================

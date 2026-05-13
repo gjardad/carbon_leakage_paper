@@ -1,36 +1,74 @@
 \subsection{The EU ETS in Belgium}
 
-The EU Emissions Trading System has covered electricity generation and energy-intensive manufacturing installations across the EEA since 2005. Coverage is at the level of the regulated installation; we link installations to their parent firm via Belgian VAT identifiers. Phase~III (2013--2020) and Phase~IV (2021--) span our sample window. The Belgian ETS roster comprises 281 installations present in the European Union Transaction Log every year between 2005 and 2023. After requiring positive verified emissions and matched Annual Accounts revenue, the analysis sample covers 88\% of total Belgian ETS emissions in 2005 (162--194 firms per year).
+The EU Emissions Trading System (EU ETS) has covered electricity generation and energy-intensive manufacturing installations across the EEA since 2005. Coverage is at the level of the regulated installation; we link installations to their parent firm via Belgian VAT identifiers. The Belgian roster comprises 281 installations present in the European Union Transaction Log every year between 2005 and 2023. After requiring positive verified emissions and matched Annual Accounts revenue, the analysis sample covers 88\% of total Belgian ETS emissions in 2005 (162--194 firms per year).
 
-\subsection{The Market Stability Reserve as the identifying event}\label{sec:msr_identification}
+The EU ETS has gone through four trading phases since its launch, each with a different cap and a different rule for how allowances are distributed between free allocation and auctioning. Figure~\ref{fig:eua_price_timeseries} reports the daily front-year EUA futures price across the full Phase~I--IV history. The phase-by-phase price evolution is largely a story of how free allocation and the cap interacted with each phase's economic conditions.
 
-Identification relies on a sharp pre/post contrast around the 2015 Market Stability Reserve (MSR) reform. Decision (EU) 2015/1814 of October 2015 established a rules-based mechanism that automatically removes a fixed fraction of allowances from circulation whenever the Total Number of Allowances in Circulation exceeds 833 million tons \citep{Perino2018}. The rule is mechanical and pre-specified, so the post-2018 EUA price path is determined by accumulated surplus and the MSR's intake schedule, not by contemporaneous economic conditions. The reform triggered a tenfold rise in EUA prices: from $\sim$€6--8 per tCO$_2$ in 2015--16 to above €80 in 2022. Cross-firm variation in exposure is determined by pre-MSR firm characteristics (emission intensity, free-allowance allocation), and our treatment intensity below is constructed from data ending in 2015. \citet{kanzig2023unequal}'s 114-event high-frequency carbon-policy-surprise series and \citet{BauerKaenzigRudebusch2026}'s extension to 2024 confirm that the post-2015 EUA path is policy-driven (first-stage F~$> 16$). We use 2015 as the cutoff for ``Post'' periods and report event-study coefficients separately for each post-2015 calendar year. Section~\ref{sec:domestic_phase2} presents an alternative event-study using the 2008 Phase~II start as the cutoff with treatment intensity built on 2005--2008 data.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{phase3_eua_price_timeseries.pdf}
+    \caption{Daily settlement price of the ECX/ICE-Endex EUA continuous front-year futures contract (\EUR{}/tCO\textsubscript{2}), 2005-04-25 to 2022-12-30. Solid black vertical lines mark the Phase~I/II (Jan 2008), Phase~II/III (Jan 2013), and Phase~III/IV (Jan 2021) boundaries. The dotted black vertical line marks the October 2015 MSR decision (Decision (EU) 2015/1814). The series follows the Refinitiv Datastream \texttt{LECEZ} continuous-front-month convention used in \citet{kanzig2023unequal}.}
+    \label{fig:eua_price_timeseries}
+\end{figure}
+
+\paragraph{Phase~I (2005--2007).} Allowances were allocated for free by member states under National Allocation Plans, with the cap set on the basis of pre-2005 self-reported emissions. The May~2006 release of verified emissions revealed that Phase~I had been substantially over-allocated, and prices crashed within days from about \EUR{30}/tCO\textsubscript{2} to about \EUR{10}, then drifted to essentially zero through 2007 as Phase~I allowances became worthless under the no-banking rule.
+
+\paragraph{Phase~II (2008--2012).} The cap tightened and limited auctioning was introduced for the first time (around 3\% of allowances on average); the rest continued to be allocated for free. The Phase~II reset to about \EUR{20}--\EUR{25} in early 2008 was short-lived: the financial crisis collapsed industrial emissions and again left the system with a large surplus. Prices fell to \EUR{5}--\EUR{15} for the remainder of the phase.
+
+\paragraph{Phase~III (2013--2020).} Auctioning became the default allocation method for electricity generation (full auctioning from 2013) and was phased in partially for other sectors, with free allocation determined by sector-specific best-available-technology product benchmarks rather than historical emissions. A ``carbon-leakage list'' identified sectors deemed at significant risk of cross-border substitution; firms in those sectors continued to receive full free allocation throughout Phase~III, while non-leakage sectors saw their free-allocation share decline from 80\% in 2013 toward 30\% by 2020. Even with these reforms, the Phase~II surplus carried over and EUA prices stayed in the \EUR{5}--\EUR{10} range through 2017.
+
+\paragraph{The 2015 MSR decision and the post-2017 price rise.} In October 2015 the EU adopted Decision (EU) 2015/1814 establishing the Market Stability Reserve, a rules-based mechanism that absorbs allowances from circulation whenever the cumulative surplus exceeds 833 million tCO\textsubscript{2} \citep{Perino2018}. The MSR became operational in January 2019. Anticipation of the surplus removal, together with further policy signals on the eventual Phase~IV cap, drove prices from \EUR{6}--\EUR{8} in 2015--2016 to \EUR{25} by 2018 and above \EUR{80} in 2022.
+
+\paragraph{Phase~IV (2021--).} The cap tightened further (linear reduction factor of 2.2\% per year). Free allocation was scheduled to phase out for sectors not on the carbon-leakage list, and the Carbon Border Adjustment Mechanism began its transitional phase in 2023 for products covered by the phase-out. Together with the post-MSR price path, Phase~IV is the first window in the policy's history in which the EU ETS imposes a non-trivial cost on the average regulated firm.
+
+\subsection{The MSR as the identifying event}\label{sec:msr_identification}
+
+Identification relies on a sharp pre/post contrast around the 2015 MSR reform. Decision (EU) 2015/1814 is mechanical and pre-specified, so the post-2018 EUA path is determined by the accumulated surplus and the MSR's intake schedule rather than by contemporaneous economic conditions. \citet{kanzig2023unequal}'s 114-event high-frequency carbon-policy-surprise series and \citet{BauerKaenzigRudebusch2026}'s extension to 2024 confirm that the post-2015 EUA path is policy-driven (first-stage F~$> 16$). We use 2015 as the headline cutoff and report event-study coefficients separately for each post-2015 year.
 
 \subsection{Belgian B2B firm-to-firm transactions}
 
-The National Bank of Belgium maintains a near-universal panel of B2B transactions, derived from VAT-listing reports that all Belgian firms above a low size threshold submit annually. Each record is a (seller VAT, buyer VAT, year, EUR amount) tuple. The panel covers 2002--2023 and includes domestic transactions only. We use 2005--2022. We restrict to private-sector buyers and sellers with a primary NACE 4-digit code and merge in Annual Accounts (revenue, total cost, employment) and EUTL records (verified emissions, free allowances) at the firm $\times$ year level.
+The National Bank of Belgium maintains a near-universal panel of B2B transactions, derived from VAT-listing reports that all Belgian firms above a low size threshold submit annually. Each record is a (seller VAT, buyer VAT, year, EUR amount) tuple. The panel covers 2002--2023 and includes domestic transactions only. We use 2005--2022. We restrict to private-sector buyers and sellers with a primary NACE 4-digit code and merge in Annual Accounts (revenue, total cost, employment) at the firm $\times$ year level.
 
 \subsection{Belgian customs panel}\label{sec:data_customs}
 
-For the across-country test (\S\ref{sec:international}) we use the Belgian customs panel maintained by the NBB and Eurostat, at the firm $\times$ HS6 product $\times$ source country $\times$ year level. The headline CdGM-replication specification uses 2000--2019 to match \citet{CosterMejeanDiGiovanni2024} (CdGM hereafter). The buyer-supplier-level customs analysis (\S\ref{sec:international_buyer_supplier} onward) extends through 2022 to align with the within-country B2B sample window and capture the post-2017 EUA price rise. We follow CdGM in classifying HS6 products as regulated/unregulated via concordance to EUTL installation activity codes; for the headline replication only, we restrict the sample to imports from non-ETS source countries (per CdGM's identifying choice). The buyer-supplier extension keeps both EU and non-ETS source rows.
+For the international margin (\S\ref{sec:international}) we use the Belgian customs panel maintained by the NBB and Eurostat, at the firm $\times$ HS6 product $\times$ source country $\times$ year level. The headline \citet{CosterMejeanDiGiovanni2024} (CdGM hereafter) replication uses 2000--2019 to match their window. The buyer-supplier-level customs analysis (\S\ref{sec:international}) extends through 2022 to align with the within-country B2B sample window and to capture the post-2017 EUA price rise. We follow CdGM in classifying HS6 products as regulated or unregulated via concordance to EUTL installation activity codes.
 
-\subsection{Treatment intensity}
+\subsection{The EU Transaction Log: emissions and allowance allocation}\label{sec:data_eutl}
 
-For each ETS supplier $j$ we construct a time-invariant pre-shock measure of carbon-cost intensity:
+The European Union Transaction Log records, for each regulated installation and year, the verified emissions and the free allowances allocated under the EU ETS. We link each EUTL installation to its parent firm via Belgian VAT identifiers and merge the resulting firm-year panel with the Annual Accounts. The headline firm-year quantity we extract is the \emph{shortage}:
 \begin{equation}
-    \text{firm cost share}_j = \frac{\overline{\text{shortage}_{j,t}}_{\,t \in 2013..2016}\;\times\;\overline{\text{EUA}_t}_{\,t \in 2013..2016}}{\overline{\text{total cost}_{j,t}}_{\,t \in 2010..2012}},
-    \label{eq:fcs}
+    \text{shortage}_{j,t} \;=\; \max\!\left(0,\; \text{emissions}_{j,t} - \text{free allowances}_{j,t}\right),
+    \label{eq:shortage}
 \end{equation}
-where $\text{shortage}_{j,t} = \max(0,\,\text{emissions}_{j,t} - \text{free allowances}_{j,t})$ in tCO$_2$, EUA$_t$ is the average annual allowance price, and total cost is from Annual Accounts. Both numerator and denominator end in 2016 or earlier, so the regressor cannot mechanically incorporate post-2015 outcomes. Cost-share intensity ranges from approximately zero (no shortage, or shortage covered by free allowances) to $\sim$5--10\% in the most-exposed installations. Within NACE 4-digit, after partialling out the sector mean, the cross-firm standard deviation is 0.037.
+the tonnes of CO\textsubscript{2} for which firm $j$ in year $t$ had to either buy allowances at auction, purchase them on the secondary market, or pay the EU ETS non-compliance penalty. Firms with surplus allocation in a given year have $\text{shortage}_{j,t} = 0$ and face no marginal cost from the EU ETS that year.
 
-For the across-NACE-4d category test we aggregate to NACE 4-digit:
-\begin{equation}
-    \text{nace exposure}_n = \frac{\sum_{j \in \text{ETS sellers in } n} \overline{\text{corr sales}_{j,t}}_{\,t \in 2010..14} \times \text{firm cost share}_j}{\sum_{j \in \text{all sellers in } n} \overline{\text{corr sales}_{j,t}}_{\,t \in 2010..14}},
-    \label{eq:nace_exposure}
-\end{equation}
-a sales-weighted average ETS exposure within the supplier sector, set to zero where no ETS sellers are active.
+To put the shortage on a scale comparable across firms of different sizes, we divide the shortage--EUA cost by the firm's total operating cost from the Annual Accounts. The resulting carbon cost share,
+\[
+    \omega_{j,t} \;=\; \frac{\text{shortage}_{j,t} \cdot \text{EUA}_t}{\text{total cost}_{j,t}},
+\]
+is the fraction of firm $j$'s operating cost attributable to allowance payments in year $t$. Table~\ref{tab:firm_cost_share_by_phase} reports its distribution across the four ETS trading phases.
 
-For the Phase~II alternative event-study (\S\ref{sec:domestic_phase2}), we re-construct equation~\eqref{eq:fcs} on the 2005--2008 numerator window with a 2003--2005 cost denominator (or earliest available three-year window), so the regressor remains predetermined relative to the 2008 cutoff.
+\begin{table}[H]
+    \centering
+    \caption{Distribution of carbon cost share $\omega_{j,t}$ across EU ETS phases.}
+    \label{tab:firm_cost_share_by_phase}
+    \footnotesize
+    \begin{tabular}{lccccccc}
+        \toprule
+        & & & & & & \multicolumn{2}{c}{Mean} \\
+        \cmidrule(lr){7-8}
+        Phase & N & Share shortage $> 0$ & p50 & p90 & p99 & Unweighted & Sales-weighted \\
+        \midrule
+        I (2005--07)            & 505 & 19.80\% & 0.00\% & 0.02\% & 0.46\%  & 0.02\% & 0.08\% \\
+        II (2008--12)           & 849 & 12.50\% & 0.00\% & 0.01\% & 0.46\%  & 0.18\% & 0.08\% \\
+        III pre-MSR (2013--17)  & 917 & 62.20\% & 0.01\% & 0.30\% & 8.67\%  & 0.56\% & 0.09\% \\
+        III post-MSR (2018--20) & 511 & 72.00\% & 0.09\% & 1.40\% & 24.00\% & 1.41\% & 0.31\% \\
+        IV (2021--22)           & 319 & 83.40\% & 0.34\% & 2.60\% & 59.90\% & 6.85\% & 0.71\% \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+The phase pattern is sharp. In Phase~I and Phase~II, free allocation generously covered ETS firms' emissions: the median firm has zero shortage in both phases, and even the 99th percentile of $\omega$ stays below half a percent of total cost. Phase~III pre-MSR begins to bite in the right tail (p99 = 8.7\%) but the median firm still has near-zero shortage. The MSR-driven price rise pushes p90 to 1.4\% post-MSR and to 2.6\% in Phase~IV, with the right tail reaching 60\% of total cost at the most-exposed installations. A complementary metric --- the effective carbon price per tonne emitted, computed as the ratio of total carbon cost paid to total emissions --- rises from \$1.80/tCO\textsubscript{2} in Phase~I to \$32.82/tCO\textsubscript{2} in Phase~IV, an eighteen-fold increase. Phase~IV is the only phase in the policy's history in which the carbon cost share is unambiguously non-trivial at the population level.
 
 \subsection{Sample sizes}
 
@@ -43,10 +81,10 @@ For the Phase~II alternative event-study (\S\ref{sec:domestic_phase2}), we re-co
         \toprule
         Section & Unit of observation & Count \\
         \midrule
-        Pass-through (\S\ref{sec:passthrough})       & NACE 4-digit $\times$ month / year             & 2005m1--2019m12 monthly; 2001--2022 annual \\
-        Domestic, across suppliers (\S\ref{sec:domestic_within})    & buyer $\times$ supplier-NACE-4d $\times$ year  & 32{,}631 cells / 110{,}870 obs \\
-        Domestic, across categories (\S\ref{sec:domestic_across}) & buyer $\times$ NACE-4d $\times$ year             & 5.7M cells / 71.7M obs \\
-        Across-country, customs (\S\ref{sec:international})        & firm $\times$ HS6 $\times$ source country $\times$ year & 8.6M obs (2000--2019, non-ETS subset) \\
+        Pass-through (\S\ref{sec:passthrough})           & NACE 4-digit $\times$ month / year                       & 2005m1--2019m12 monthly; 2001--2022 annual \\
+        Within NACE 4-digit (\S\ref{sec:domestic_within_intensive})    & buyer $\times$ supplier-NACE-4d $\times$ year         & RMD: \notrun{} cells / obs \\
+        Across NACE 4-digit (\S\ref{sec:domestic_across}) & buyer $\times$ NACE-4d $\times$ year                     & RMD: \notrun{} cells / obs \\
+        International, customs (\S\ref{sec:international})         & firm $\times$ HS6 $\times$ source country $\times$ year & 8.6M obs (2000--2019, non-ETS subset) \\
         \bottomrule
     \end{tabular}
 \end{table}
