@@ -4,78 +4,106 @@ We test two domestic reallocation margins. Within NACE 4-digit (\S\ref{sec:domes
 
 For each margin we estimate both the intensive margin (the buyer's share of spending) and the extensive margin (whether the buyer purchases from the regulated source at all). The reallocation that the leakage hypothesis would predict --- a smaller share of regulated input or a higher probability of exiting the relationship --- does not appear on either margin or on either side.
 
-\subsubsection{Within NACE 4-digit: across suppliers}\label{sec:domestic_within}
+\subsubsection{Within NACE 4-digit: intensive margin (across suppliers)}\label{sec:domestic_within_intensive}
 
-For each (buyer $b$, supplier-NACE-4d $n$) cell with at least one ETS supplier and at least two suppliers active over the pre-shock window, we identify $j^*(b,n)$ as the most-exposed ETS supplier in the cell --- the supplier with the largest predetermined exposure to the EU ETS shock, frozen at pre-2015 averages.\footnote{Predetermined exposure is constructed as $\omega_j \times (1 - a_j)$, where $\omega_j$ is firm $j$'s emission intensity (tCO\textsubscript{2} per euro of input cost) measured on 2013--2014 data, and $a_j$ is firm $j$'s pre-shock free-allocation share. See Section~\ref{sec:data}.} The intensive-margin outcome is $j^*$'s share of cell-level annual spending; the extensive-margin outcome is the indicator that $j^*$ remains active as a supplier to $b$ in year $t$.
+For each ETS event year $\tau \in \{2008, 2013, 2017\}$, we build (buyer $b$, NACE 4-digit $n$) cells using the two pre-event years (2006--07, 2011--12, 2015--16). A cell is included if the buyer sourced from at least two distinct suppliers within that NACE 4-digit over the pre-period and at least one of them had a positive carbon-cost exposure $\omega$.\footnote{Firm-level exposure $\omega_j$ is the carbon cost the EU ETS imposes on firm $j$ as a share of its total cost: $\omega_j = \max(\text{emissions}_j - \text{free allocation}_j, 0) \cdot \text{EUA}_t / \text{total cost}_j$, averaged over the two pre-event years. See Section~\ref{sec:data}.} Within each cell we identify the \emph{top-omega} supplier (the supplier with the largest pre-event $\omega$) and the \emph{bottom-omega} supplier (the smallest), and we track the share each supplier captures of the buyer's spending in that NACE 4-digit over 2005--2022. The bottom-omega supplier is the within-cell control: in most cells it has $\omega = 0$ (a non-ETS firm, or an ETS firm with surplus allocation in the pre-period).
 
-The regression for the intensive margin is
+\paragraph{Specification.} The regression compares the within-cell evolution of the top-omega supplier's share to the bottom-omega supplier's share around the event year:
 \begin{equation}
-    \text{share top}_{b,n,t} \;=\; \beta\,\omega_{j^*(b,n)} \times \mathbf{1}[t \geq 2015] \;+\; \alpha_{b,n} \;+\; \delta_{n,t} \;+\; \varepsilon_{b,n,t},
-    \label{eq:domestic_within_intensive}
+    \text{share}_{b,n,r,t} \;=\; \alpha_{b,n,r} \;+\; \delta_t \;+\; \beta \cdot \mathbf{1}[r = \text{top}] \cdot \mathbf{1}[t \geq \tau] \;+\; \varepsilon_{b,n,r,t},
+    \label{eq:within_intensive}
 \end{equation}
-with buyer-cell fixed effects $\alpha_{b,n}$ and supplier-NACE-4d $\times$ year fixed effects $\delta_{n,t}$. Standard errors are two-way clustered on buyer and on supplier-NACE 4-digit. The coefficient $\beta$ is the post-2015 change in the most-exposed supplier's share per unit of exposure intensity. A leakage-consistent response is $\beta < 0$: buyers cut the share they spend on the most-exposed regulated supplier as the policy tightens. The extensive-margin regression replaces the left-hand side with the indicator $\mathbf{1}[\text{spending}_{b \to j^*, t} > 0]$ and keeps the same fixed-effect structure.
+where $r \in \{\text{top}, \text{bot}\}$ indexes the supplier role within the cell, $\alpha_{b,n,r}$ is a cell-by-role fixed effect, and $\delta_t$ is a year fixed effect. Standard errors are clustered at the cell level. The coefficient $\beta$ measures the change in the top-omega supplier's within-cell share, post-event, relative to the bottom-omega supplier in the same cell. A leakage-consistent response is $\beta < 0$.
 
-\paragraph{Headline result --- intensive margin.} \notrun{} $\widehat{\beta} = X$ (s.e.\ $X$, $p = X$). The point estimate is statistically indistinguishable from zero. The corresponding event study (Figure~\ref{fig:within_nace4d_intensive_pooled}) shows pre-period coefficients that are flat through 2010--2014 and post-period coefficients that hover near zero through the 2022 EUA peak. The full price run-up from \EUR{7} to \EUR{90} does not move the share that exposed Belgian buyers spend on their most-exposed regulated supplier.
+\paragraph{Headline result.} Figure~\ref{fig:within_intensive_topbot} reports the mean share of the top-omega and bottom-omega supplier within their cells, across the three event windows. \notrun{} The two trajectories track each other closely throughout, including across the post-MSR price run-up. There is no visible separation post-event in the direction that the leakage hypothesis predicts.
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.75\textwidth]{phase4_within_nace4d_reallocation_pooled_combined.pdf}
-    \caption{Within-NACE-4d reallocation: pooled event study, all cells, intensive margin. Coefficients on $\omega_{j^*(b,n)} \times \mathbf{1}[\text{year}=t]$ relative to $t = 2014$, 95\% pointwise bands.}
-    \label{fig:within_nace4d_intensive_pooled}
+    \caption{Within-NACE 4-digit intensive margin: mean within-cell share of the top-omega and bottom-omega supplier, by event window. Vertical dashed lines mark the event year. 95\% bootstrap CIs.}
+    \label{fig:within_intensive_topbot}
 \end{figure}
 
-\paragraph{Headline result --- extensive margin.} \notrun{} $\widehat{\beta} = X$ (s.e.\ $X$, $p = X$). The probability that the most-exposed regulated supplier remains active in the buyer's input mix does not fall after 2015. Higher exposure does not predict relationship exit.
+\paragraph{DiD coefficients and heterogeneity cuts.} Table~\ref{tab:within_intensive_did} reports $\hat{\beta}$ from equation~(\ref{eq:within_intensive}) for each event year, both pooled across all cells and restricted to the top quartile under three heterogeneity cuts. The cuts isolate the cells where leakage should be most likely if it is operating at all. Top quartile by \emph{buyer-total shock} restricts to cells where the policy-induced cost shock from the top-omega supplier is the largest fraction of the buyer's total input bill --- the cells where the substitution incentive is largest. Top quartile by \emph{NACE 4-digit input share} restricts to cells where this NACE 4-digit input matters most to the buyer, regardless of its carbon exposure. Top quartile by \emph{$\omega$ gap} restricts to cells with the largest within-cell wedge in carbon exposure between top and bottom supplier --- the cells where the policy creates the largest relative-price gap to substitute against.
 
-\begin{figure}[H]
+\begin{table}[H]
     \centering
-    \includegraphics[width=0.75\textwidth]{phase4_within_nace4d_extensive_DiD.pdf}
-    \caption{Within-NACE-4d reallocation: extensive margin. Probability that the most-exposed ETS supplier is still active in the buyer's input mix at year $t$, 95\% pointwise bands.}
-    \label{fig:within_nace4d_extensive}
-\end{figure}
+    \caption{Within NACE 4-digit DiD: $\hat{\beta}$ on (post $\times$ top-omega) by event year and heterogeneity restriction.}
+    \label{tab:within_intensive_did}
+    \input{leakage_within_across/figures/phase4_within_nace4d_reallocation_did_table_combined.tex}
+\end{table}
 
-\paragraph{Heterogeneity --- where the shock bites hardest.} A natural concern with a pooled null is that the average effect masks substitution concentrated in the cells where the shock is large at the buyer's total-cost level. Section~\ref{sec:shock_magnitude} documented that shock intensity is highly skewed across cells. The right test of the magnitude-too-small hypothesis is to look inside the top quartile of buyer-level exposure: if the policy reallocates anywhere, it should be there. \notrun{} On the top exposure quartile, $\widehat{\beta}_{Q4} = X$ (s.e.\ $X$). The point estimate is no larger in magnitude than in the pooled sample, and remains statistically indistinguishable from zero (Figure~\ref{fig:within_nace4d_topQ}). The heaviest-shock cells do not reallocate more per unit of exposure than the lightly-affected ones.
+\paragraph{Reading the table.} At 2013 (Phase III auctioning), all four columns return negative point estimates, none statistically significant. At 2017 (post-MSR), all four columns are close to zero. At 2008 (Phase II onset), the four columns are positive --- the opposite of what leakage would predict --- which reflects mean reversion and a size-omega correlation that mixes with the omega channel in the early window where most ETS firms had surplus allocation.\footnote{Section 1 of [phase4 within-NACE-4d body of analyses] documents that the median Belgian ETS firm in 2011--12 had allocated allowances 1.33 times its emissions; only 14\% of firms had $\omega > 0$ in that pre-period.} The 2013 and 2017 windows are the substantive tests: in neither does the top-omega supplier lose share to its bottom-omega within-cell competitor, in pooled or in any of the three top-quartile cuts.
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.75\textwidth]{phase4_within_nace4d_reallocation_topQ_omegagap.pdf}
-    \caption{Within-NACE-4d reallocation: top quartile by gap in supplier exposure $\omega$. The cells where the policy creates the largest relative-price wedge across competing suppliers within the same NACE 4-digit. 95\% pointwise bands.}
-    \label{fig:within_nace4d_topQ}
-\end{figure}
-
-\paragraph{Heterogeneity --- by event window.} The post-2015 EU ETS run-up was not monotonic; the policy regime tightened in three discrete steps (Phase II in 2008, Phase III in 2013, and the MSR-driven reset in 2015 that compounded into the 2017--2022 peak). We estimate the same specification around each cutoff (Figure~\ref{fig:within_nace4d_by_cutoff}) and find no reallocation around any of them. The 2008 and 2013 event studies are flat both before and after the cutoff; the 2017 cutoff isolates the post-MSR period at peak EUA prices and is also flat. The reallocation that should be most detectable around the largest jump in the EUA price is not there.
+\paragraph{Why is the substitution incentive so small?} The leakage hypothesis assumes that the policy creates a within-cell relative-price wedge that buyers can profit from by switching. Figures~\ref{fig:within_dist_shock} through~\ref{fig:within_dist_gap} report the distribution of the three ingredients that determine the size of that wedge, across the cells in the 2017 sample.\footnote{The 2017 sample is the largest of the three event windows and reflects the post-MSR period, when EUA prices were highest. The 2013 and 2008 distributions track the same shape, on smaller cell counts.} The dollar shock at the buyer's total cost (Figure~\ref{fig:within_dist_shock}) --- the product of the top-omega supplier's carbon-cost intensity and the share of the buyer's total cost that goes to that supplier --- has a median below \notrun{X} and a 99th percentile below \notrun{X}. The NACE 4-digit input share at the buyer (Figure~\ref{fig:within_dist_nshare}) --- how much this input category matters at all --- is similarly skewed. The $\omega$ gap between top and bottom supplier (Figure~\ref{fig:within_dist_gap}) is, in most cells, an order of magnitude smaller than the supplier-level $\omega$ itself, because the bottom-omega supplier within a cell is usually a non-ETS firm with $\omega = 0$ but a supplier-level cost structure that is itself partly carbon-exposed through its own inputs.
 
 \begin{figure}[H]
     \centering
     \begin{subfigure}{0.32\textwidth}
-        \includegraphics[width=\textwidth]{phase4_within_nace4d_reallocation_by_nace4d_2008.pdf}
-        \caption{2008 cutoff (Phase II).}
+        \includegraphics[width=\textwidth]{phase4_within_nace4d_intensive_dist_shock_buyertotal.pdf}
+        \caption{Dollar shock at buyer total cost.}
+        \label{fig:within_dist_shock}
     \end{subfigure}
     \begin{subfigure}{0.32\textwidth}
-        \includegraphics[width=\textwidth]{phase4_within_nace4d_reallocation_by_nace4d_2013.pdf}
-        \caption{2013 cutoff (Phase III).}
+        \includegraphics[width=\textwidth]{phase4_within_nace4d_intensive_dist_nace4d_share.pdf}
+        \caption{NACE 4-digit input share at the buyer.}
+        \label{fig:within_dist_nshare}
     \end{subfigure}
     \begin{subfigure}{0.32\textwidth}
-        \includegraphics[width=\textwidth]{phase4_within_nace4d_reallocation_by_nace4d_2017.pdf}
-        \caption{2017 cutoff (post-MSR).}
+        \includegraphics[width=\textwidth]{phase4_within_nace4d_intensive_dist_omega_gap.pdf}
+        \caption{$\omega_{\text{top}} - \omega_{\text{bot}}$ within cell.}
+        \label{fig:within_dist_gap}
     \end{subfigure}
-    \caption{Within-NACE-4d reallocation across the three ETS event windows.}
-    \label{fig:within_nace4d_by_cutoff}
+    \caption{Distribution of the three ingredients of the within-cell substitution incentive, across (buyer, NACE 4-digit) cells in the 2017 event window. Log scale; dashed line marks the 75th percentile.}
+    \label{fig:within_distributions}
 \end{figure}
 
-\paragraph{Placebo on unregulated cells.} If the absence of a reallocation response reflected a systematic data artefact rather than firm behavior, we would expect to see the same pattern in cells where no ETS supplier is present. The placebo specification, defined on cells with no ETS supplier in the same NACE 4-digit, is by construction flat (Figure~\ref{fig:within_nace4d_placebo}). The headline null is therefore not a mechanical feature of the design.
+\paragraph{How much could a buyer save by substituting?} Combining the three ingredients gives the potential savings, as a fraction of the buyer's total input cost, from substituting the entire top-omega spend to the bottom-omega supplier:
+\begin{equation}
+    \text{savings}_{b,n}(\rho,\, p^{\text{EUA}}) \;=\; \rho \cdot p^{\text{EUA}} \cdot \left(\omega_{\text{top}} - \omega_{\text{bot}}\right) \cdot \frac{\text{cell spend}_{b,n}}{\text{buyer total cost}_b},
+    \label{eq:savings}
+\end{equation}
+where $\omega_j = \text{shortage}_j / \text{total cost}_j$ is the physical carbon intensity of firm $j$'s pre-event input bill (units: tCO\textsubscript{2} per euro), $p^{\text{EUA}}$ is the EUA price (euros per tCO\textsubscript{2}), and $\rho \in [0, 1]$ is the rate at which the supplier's carbon-cost shock is passed through into the buyer's price. Figure~\ref{fig:within_savings} reports the cumulative distribution of (\ref{eq:savings}) under two EUA-price scenarios: the 2017 annual mean (\EUR{5.76}/tCO\textsubscript{2}, pre-MSR price) and the 2022 annual mean (\EUR{80.24}/tCO\textsubscript{2}, post-MSR peak). Even at the 2022 EUA price and full pass-through, the median cell could save only \notrun{0.002}\% of its total input cost from a full substitution; the 99th-percentile cell could save \notrun{4.7}\%. At 2017 EUA prices, even the 99th-percentile cell could save only \notrun{0.34}\%. The substitution incentive is, for the bulk of cells, an order of magnitude smaller than any plausible cost of finding, vetting, and on-boarding an alternative supplier.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics[width=\textwidth]{phase4_within_nace4d_intensive_savings_by_passthrough_eua2017.pdf}
+        \caption{2017 EUA price (\EUR{5.76}/tCO\textsubscript{2}).}
+    \end{subfigure}
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics[width=\textwidth]{phase4_within_nace4d_intensive_savings_by_passthrough_eua2022.pdf}
+        \caption{2022 EUA price (\EUR{80.24}/tCO\textsubscript{2}).}
+    \end{subfigure}
+    \caption{Counterfactual euro savings from full substitution to the bottom-omega supplier, as a fraction of the buyer's total input cost, across pass-through rates $\rho \in \{0.25, 0.5, 0.75, 1.0\}$ and two EUA-price scenarios. ECDF across (buyer, NACE 4-digit) cells in the 2017 event window. Log scale on the horizontal axis.}
+    \label{fig:within_savings}
+\end{figure}
+
+\paragraph{Placebo.} If the null reflected a systematic data artefact rather than firm behavior, we would expect the same flat trajectories in cells where no ETS supplier is present. Figure~\ref{fig:within_nace4d_placebo} reports the placebo specification on (a) all NACE 4-digit cells with no ETS supplier and (b) cells inside ETS-treated NACE 4-digits with no ETS supplier in the buyer's network. The placebo is flat by construction; the headline null in the main specification is therefore not a mechanical artefact.
 
 \begin{figure}[H]
     \centering
     \begin{subfigure}{0.49\textwidth}
         \includegraphics[width=\textwidth]{phase4_within_nace4d_reallocation_placebo_anyNACE4d.pdf}
-        \caption{Placebo on all unregulated NACE 4-digit cells.}
+        \caption{All NACE 4-digit cells with no ETS supplier.}
     \end{subfigure}
     \begin{subfigure}{0.49\textwidth}
         \includegraphics[width=\textwidth]{phase4_within_nace4d_reallocation_placebo_etsNACE4d.pdf}
-        \caption{Placebo on ETS-NACE-4d cells with no ETS supplier in the buyer's network.}
+        \caption{ETS-treated NACE 4-digit cells with no ETS supplier in the buyer's network.}
     \end{subfigure}
     \caption{Placebo specifications. 95\% pointwise bands.}
     \label{fig:within_nace4d_placebo}
+\end{figure}
+
+\subsubsection{Within NACE 4-digit: extensive margin (supplier survival)}\label{sec:domestic_within_extensive}
+
+\notrun{[To be revised in the same style as the intensive margin: top-omega vs bottom-omega trajectories, DiD table by event year, with extensive-margin outcome (probability the supplier remains active in the buyer's input mix).]}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{phase4_within_nace4d_extensive_DiD.pdf}
+    \caption{Within NACE 4-digit extensive margin: probability that the top-omega ETS supplier remains active in the buyer's input mix at year $t$, by event window.}
+    \label{fig:within_nace4d_extensive}
 \end{figure}
 
 \subsubsection{Across NACE 4-digit: input-category share}\label{sec:domestic_across}
