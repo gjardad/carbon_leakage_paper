@@ -37,27 +37,38 @@ where $r \in \{\text{top}, \text{bot}\}$ indexes the supplier role within the ce
 
 \paragraph{Why we do not read this as evidence of substitution.} Two reasons. First, three significant cells at $p<0.05$ out of twelve is barely above the 0.6 false positives one would expect under a global null. A Bonferroni correction across the twelve estimates leaves only the Phase II cost-shock cell; the Phase III exposure-gap result sits just outside the threshold ($p \approx 0.008$ against a Bonferroni-adjusted target of $0.004$).\footnote{A formal multiple-testing exercise across the twelve cells --- Bonferroni, Benjamini-Hochberg, Romano-Wolf, and a joint Wald test that all twelve coefficients are zero --- is in [TODO.md].} Second, and more decisively, the Phase III-vs-MSR pattern is backwards for any plausible leakage mechanism. EUA prices around the Phase III onset averaged \EUR{5}--\EUR{7} per tCO\textsubscript{2}; the post-MSR EUA path peaked above \EUR{80} per tCO\textsubscript{2}, an order of magnitude higher. Any structural friction that lets buyers reallocate at a \EUR{7} wedge should let them reallocate at an \EUR{85} wedge, with stronger estimated coefficients in the higher-price window. Yet at MSR every cell of the table either points in the wrong direction or is statistically indistinguishable from zero. The two-out-of-twelve significant negatives that we do see line up with the lower-price treatment period, which is the opposite of what the mechanism predicts. We conclude that the within-NACE-4d intensive margin does not show robust evidence of buyer-side substitution across the three treatment periods we examine.
 
-\paragraph{Why is the substitution incentive so small?} The leakage hypothesis assumes that the policy creates a within-cell relative-price wedge that buyers can profit from by switching. Figures~\ref{fig:within_dist_shock} through~\ref{fig:within_dist_gap} report the distribution of the three ingredients that determine the size of that wedge, across the cells in the 2017 sample.\footnote{The 2017 sample is the largest of the three event windows and reflects the post-MSR period, when EUA prices were highest. The 2013 and 2008 distributions track the same shape, on smaller cell counts.} The dollar shock at the buyer's total cost (Figure~\ref{fig:within_dist_shock}) --- the product of the top-omega supplier's carbon-cost intensity and the share of the buyer's total cost that goes to that supplier --- has a median below \notrun{X} and a 99th percentile below \notrun{X}. The NACE 4-digit input share at the buyer (Figure~\ref{fig:within_dist_nshare}) --- how much this input category matters at all --- is similarly skewed. The $\omega$ gap between top and bottom supplier (Figure~\ref{fig:within_dist_gap}) is, in most cells, an order of magnitude smaller than the supplier-level $\omega$ itself, because the bottom-omega supplier within a cell is usually a non-ETS firm with $\omega = 0$ but a supplier-level cost structure that is itself partly carbon-exposed through its own inputs.
+\paragraph{Why is the substitution incentive so small?} The leakage hypothesis assumes that the policy creates a within-cell relative-price wedge that buyers can profit from by switching. Three quantities determine the size of that wedge --- the cost shock at the buyer's total cost level, the NACE 4-digit input share, and the within-cell $\omega$ gap --- and Figures~\ref{fig:within_dist_shock} and~\ref{fig:within_distributions_other} report their distributions across the cells in the 2017 event window.\footnote{The 2017 sample is the largest of the three event windows. The 2013 and 2008 distributions track the same shape on smaller cell counts.} The cost shock at the buyer's total cost (Figure~\ref{fig:within_dist_shock}) is the product of the top-$\omega$ supplier's carbon-cost intensity, the share of the buyer's total cost that goes to that supplier, and the EUA price. We report it for two end-of-year EUA prices, deflated to 2016 euros: \EUR{8.06}/tCO\textsubscript{2} (end-of-2017, pre-MSR-peak) and \EUR{70.45}/tCO\textsubscript{2} (end-of-2022, post-MSR-peak). At the 2022 deflated price, the median cell faces a cost shock below \notrun{X} of its total input cost and the 99th percentile cell faces a shock below \notrun{X}. The NACE 4-digit input share at the buyer (Figure~\ref{fig:within_dist_nshare}) is similarly right-skewed. The $\omega$ gap between top and bottom supplier (Figure~\ref{fig:within_dist_gap}) is, in most cells, an order of magnitude smaller than the supplier-level $\omega$ itself, because the bottom-$\omega$ supplier within a cell is usually a non-ETS firm with $\omega = 0$ whose own cost structure is nonetheless partly carbon-exposed through its own inputs.
 
 \begin{figure}[H]
     \centering
-    \begin{subfigure}{0.32\textwidth}
-        \includegraphics[width=\textwidth]{phase4_within_nace4d_intensive_dist_shock_buyertotal.pdf}
-        \caption{Dollar shock at buyer total cost.}
-        \label{fig:within_dist_shock}
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics[width=\textwidth]{phase4_within_nace4d_intensive_dist_shock_buyertotal_eua2017.pdf}
+        \caption{End-of-2017 EUA (real, 2016 base).}
+        \label{fig:within_dist_shock_2017}
     \end{subfigure}
-    \begin{subfigure}{0.32\textwidth}
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics[width=\textwidth]{phase4_within_nace4d_intensive_dist_shock_buyertotal_eua2022.pdf}
+        \caption{End-of-2022 EUA (real, 2016 base).}
+        \label{fig:within_dist_shock_2022}
+    \end{subfigure}
+    \caption{Distribution of the cost shock at the buyer's total cost across (buyer, NACE 4-digit) cells in the 2017 event window. The cost shock is $\omega_{\text{top}} \cdot (\text{cell spend} / \text{buyer total cost}) \cdot \text{EUA}$, expressed as a fraction of buyer total cost. EUA prices are end-of-year nominal settlements deflated to 2016 euros using the Eurostat EA HICP. Log scale on the horizontal axis; dashed line marks the 75th percentile.}
+    \label{fig:within_dist_shock}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.49\textwidth}
         \includegraphics[width=\textwidth]{phase4_within_nace4d_intensive_dist_nace4d_share.pdf}
         \caption{NACE 4-digit input share at the buyer.}
         \label{fig:within_dist_nshare}
     \end{subfigure}
-    \begin{subfigure}{0.32\textwidth}
+    \begin{subfigure}{0.49\textwidth}
         \includegraphics[width=\textwidth]{phase4_within_nace4d_intensive_dist_omega_gap.pdf}
         \caption{$\omega_{\text{top}} - \omega_{\text{bot}}$ within cell.}
         \label{fig:within_dist_gap}
     \end{subfigure}
-    \caption{Distribution of the three ingredients of the within-cell substitution incentive, across (buyer, NACE 4-digit) cells in the 2017 event window. Log scale; dashed line marks the 75th percentile.}
-    \label{fig:within_distributions}
+    \caption{Distribution of the other two ingredients of the within-cell substitution incentive, across (buyer, NACE 4-digit) cells in the 2017 event window. Log scale; dashed line marks the 75th percentile.}
+    \label{fig:within_distributions_other}
 \end{figure}
 
 \paragraph{How much could a buyer save by substituting?} Combining the three ingredients gives the potential savings, as a fraction of the buyer's total input cost, from substituting the entire top-omega spend to the bottom-omega supplier:
