@@ -28,14 +28,12 @@ where $r \in \{\text{top}, \text{bot}\}$ indexes the supplier role within the ce
 
 \begin{table}[H]
     \centering
-    \caption{Reallocation within sectors.}
+    \caption{Reallocation Within Sectors}
     \label{tab:within_intensive_did}
     \input{leakage_within_across/tables/phase4_within_nace4d_reallocation_did_table_combined.tex}
 \end{table}
 
-\paragraph{Reading the table.} \notrun{[Describe which of the 14 cells in Table~\ref{tab:within_intensive_did} are individually significant before correction, and which point in the leakage direction. Highlight the cells that exhibit the largest leakage-direction coefficients and any pattern across the top-quartile vs top-decile columns.]}
-
-\paragraph{Multiple-testing correction.} The 14 cells in Table~\ref{tab:within_intensive_did} share data --- the same buyers, the same suppliers, the same B2B panel --- so the tests are positively dependent. We report Romano-Wolf step-down adjusted $p$-values with cluster-bootstrap on buyer (\notrun{$B$ replicates}), which controls the family-wise error rate while estimating the dependence structure from the data itself. \notrun{[Describe which cells survive Romano-Wolf at $p<0.05$. State the conclusion: under Romano-Wolf, the within-NACE-4d intensive margin does/does not show robust evidence of buyer-side substitution.]}
+\paragraph{Reading the table.} Coefficients in Table~\ref{tab:within_intensive_did} are from the size-controlled specification, which adds a $\text{year} \times \log(\text{pre-event sales}_{b,n,r})$ interaction to equation~(\ref{eq:within_intensive}). This absorbs differential secular trends between large and small suppliers and isolates the post-event change attributable to the top-omega vs bottom-omega contrast. Standard errors in parentheses are cluster-robust at the (buyer, NACE 4-digit) cell. The 14 cells in the table share data, so the tests are positively dependent; the stars use Romano-Wolf step-down adjusted $p$-values from a cluster-bootstrap on buyer, which controls the family-wise error rate while estimating the dependence structure from the data itself. \notrun{[Describe which cells survive Romano-Wolf at $p < 0.05$. State the conclusion: under Romano-Wolf, the within-NACE-4d intensive margin does or does not show robust evidence of buyer-side substitution.]}
 
 \paragraph{Why is the substitution incentive so small?} The leakage hypothesis assumes that the policy creates a within-cell relative-price wedge that buyers can profit from by switching. Three quantities determine the size of that wedge --- the cost shock at the buyer's total cost level, the NACE 4-digit input share, and the within-cell $\omega$ gap --- and Figures~\ref{fig:within_dist_shock} and~\ref{fig:within_distributions_other} report their distributions across the cells in the 2017 treatment period (the larger of the two cell sets). The cost shock at the buyer's total cost (Figure~\ref{fig:within_dist_shock}) is the product of the top-$\omega$ supplier's carbon-cost intensity, the share of the buyer's total cost that goes to that supplier, and the EUA price. We report it for two end-of-year EUA prices, deflated to 2016 euros: \EUR{8.06}/tCO\textsubscript{2} (end-of-2017, pre-MSR-peak) and \EUR{70.45}/tCO\textsubscript{2} (end-of-2022, post-MSR-peak). At the 2022 deflated price, the median cell faces a cost shock below \notrun{X} of its total input cost and the 99th percentile cell faces a shock below \notrun{X}. The NACE 4-digit input share at the buyer (Figure~\ref{fig:within_dist_nshare}) is similarly right-skewed. The $\omega$ gap between top and bottom supplier (Figure~\ref{fig:within_dist_gap}) is, in most cells, an order of magnitude smaller than the supplier-level $\omega$ itself, because the bottom-$\omega$ supplier within a cell is usually a non-ETS firm with $\omega = 0$ whose own cost structure is nonetheless partly carbon-exposed through its own inputs.
 
@@ -69,43 +67,6 @@ where $r \in \{\text{top}, \text{bot}\}$ indexes the supplier role within the ce
     \end{subfigure}
     \caption{Distribution of the other two ingredients of the within-cell substitution incentive, across (buyer, NACE 4-digit) cells in the 2017 event window. Log scale; dashed line marks the 75th percentile.}
     \label{fig:within_distributions_other}
-\end{figure}
-
-\paragraph{How much could a buyer save by substituting?} Combining the three ingredients gives the potential savings, as a fraction of the buyer's total input cost, from substituting the entire top-omega spend to the bottom-omega supplier:
-\begin{equation}
-    \text{savings}_{b,n}(\rho,\, p^{\text{EUA}}) \;=\; \rho \cdot p^{\text{EUA}} \cdot \left(\omega_{\text{top}} - \omega_{\text{bot}}\right) \cdot \frac{\text{cell spend}_{b,n}}{\text{buyer total cost}_b},
-    \label{eq:savings}
-\end{equation}
-where $\omega_j = \text{shortage}_j / \text{total cost}_j$ is the physical carbon intensity of firm $j$'s pre-event input bill (units: tCO\textsubscript{2} per euro), $p^{\text{EUA}}$ is the EUA price (euros per tCO\textsubscript{2}), and $\rho \in [0, 1]$ is the rate at which the supplier's carbon-cost shock is passed through into the buyer's price. Figure~\ref{fig:within_savings} reports the cumulative distribution of (\ref{eq:savings}) under two EUA-price scenarios: end-of-2017 (\EUR{8.06}/tCO\textsubscript{2} in 2016 euros) and end-of-2022 (\EUR{70.45}/tCO\textsubscript{2} in 2016 euros), both deflated to 2016 base prices so the numerator and denominator are on a consistent real scale. Even at the 2022 EUA price and full pass-through, the median cell could save only \notrun{X}\% of its total input cost from a full substitution; the 99th-percentile cell could save \notrun{X}\%. At 2017 EUA prices, even the 99th-percentile cell could save only \notrun{X}\%. The substitution incentive is, for the bulk of cells, an order of magnitude smaller than any plausible cost of finding, vetting, and on-boarding an alternative supplier.
-
-\begin{figure}[H]
-    \centering
-    \begin{subfigure}{0.49\textwidth}
-        \includegraphics[width=\textwidth]{phase4_within_nace4d_intensive_savings_by_passthrough_eua2017.pdf}
-        \caption{End-of-2017 EUA, deflated (\EUR{8.06}/tCO\textsubscript{2}, 2016 base).}
-    \end{subfigure}
-    \begin{subfigure}{0.49\textwidth}
-        \includegraphics[width=\textwidth]{phase4_within_nace4d_intensive_savings_by_passthrough_eua2022.pdf}
-        \caption{End-of-2022 EUA, deflated (\EUR{70.45}/tCO\textsubscript{2}, 2016 base).}
-    \end{subfigure}
-    \caption{Counterfactual real-euro savings from full substitution to the bottom-omega supplier, as a fraction of the buyer's total input cost, across pass-through rates $\rho \in \{0.25, 0.5, 0.75, 1.0\}$ and two end-of-year EUA-price scenarios (deflated to 2016 euros using the Eurostat EA HICP). ECDF across (buyer, NACE 4-digit) cells in the 2017 event window.}
-    \label{fig:within_savings}
-\end{figure}
-
-\paragraph{Placebo.} If the null reflected a systematic data artefact rather than firm behavior, we would expect the same flat trajectories in cells where no ETS supplier is present. Figure~\ref{fig:within_nace4d_placebo} reports the placebo specification on (a) all NACE 4-digit cells with no ETS supplier and (b) cells inside ETS-treated NACE 4-digits with no ETS supplier in the buyer's network. The placebo is flat by construction; the headline null in the main specification is therefore not a mechanical artefact.
-
-\begin{figure}[H]
-    \centering
-    \begin{subfigure}{0.49\textwidth}
-        \includegraphics[width=\textwidth]{phase4_within_nace4d_reallocation_placebo_anyNACE4d.pdf}
-        \caption{All NACE 4-digit cells with no ETS supplier.}
-    \end{subfigure}
-    \begin{subfigure}{0.49\textwidth}
-        \includegraphics[width=\textwidth]{phase4_within_nace4d_reallocation_placebo_etsNACE4d.pdf}
-        \caption{ETS-treated NACE 4-digit cells with no ETS supplier in the buyer's network.}
-    \end{subfigure}
-    \caption{Placebo specifications. 95\% pointwise bands.}
-    \label{fig:within_nace4d_placebo}
 \end{figure}
 
 \subsubsection{Within NACE 4-digit: extensive margin (supplier survival)}\label{sec:domestic_within_extensive}
