@@ -155,3 +155,36 @@ We report two sets of bounds. The relative-magnitudes restriction $\Delta^{RM}(\
 \end{figure}
 
 The original interval excludes zero. Under a relative-magnitudes restriction with $\bar M = 0.5$ (post-treatment violation up to half of the worst pre-treatment violation), the coefficient is no longer statistically distinguishable from zero. We report the result without claiming robustness to large violations of parallel trends; the RM bounds quantify exactly how strong the parallel-trends assumption needs to be for the column-4 result to survive.
+
+% ----------------------------------------------------------------
+\subsection{Cost-shock distribution: price and denominator robustness}\label{app:within_dist_shock_robustness}
+% ----------------------------------------------------------------
+
+Section~\ref{sec:domestic_within_intensive} reports the cost-shock distribution (Figure~\ref{fig:within_dist_shock}) at one EUA-price scenario (end-of-2018, deflated to 2016 euros using the Belgian aggregate producer price index) and one denominator (the buyer's total input cost). Here we verify that the small-magnitude conclusion does not depend on either choice.
+
+\paragraph{Price robustness.} Figure~\ref{fig:app_dist_shock_buyertotal_prices} reports the same distribution at end-of-2017 (\EUR{7.94}/tCO\textsubscript{2}, pre-MSR-peak; about a third of the 2018 price) and end-of-2022 (\EUR{61.83}/tCO\textsubscript{2}, post-MSR-peak; about $2.6\times$ the 2018 price). The mass of the distribution shifts by roughly one log-decade across the three scenarios, but at no scenario does the median cell face a shock above $0.01\%$ of buyer total cost.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics[width=\textwidth]{phase4_within_nace4d_intensive_dist_shock_buyertotal_eua2017.pdf}
+        \caption{End-of-2017 EUA (\EUR{7.94}/tCO\textsubscript{2}, real).}
+        \label{fig:app_dist_shock_buyertotal_2017}
+    \end{subfigure}
+    \begin{subfigure}{0.49\textwidth}
+        \includegraphics[width=\textwidth]{phase4_within_nace4d_intensive_dist_shock_buyertotal_eua2022.pdf}
+        \caption{End-of-2022 EUA (\EUR{61.83}/tCO\textsubscript{2}, real).}
+        \label{fig:app_dist_shock_buyertotal_2022}
+    \end{subfigure}
+    \caption{Cost-shock distribution at the buyer's total cost, alternative EUA-price scenarios. Same construction as Figure~\ref{fig:within_dist_shock}: $\omega_{\text{top}} \cdot (\text{top-omega supplier sales} / \text{buyer total cost}) \cdot \text{EUA}$, with the EUA deflated to 2016 euros using the Belgian aggregate producer price index.}
+    \label{fig:app_dist_shock_buyertotal_prices}
+\end{figure}
+
+\paragraph{Denominator robustness.} The headline figure scales the cost shock against the buyer's entire input bill. A reader might prefer the buyer's spending within the relevant NACE 4-digit sector as the denominator: the substitution decision is made within that category, so the relevant question is what fraction of category spending the carbon-cost burden represents. Figure~\ref{fig:app_dist_shock_nacespend_2018} reports this version at the headline EUA scenario (end-of-2018). The distribution shifts about three decades to the right --- the buyer-total denominator is typically two-to-three log-orders larger than the NACE 4-digit spend --- but the qualitative picture is unchanged: the median cell faces a shock of about $0.04\%$ of its NACE 4-digit spend, and $99\%$ of cells fall below $5\%$.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{phase4_within_nace4d_intensive_dist_shock_nacespend_eua2018.pdf}
+    \caption{Cost shock as a fraction of the buyer's spending in the relevant NACE 4-digit sector: $\omega_{\text{top}} \cdot (\text{top-omega supplier sales} / \text{NACE 4-digit spend}) \cdot \text{EUA}$. End-of-2018 EUA deflated to 2016 euros (\EUR{23.70}/tCO\textsubscript{2}). Log scale on the horizontal axis; dashed line marks the 75th percentile.}
+    \label{fig:app_dist_shock_nacespend_2018}
+\end{figure}
