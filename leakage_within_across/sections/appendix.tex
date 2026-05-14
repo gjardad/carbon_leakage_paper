@@ -188,3 +188,20 @@ Section~\ref{sec:domestic_within_intensive} reports the cost-shock distribution 
     \caption{Cost shock as a fraction of the buyer's spending in the relevant NACE 4-digit sector: $\omega_{\text{top}} \cdot (\text{top-omega supplier sales} / \text{NACE 4-digit spend}) \cdot \text{EUA}$. End-of-2018 EUA deflated to 2016 euros (\EUR{23.70}/tCO\textsubscript{2}). Log scale on the horizontal axis; dashed line marks the 75th percentile.}
     \label{fig:app_dist_shock_nacespend_2018}
 \end{figure}
+
+% ----------------------------------------------------------------
+\subsection{Counterfactual savings from switching}\label{app:within_savings_cdf}
+% ----------------------------------------------------------------
+
+The cost-shock distribution measures the carbon-cost burden embedded in the top-omega supplier's deliveries; the corresponding savings if the buyer switched all such spending to the bottom-omega supplier scales the shock by the exposure gap and by the pass-through rate $\rho$:
+\begin{equation*}
+    \text{savings}_{b,n}(\rho,\, p^{\text{EUA}}) \;=\; \rho \cdot p^{\text{EUA}} \cdot \left(\omega_{\text{top}} - \omega_{\text{bot}}\right) \cdot \frac{\text{top-omega supplier sales}_{b,n}}{\text{buyer total cost}_b}.
+\end{equation*}
+Figure~\ref{fig:app_within_savings_cdf} reports the empirical CDF of this quantity across cells under four pass-through rates $\rho \in \{0.25, 0.5, 0.75, 1\}$ at the end-of-2018 deflated EUA price (\EUR{23.70}/tCO\textsubscript{2}). Even at full pass-through, well over $99\%$ of cells could save less than $1\%$ of total input cost from a complete switch.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.75\textwidth]{phase4_within_nace4d_intensive_savings_by_passthrough_eua2018.pdf}
+    \caption{Empirical CDF of the counterfactual savings (as a fraction of buyer total input cost) from substituting all top-omega supplier spending to the bottom-omega supplier within the cell, across (buyer, NACE 4-digit) cells in the 2017 event window. End-of-2018 EUA deflated to 2016 euros using the Belgian aggregate PPI. Each curve is one pass-through rate $\rho$. Log scale on the horizontal axis.}
+    \label{fig:app_within_savings_cdf}
+\end{figure}
