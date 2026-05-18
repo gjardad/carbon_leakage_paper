@@ -205,3 +205,166 @@ Figure~\ref{fig:app_within_savings_cdf} reports the empirical CDF of this quanti
     \caption{Empirical CDF of the counterfactual savings (as a fraction of buyer total input cost) from substituting all top-omega supplier spending to the bottom-omega supplier within the cell, across (buyer, NACE 4-digit) cells in the 2017 event window. End-of-2018 EUA deflated to 2016 euros using the Belgian aggregate PPI. Each curve is one pass-through rate $\rho$. Log scale on the horizontal axis.}
     \label{fig:app_within_savings_cdf}
 \end{figure}
+
+% ================================================================
+% RELATIONAL-CAPITAL FALSIFICATION: NEW-PAIR OMEGA-RANK ANALYSIS
+% ================================================================
+%
+% Supports paragraph 3 of §\ref{sec:discussion}. Structure:
+%   1. Setup and identification (sample disjointness from main-text tests)
+%   2. Headline: year-t-rank event study on rank-stable NACE 4-digit sectors
+%   3. Justification for the stable-rank restriction (mean reversion + abatement
+%      decomposition)
+%   4. Supplementary: supplier-level Story-A-vs-B DiD
+%   5. Cohort-composition diagnostic explaining the 2016 reference anomaly
+%
+% ----------------------------------------------------------------
+
+\section{Relational capital: new-pair omega-rank falsification}\label{app:omega_rank}
+
+This appendix details the empirical test of mechanism 3 in §\ref{sec:discussion} (relational capital). The argument runs as follows. The existing-portfolio margin tests in §\ref{sec:domestic_within_intensive} and §\ref{sec:domestic_across} show no within-NACE 4-digit substitution among Belgian buyers after the MSR decision. One candidate explanation is that switching costs --- accumulated trust, contract-specific information, sunk relationship-specific investments --- prevent substitution even when relative prices change. If that is the binding friction, it should not bind on the new-relationship margin: a buyer forming a fresh supplier pair starts from a clean slate. Buyers forming new pairs in an ETS-treated NACE 4-digit sector after the MSR decision should therefore pick systematically cleaner suppliers than buyers forming new pairs before. This appendix tests that prediction directly and reports a null at $\tau = 2017$.
+
+% ----------------------------------------------------------------
+\subsection{Setup and identification independence from existing-portfolio tests}\label{app:omega_rank_setup}
+% ----------------------------------------------------------------
+
+Define a "new pair" as a (buyer, supplier) pair first observed in the Belgian B2B panel in a given year. Restrict to suppliers in ETS-treated NACE 4-digit sectors with a non-missing within-NACE 4-digit allowance-shortage rank: $\omega_{j,t} = \text{shortage}_{j,t} / \text{total cost}_{j,t}$, then percentile-rank within (NACE 4-digit, year) among all EUTL firms with non-missing $\omega$. Higher rank $=$ more carbon-cost-exposed.
+
+Identification at the new-pair margin is essentially disjoint from the existing-portfolio tests in the main text. Only 4--15\% of new omega-matched pairs per year land in a buyer-NACE 4-digit-year cell that has $\geq 2$ omega-able suppliers; the remaining 85--96\% are single-seller cells, invisible to the within-cell intensive-margin tests in §\ref{sec:domestic_within_intensive} by construction. For omega-matched new pairs, the median share of the new supplier within the buyer's NACE 4-digit spend is $100\%$ throughout the 2006--2022 panel. The new-pair margin captures market entry; the within-cell tests cover portfolio rebalancing within already-established sourcing. The two margins share no identifying variation.
+
+% ----------------------------------------------------------------
+\subsection{Headline: year-$t$-rank event study on rank-stable NACE 4-digit sectors}\label{app:omega_rank_headline}
+% ----------------------------------------------------------------
+
+The natural test is the year-$t$-rank event study: for new pairs formed in year $t$, what is the supplier's within-NACE 4-digit rank at the time of pair formation? If buyers shift toward cleaner suppliers post-MSR, the mean rank of new picks should fall.
+
+A direct year-$t$-rank event study on the full sample is contaminated, because within-NACE 4-digit ranks shift across years for reasons unrelated to buyer choice (Appendix~\ref{app:omega_rank_rank_instability} below documents the channels). To isolate buyer choice, we restrict the sample to NACE 4-digit sectors where the supplier rank ordering is stable across the post-event window. For each NACE 4-digit sector with $\geq 3$ EUTL firms tracked at both 2016 and 2022, we compute the Spearman rank correlation $\rho$ between supplier ranks at the two endpoints. "Stable" sectors are those with $\rho$ above a threshold.
+
+At $\tau = 2017$, 17 NACE 4-digit sectors have $\geq 3$ EUTL firms tracked at both endpoints. Of these, $7$ have $\rho \geq 0.8$ ($28$ firms, $\sim 1\,030$ new pairs in the 2012--2022 window) and $5$ have $\rho \geq 0.9$ ($18$ firms, $\sim 950$ new pairs). We report both as parallel specifications. At $\tau = 2005$ no NACE 4-digit sector is rank-stable at any reasonable threshold (the within-NACE 4-digit rank distribution scrambles almost completely across Phase~I; see Appendix~\ref{app:omega_rank_rank_instability}), so the stable-sector test cannot be run there, and $\tau = 2017$ stands as the headline event.
+
+Within each stable subsample we estimate the event-study
+\begin{equation}
+    \text{rank}^{yt}_{ij} \;=\; \sum_{\substack{e = -4 \\ e \neq -1}}^{+4} \beta_e \cdot \mathbf{1}\big\{\text{year\_first}_{ij} - 2017 = e\big\} \;+\; \alpha_b \;+\; \gamma_n \;+\; \varepsilon_{ij},
+    \label{eq:omega_rank_eventstudy}
+\end{equation}
+where $\text{rank}^{yt}_{ij}$ is the supplier's within-NACE 4-digit percentile rank in $\text{year\_first}_{ij}$ (the year pair $ij$ is first observed), $\alpha_b$ is a buyer fixed effect, $\gamma_n$ is a supplier-NACE 4-digit fixed effect, and standard errors are two-way clustered on buyer and supplier-NACE 4-digit. The omitted reference category is rel-year $= -1$ (year_first $= 2016$).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{phase4_new_relationships_omega_rank_supplier_test_stable_yeartrank_event_study.pdf}
+    \caption{Event-study coefficients $\hat\beta_e$ from \eqref{eq:omega_rank_eventstudy} at $\tau = 2017$, restricted to NACE 4-digit sectors where the Spearman rank correlation $\rho$ between supplier ranks at 2016 and 2022 exceeds the legend threshold ($\rho \geq 0.8$: 7 sectors, 28 firms; $\rho \geq 0.9$: 5 sectors, 18 firms). Bars are $95\%$ confidence intervals from two-way-clustered (buyer, supplier-NACE 4-digit) standard errors. The omitted reference is rel-year $= -1$ (year\_first $= 2016$). Vertical dashed line at rel-year $= -0.5$ marks the event boundary. Source: \texttt{phase4\_new\_relationships\_omega\_rank\_supplier\_test.R}.}
+    \label{fig:omega_rank_stable_yeartrank}
+\end{figure}
+
+The figure does not display a clean post-event drift. Pre-period coefficients at rel-year $= -4$ and $-3$ sit at $\pm 0.05$, but rel-year $= -2$ (year_first $= 2015$) spikes to $+0.11$ at $\rho \geq 0.9$ and $+0.06$ at $\rho \geq 0.8$. The first post-event coefficient at rel-year $= 0$ (year_first $= 2017$) sits at $+0.087$ across both thresholds. From rel-year $= +1$ onward, coefficients hover within $\pm 0.05$ of zero, with $95\%$ confidence intervals that include zero at every horizon.
+
+We read the rel-year $= -2$ and rel-year $= 0$ spikes as artifacts of the 2015--2016 B2B reporting-threshold change (Appendix~\ref{app:omega_rank_cohort_diagnostic}): the 2016 reference cohort is an unusually large influx of long-tenured suppliers whose within-sector ranks happen to be low, so years adjacent to 2016 mechanically appear elevated relative to that reference. The symmetric spike pattern at rel-year $= -2$ (one year before the reporting wave) and rel-year $= 0$ (one year after) is consistent with this interpretation and inconsistent with a behavioral post-MSR drift.
+
+The defensible reading: from rel-year $= +1$ onward, post-event year-$t$-rank coefficients are bounded within $\pm 0.05$ of zero. Buyers forming new supplier pairs more than one year after the MSR decision do not select systematically cleaner suppliers than their 2016 counterparts. The sample is thin ($28$ firms in $7$ sectors at the headline threshold), so the result is "absence of evidence" rather than "evidence of absence": we cannot reject moderate effects in either direction, but find no sustained signal in the direction relational capital would predict.
+
+% ----------------------------------------------------------------
+\subsection{Why restrict to stable-rank NACE 4-digit sectors?}\label{app:omega_rank_rank_instability}
+% ----------------------------------------------------------------
+
+The stable-sector restriction in the headline test is needed because the within-NACE 4-digit rank distribution is unstable at the firm level across the post-event window. Two pieces of evidence.
+
+\paragraph{Rank mean-reversion.} For the $120$ EUTL firms with non-missing rank in both 2016 and 2022, regressing $\Delta \text{rank}_i = \text{rank}_{i, 2022} - \text{rank}_{i, 2016}$ on $\text{rank}_{i, 2016}$ within sector gives a slope of $-0.536$ (standard error $0.115$, $p < 0.001$, clustered at the NACE 4-digit level). High-rank firms in 2016 systematically lose rank by 2022. Equivalently, rank persistence is $\rho \approx 0.46$ over the six-year window. At $\tau = 2005$ the mean-reversion is even stronger: the $89$ EUTL firms tracked in both 2005 and 2010 give a slope of $-0.946$ ($p < 0.001$), implying near-zero rank persistence over Phase~I. This is why no NACE 4-digit sector is rank-stable at $\tau = 2005$.
+
+Mean-reversion in rank, combined with the descriptive fact that buyers slightly prefer above-median-rank suppliers (mean pick rank $\approx 0.55$, above the random-pick value of $0.5$), produces a mechanical decline in mean year-$t$ pick rank of roughly $(0.55 - 0.50) \times (1 - \rho) \approx 0.027$ over the window --- of similar order to the $\sim 0.05$ decline visible in the unrestricted descriptive year-$t$ trajectory. Without a sample restriction that removes this mechanical channel, a year-$t$-rank decline cannot be cleanly attributed to buyer choice.
+
+\paragraph{Rank-change decomposition.} The carbon-cost rank composite $\omega_{j,t} = (\text{emissions}_{j,t} - \text{free allowances}_{j,t}) / \text{total cost}_{j,t}$ can shift because emissions, free allocations, or total cost change. Regressing $\Delta \log X_j$ on $\text{rank}_{j, \text{ref}}$ within sector for each of $X \in \{\text{emissions, free allocations, total cost, emissions/cost}\}$ identifies which channels drive the mean-reversion.
+
+\begin{table}[H]
+    \centering
+    \caption{Within-NACE 4-digit regression of $\Delta \log X_j$ on the supplier's pre-event within-NACE 4-digit rank. $\Delta$ is taken between 2016 and 2022 for $\tau = 2017$ (rank measured at 2016); between 2005 and 2010 for $\tau = 2005$ (rank measured at 2005). NACE 4-digit fixed effects; standard errors clustered at the NACE 4-digit level. Negative slope means high-rank firms lost more of the dimension over the window. Stars: $^{\dagger}\,p < 0.10$, $^{*}\,p < 0.05$, $^{**}\,p < 0.01$. Source: \texttt{phase4\_new\_relationships\_omega\_rank\_supplier\_test.R}.}
+    \label{tab:app_omega_rank_decomp}
+    \begin{tabular}{lcccc}
+        \toprule
+                            & $\Delta \log$ em.  & $\Delta \log$ alloc.  & $\Delta \log$ cost & $\Delta \log$(em/cost) \\
+        \midrule
+        \multicolumn{5}{l}{\textit{Panel A: $\tau = 2017$, rank fixed at 2016, $\Delta$ from 2016 to 2022}} \\
+        $\hat\beta$ on rank$_{2016}$ & $-0.423^{*}$ & $\phantom{-}0.052$ & $-0.186$ & $-0.229$ \\
+                                    & $(0.164)$    & $(0.124)$           & $(0.279)$ & $(0.359)$ \\
+        $n$                         & 119          & 110                 & 120       & 119 \\[0.5ex]
+        \multicolumn{5}{l}{\textit{Panel B: $\tau = 2005$, rank fixed at 2005, $\Delta$ from 2005 to 2010}} \\
+        $\hat\beta$ on rank$_{2005}$ & $-0.826^{\dagger}$ & $-0.008$  & $-0.465^{\dagger}$ & $-0.360$ \\
+                                    & $(0.410)$          & $(0.198)$ & $(0.245)$          & $(0.575)$ \\
+        $n$                         & 88                 & 89        & 89                 & 88 \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+Three observations.
+
+First, free allocations are unrelated to pre-event rank at both events ($\hat\beta_{\text{alloc}} \approx 0$, $p > 0.65$). The rank decline of high-rank firms is not a mechanical policy artifact via allocation revisions.
+
+Second, at $\tau = 2017$ emissions decline strongly with pre-event rank ($\hat\beta_{\text{em}} = -0.423$, $p = 0.02$) while costs do not ($\hat\beta_{\text{cost}} = -0.186$, $p = 0.51$). The emissions-intensity coefficient $\hat\beta_{\text{em/cost}} = -0.229$ leans negative without reaching significance. The pattern is consistent with high-rank firms reducing emissions through real intensity-reducing abatement, not purely output shrinkage.
+
+Third, at $\tau = 2005$ emissions and costs decline together (both at $p \approx 0.06$), and the intensity coefficient is not separately identifiable. The Phase~I rank-decline of high-rank firms looks like output shrinkage; we cannot pin down a residual abatement channel.
+
+The combined reading: across both events, the supplier-side rank decline among high-rank firms reflects a behavioral channel --- real abatement at $\tau = 2017$, output shrinkage and possibly abatement at $\tau = 2005$. Using year-$t$ rank as the LHS on the full sample would conflate this supplier-side behavior with the buyer-side variation we want to identify. The stable-rank sector restriction in the headline test eliminates the channel by construction: within sectors where the rank ordering is preserved, the supplier's year-$t$ rank equals their rank at the reference year, and the LHS captures only buyer choice.
+
+% ----------------------------------------------------------------
+\subsection{Supplementary: supplier-level Story-A-vs-B DiD}\label{app:omega_rank_supplier_did}
+% ----------------------------------------------------------------
+
+We complement the headline event study with a supplier-level DiD on new-buyer counts. The test isolates a different version of the behavioral question: do suppliers who abated more (lost more rank) gain disproportionately more new buyers post-event? If buyers' choice rule shifted toward cleaner suppliers, abater suppliers should attract more new pairs after the policy than non-abater suppliers.
+
+The unit is (supplier $\times$ period) with $\text{period} \in \{\text{pre, post}\}$ around the event. For $\tau = 2017$, the pre period is 2012--2016 and the post period is 2017--2022:
+\begin{equation}
+    \log\big(1 + n^{\text{pairs}}_{it}\big) \;=\; \beta \cdot \text{post}_t \cdot \text{abater}_i \;+\; \alpha_i \;+\; \gamma_t \;+\; \varepsilon_{it},
+    \label{eq:omega_rank_supplier_did}
+\end{equation}
+where $n^{\text{pairs}}_{it}$ counts new buyer relationships supplier $i$ forms in period $t$ and $\text{abater}_i = \mathbf{1}\{\Delta \text{rank}_i < \text{median}(\Delta \text{rank})\}$ flags suppliers whose 2016-to-2022 rank decline exceeds the cross-supplier median. Standard errors are clustered at the supplier. $\beta > 0$ would indicate a buyer-side shift toward abaters.
+
+\begin{table}[H]
+    \centering
+    \caption{Supplier-level Story-A-vs-B pooled DiD from \eqref{eq:omega_rank_supplier_did}. Standard errors clustered at the supplier in parentheses. $\beta > 0$ would mean abater suppliers gain disproportionately more new buyers post-event. Source: \texttt{phase4\_new\_relationships\_omega\_rank\_supplier\_test.R}.}
+    \label{tab:app_omega_rank_supplier_did}
+    \begin{tabular}{lcc}
+        \toprule
+        Event $\tau$                     & $2005$           & $2017$            \\
+        \midrule
+        $\hat\beta$ (post $\cdot$ abater) & $\phantom{-}0.334$ & $\phantom{-}0.052$ \\
+                                          & $(0.300)$          & $(0.138)$          \\
+        $n$ (supplier $\times$ period)    & 238                & 292                \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+The headline estimate at $\tau = 2017$ is $\hat\beta = 0.052$ ($p = 0.71$), indistinguishable from zero. The event-time version (Figure~\ref{fig:app_omega_rank_supplier_es}) substitutes rel-year-by-abater interactions for the pooled post-by-abater term; the pattern year by year is the same. We report four parallel specifications --- base (seller and year fixed effects); $+$ size $\times$ rel-year (pre-event customer count interacted with rel-year, absorbing differential trends for larger vs smaller suppliers); $+$ NACE 4-digit $\times$ year fixed effects (sectoral year shocks absorbed); $+$ supplier vintage $\times$ rel-year (supplier B2B-tenure trend absorbed) --- to verify that the null is not driven by any single channel.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{phase4_new_relationships_omega_rank_supplier_test_event_study_2017.pdf}
+    \caption{Event-time version of Table~\ref{tab:app_omega_rank_supplier_did} at $\tau = 2017$, with rel-year $\cdot$ abater interactions in place of the pooled post $\cdot$ abater term. Four parallel specifications dodged at each rel-year: base (seller and year fixed effects); $+$ size $\times$ rel-year; $+$ NACE 4-digit $\times$ year fixed effects; $+$ supplier vintage $\times$ rel-year. Bars are $95\%$ confidence intervals from supplier-clustered standard errors. Source: \texttt{phase4\_new\_relationships\_omega\_rank\_supplier\_test.R}.}
+    \label{fig:app_omega_rank_supplier_es}
+\end{figure}
+
+The supplier-level test corroborates the headline year-$t$-rank result: abaters do not disproportionately gain new buyers post-MSR. The sample at the supplier level is even smaller than at the new-pair level ($292$ supplier-period observations at $\tau = 2017$) because it is bottlenecked by the size of the Belgian EUTL universe ($\sim 150$ ω-rankable firms per year), which constrains the cross-supplier variation. We report it as supporting evidence rather than a standalone headline.
+
+% ----------------------------------------------------------------
+\subsection{Cohort-composition diagnostic: the 2015--2016 reporting wave}\label{app:omega_rank_cohort_diagnostic}
+% ----------------------------------------------------------------
+
+The pre-trend imperfection at rel-year $= -2$ and the symmetric spike at rel-year $= 0$ in the headline event study (Figure~\ref{fig:omega_rank_stable_yeartrank}) reflect a non-policy data feature: the 2015--2016 reform of the B2B reporting threshold, which brought a wave of previously-unreported buyer-supplier relationships into the panel between 2015 and 2016. Two cohort-level diagnostics make the artifact visible.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{phase4_new_relationships_omega_rank_did_cohort_count_2017.pdf}
+        \caption{New-pair count by year\_first cohort.}
+        \label{fig:app_omega_rank_cohort_count}
+    \end{subfigure}\hfill
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{phase4_new_relationships_omega_rank_did_cohort_vintage_2017.pdf}
+        \caption{Mean supplier vintage by year\_first cohort.}
+        \label{fig:app_omega_rank_cohort_vintage}
+    \end{subfigure}
+    \caption{Cohort composition around $\tau = 2017$. \textbf{Panel (a):} number of new buyer-supplier pairs first observed in each year. The 2016 cohort is roughly $10\times$ larger than its 2012--2015 neighbors. \textbf{Panel (b):} mean supplier vintage (mean first year the supplier appears anywhere in the Belgian B2B panel) for new pairs in each year. The 2016 cohort is composed of suppliers whose mean first B2B appearance is $\sim 2002.1$ --- the most tenured group in the entire 2012--2022 window. This indicates the 2016 spike consists of buyers (not suppliers) entering the panel, forming relationships with already-established suppliers. Because rel-year $= -1$ in the headline event study is the year 2016, the reference category is anchored to this anomalously composed cohort. Source: \texttt{phase4\_new\_relationships\_omega\_rank\_did.R}.}
+    \label{fig:app_omega_rank_cohort}
+\end{figure}
+
+The 2016 cohort spikes to roughly ten times the 2012--2015 cohort size (Panel a), and the suppliers in those new 2016 pairs are the most tenured in the entire event-study window (Panel b: mean first-B2B-year $\approx 2002.1$, against the 2003.0 typical of other cohorts). The combination indicates that the 2016 spike is on the buyer side: a wave of newly-reporting buyers forming relationships with already-established suppliers, not a wave of new suppliers entering the network. Because the headline event study uses rel-year $= -1$ (the year 2016) as the omitted reference, the reference cohort's anomalously low mean within-sector rank --- driven by the unusual tilt toward long-tenured suppliers --- pulls every other rel-year coefficient mechanically upward. The mirrored spikes at rel-year $= -2$ (2015) and rel-year $= 0$ (2017) in Figure~\ref{fig:omega_rank_stable_yeartrank} reflect this reference-anchoring rather than a behavioral feature of the surrounding years.
