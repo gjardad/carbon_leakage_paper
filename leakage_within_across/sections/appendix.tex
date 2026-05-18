@@ -247,7 +247,7 @@ Within each stable subsample we estimate the event-study
     \text{rank}^{yt}_{ij} \;=\; \sum_{\substack{e = -4 \\ e \neq -1}}^{+4} \beta_e \cdot \mathbf{1}\big\{\text{year\_first}_{ij} - 2017 = e\big\} \;+\; \alpha_b \;+\; \gamma_n \;+\; \varepsilon_{ij},
     \label{eq:omega_rank_eventstudy}
 \end{equation}
-where $\text{rank}^{yt}_{ij}$ is the supplier's within-NACE 4-digit percentile rank in $\text{year\_first}_{ij}$ (the year pair $ij$ is first observed), $\alpha_b$ is a buyer fixed effect, $\gamma_n$ is a supplier-NACE 4-digit fixed effect, and standard errors are two-way clustered on buyer and supplier-NACE 4-digit. The omitted reference category is rel-year $= -1$ (year_first $= 2016$).
+where $\text{rank}^{yt}_{ij}$ is the supplier's within-NACE 4-digit percentile rank in $\text{year\_first}_{ij}$ (the year pair $ij$ is first observed), $\alpha_b$ is a buyer fixed effect, $\gamma_n$ is a supplier-NACE 4-digit fixed effect, and standard errors are two-way clustered on buyer and supplier-NACE 4-digit. The omitted reference category is rel-year $= -1$ (year\_first $= 2016$).
 
 \begin{figure}[H]
     \centering
@@ -256,7 +256,7 @@ where $\text{rank}^{yt}_{ij}$ is the supplier's within-NACE 4-digit percentile r
     \label{fig:omega_rank_stable_yeartrank}
 \end{figure}
 
-The figure does not display a clean post-event drift. Pre-period coefficients at rel-year $= -4$ and $-3$ sit at $\pm 0.05$, but rel-year $= -2$ (year_first $= 2015$) spikes to $+0.11$ at $\rho \geq 0.9$ and $+0.06$ at $\rho \geq 0.8$. The first post-event coefficient at rel-year $= 0$ (year_first $= 2017$) sits at $+0.087$ across both thresholds. From rel-year $= +1$ onward, coefficients hover within $\pm 0.05$ of zero, with $95\%$ confidence intervals that include zero at every horizon.
+The figure does not display a clean post-event drift. Pre-period coefficients at rel-year $= -4$ and $-3$ sit at $\pm 0.05$, but rel-year $= -2$ (year\_first $= 2015$) spikes to $+0.11$ at $\rho \geq 0.9$ and $+0.06$ at $\rho \geq 0.8$. The first post-event coefficient at rel-year $= 0$ (year\_first $= 2017$) sits at $+0.087$ across both thresholds. From rel-year $= +1$ onward, coefficients hover within $\pm 0.05$ of zero, with $95\%$ confidence intervals that include zero at every horizon.
 
 We read the rel-year $= -2$ and rel-year $= 0$ spikes as artifacts of the 2015--2016 B2B reporting-threshold change (Appendix~\ref{app:omega_rank_cohort_diagnostic}): the 2016 reference cohort is an unusually large influx of long-tenured suppliers whose within-sector ranks happen to be low, so years adjacent to 2016 mechanically appear elevated relative to that reference. The symmetric spike pattern at rel-year $= -2$ (one year before the reporting wave) and rel-year $= 0$ (one year after) is consistent with this interpretation and inconsistent with a behavioral post-MSR drift.
 
